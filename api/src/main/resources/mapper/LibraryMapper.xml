@@ -69,4 +69,73 @@
         updated_at = NOW()
     </insert>
 
+    <select id="searchLibraries" resultType="com.sele906.api.library.domain.Library">
+        SELECT
+            lib_code, name,
+            address,
+            tel,
+            fax,
+            homepage,
+            latitude,
+            longitude,
+            closed_days,
+            operating_time,
+            book_count,
+            <choose>
+                <when test="latitude != null and longitude != null">
+                    ST_Distance(
+                    location,
+                    ST_SetSRID(
+                    ST_MakePoint(#{longitude}, #{latitude}),
+                    4326
+                    )::geography
+                    ) AS distance
+                </when>
+                <otherwise>
+                    NULL AS distance
+                </otherwise>
+            </choose>
+
+        FROM library
+
+        <where>
+            <!-- 도서관 이름 -->
+            <if test="keyword != null and keyword != ''">
+                AND name ILIKE CONCAT('%', #{keyword}, '%')
+            </if>
+
+            <!-- 사용자와 5km 이내 도서관 출력 -->
+            <if test="latitude != null and longitude != null">
+                AND ST_DWithin(
+                location,
+                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
+                #{radius}
+                )
+            </if>
+        </where>
+
+        ORDER BY
+            distance,
+            name
+
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getLibraryByLibCode" resultType="com.sele906.api.library.domain.Library">
+        SELECT
+            lib_code,
+            name,
+            address,
+            tel,
+            fax,
+            homepage,
+            latitude,
+            longitude,
+            closed_days,
+            operating_time,
+            book_count
+        FROM library
+        WHERE lib_code = #{libCode}
+    </select>
+
 </mapper>

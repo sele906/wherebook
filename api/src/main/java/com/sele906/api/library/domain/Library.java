@@ -23,6 +23,7 @@ public class Library {
     private String closedDays;
     private String operatingTime;
     private Integer bookCount;
+    private Double distance;
     private Date createdAt;
     private Date updatedAt;
 }

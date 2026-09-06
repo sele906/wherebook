@@ -1,13 +1,18 @@
 package com.sele906.api.library.service;
 
+import com.sele906.api.common.exception.ResponseNotFoundException;
 import com.sele906.api.library.domain.Library;
+import com.sele906.api.library.domain.LibrarySearchRequest;
 import com.sele906.api.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.HtmlUtils;
 import tools.jackson.databind.JsonNode;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +22,6 @@ public class LibraryService {
     String authKey;
 
     private final LibraryMapper libraryMapper;
-
-    public Library findOne() {
-        return libraryMapper.findOne();
-    }
 
     public int syncLibraries() {
 
@@ -162,5 +163,21 @@ public class LibraryService {
                 .replaceAll("<[^>]*>", "");
 
         return HtmlUtils.htmlUnescape(cleaned).trim();
+    }
+
+    public List<Library> searchLibraries(LibrarySearchRequest request) {
+        return libraryMapper.searchLibraries(request);
+    }
+
+    public Library getLibrary(String libCode) {
+        Library library = libraryMapper.getLibraryByLibCode(libCode);
+
+        if (library == null) {
+            throw new ResponseNotFoundException(
+                    "도서관을 찾을 수 없습니다. libCode: " + libCode
+            );
+        }
+
+        return library;
     }
 }
