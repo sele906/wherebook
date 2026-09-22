@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sele906.api.book.mapper.BookMapper">
+
+    <select id="getBookByIsbn13" resultType="Book">
+        SELECT
+            isbn13,
+            title,
+            authors,
+            publisher,
+            publication_year,
+            class_no,
+            class_name,
+            description,
+            image_url,
+            fetched_at
+        FROM book
+        WHERE isbn13 = #{isbn13}
+    </select>
+
+    <insert id="upsertBook">
+        INSERT INTO book (
+            isbn13,
+            title,
+            authors,
+            publisher,
+            publication_year,
+            class_no,
+            class_name,
+            description,
+            image_url
+        )
+        VALUES (
+            #{isbn13},
+            #{title},
+            #{authors},
+            #{publisher},
+            #{publicationYear},
+            #{classNo},
+            #{className},
+            #{description},
+            #{imageUrl}
+        )
+        ON CONFLICT (isbn13) DO UPDATE SET
+            title = EXCLUDED.title,
+            authors = EXCLUDED.authors,
+            publisher = EXCLUDED.publisher,
+            publication_year = EXCLUDED.publication_year,
+            class_no = EXCLUDED.class_no,
+            class_name = EXCLUDED.class_name,
+            description = EXCLUDED.description,
+            image_url = EXCLUDED.image_url,
+            fetched_at = now()
+    </insert>
+
+</mapper>
