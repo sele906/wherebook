@@ -1,6 +1,7 @@
 package com.sele906.api.library.controller;
 
 import com.sele906.api.library.domain.LibrarySearchRequest;
+import com.sele906.api.library.domain.LibrarySearchResponse;
 import com.sele906.api.library.service.LibraryService;
 import com.sele906.api.library.domain.Library;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,10 @@ public class LibraryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Library>> searchLibraries(
+    public ResponseEntity<LibrarySearchResponse> searchLibraries(
             @ModelAttribute LibrarySearchRequest request
     ) {
-        List<Library> response = libraryService.searchLibraries(request);
+        LibrarySearchResponse response = libraryService.searchLibraries(request);
         return ResponseEntity.ok(response);
     }
 

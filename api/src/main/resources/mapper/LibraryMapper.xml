@@ -6,39 +6,39 @@
 <mapper namespace="com.sele906.api.library.mapper.LibraryMapper">
 
     <select id="findOne"
-            resultType="com.sele906.api.library.domain.Library">
+            resultType="Library">
         SELECT *
         FROM library
         LIMIT 1
     </select>
 
-    <insert id="insertLibrary">
+    <insert id="upsertLibrary">
         INSERT INTO library (
-        lib_code,
-        name,
-        address,
-        tel,
-        fax,
-        homepage,
-        latitude,
-        longitude,
-        closed_days,
-        operating_time,
-        book_count,
-        location
+            lib_code,
+            name,
+            address,
+            tel,
+            fax,
+            homepage,
+            latitude,
+            longitude,
+            closed_days,
+            operating_time,
+            book_count,
+            location
         )
         VALUES (
-        #{libCode},
-        #{name},
-        #{address},
-        #{tel},
-        #{fax},
-        #{homepage},
-        #{latitude},
-        #{longitude},
-        #{closedDays},
-        #{operatingTime},
-        #{bookCount},
+            #{libCode},
+            #{name},
+            #{address},
+            #{tel},
+            #{fax},
+            #{homepage},
+            #{latitude},
+            #{longitude},
+            #{closedDays},
+            #{operatingTime},
+            #{bookCount},
 
         <choose>
             <when test="latitude != null and longitude != null">
@@ -69,7 +69,37 @@
         updated_at = NOW()
     </insert>
 
-    <select id="searchLibraries" resultType="com.sele906.api.library.domain.Library">
+    <!--  새 데이터 추가시 빈 지역컬럼 자동화하는 쿼리도 있으면 좋음  -->
+
+    <sql id="searchWhere">
+        <where>
+            <!-- 도서관 이름 유효성 검사 -->
+            <if test="keyword != null and keyword != ''">
+                AND name ILIKE CONCAT('%', #{keyword}, '%')
+            </if>
+
+            <!-- 지역 코드 유효성 검사 -->
+            <if test="regionCode != null and regionCode != ''">
+                AND region_code = #{regionCode}
+            </if>
+
+            <!-- 세부 지역 코드 유효성 검사 -->
+            <if test="dtlRegionCode != null and dtlRegionCode != ''">
+                AND dtl_region_code = #{dtlRegionCode}
+            </if>
+
+            <!-- 사용자와 #{radius} 이내 도서관 출력 -->
+            <if test="latitude != null and longitude != null">
+                AND ST_DWithin(
+                location,
+                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
+                #{radius}
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="searchLibraries" resultType="LibrarySearchItem">
         SELECT
             lib_code, name,
             address,
@@ -98,21 +128,7 @@
 
         FROM library
 
-        <where>
-            <!-- 도서관 이름 -->
-            <if test="keyword != null and keyword != ''">
-                AND name ILIKE CONCAT('%', #{keyword}, '%')
-            </if>
-
-            <!-- 사용자와 5km 이내 도서관 출력 -->
-            <if test="latitude != null and longitude != null">
-                AND ST_DWithin(
-                location,
-                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
-                #{radius}
-                )
-            </if>
-        </where>
+        <include refid="searchWhere"/>
 
         ORDER BY
             distance,
@@ -121,7 +137,13 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
-    <select id="getLibraryByLibCode" resultType="com.sele906.api.library.domain.Library">
+    <select id="countLibraries" resultType="int">
+        SELECT COUNT(*)
+        FROM library
+        <include refid="searchWhere"/>
+    </select>
+
+    <select id="getLibraryByLibCode" resultType="Library">
         SELECT
             lib_code,
             name,
@@ -133,7 +155,9 @@
             longitude,
             closed_days,
             operating_time,
-            book_count
+            book_count,
+            region_code,
+            dtl_region_code
         FROM library
         WHERE lib_code = #{libCode}
     </select>
