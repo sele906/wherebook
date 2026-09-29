@@ -1,0 +1,73 @@
+.header {
+    display: none;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+
+    font-size: 21px;
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-title);
+    color: var(--text);
+}
+
+.brand:hover {
+    color: var(--text);
+}
+
+.nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.navLink,
+.iconLink {
+    height: var(--touch);
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-2);
+    font-size: 15px;
+    font-weight: var(--weight-medium);
+}
+
+.navLink {
+    padding: 0 14px;
+    gap: 8px;
+}
+
+.iconLink {
+    width: var(--touch);
+    margin-left: 4px;
+}
+
+.navLink:hover,
+.iconLink:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* 600px 이상 = 태블릿/PC. 이때만 헤더가 뜨고 TabBar가 숨음 */
+@media (min-width: 600px) {
+    .header {
+        flex-shrink: 0;
+        height: var(--web-header-h);
+        padding: 0 40px;
+
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+}

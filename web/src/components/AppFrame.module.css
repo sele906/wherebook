@@ -1,0 +1,17 @@
+.frame {
+    height: 100dvh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg);
+}
+
+.scroll {
+    flex: 1;
+
+    /* flex 안에서 overflow가 제대로 작동하려면 이게 은근 중요함 */
+    min-height: 0;
+    overflow-y: auto;
+}

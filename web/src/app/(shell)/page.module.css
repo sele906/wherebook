@@ -1,0 +1,463 @@
+/*
+ * 메인 화면. 목업의 Main(모바일)과 WebMain(웹)을 한 DOM으로 합치고
+ * grid-template-areas로 순서를 바꿈 — 두 목업의 섹션 순서가 서로 다르기 때문.
+ *   모바일:   히어로 → 내 주변 → 최근 검색어 → 인기 대출
+ *   600px~:   히어로 → 최근 검색어 → 내 주변 → 인기 대출
+ *   900px~:   히어로 → 최근 검색어 → [인기 대출 | 내 주변 aside]
+ */
+
+.main {
+    padding: 0 20px 32px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        'header'
+        'hero'
+        'nearby'
+        'recent'
+        'popular';
+}
+
+/* ---- 모바일 헤더 (600px 이상에서는 SiteHeader가 대신) ---- */
+
+.mobileHeader {
+    grid-area: header;
+    height: var(--header-h);
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.wordmark {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-title);
+}
+
+.iconLink {
+    width: var(--touch);
+    height: var(--touch);
+    margin-left: auto;
+    margin-right: -10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-3);
+}
+
+.iconLink:hover {
+    color: var(--text);
+}
+
+/* ---- 히어로 + 검색 ---- */
+
+.hero {
+    grid-area: hero;
+}
+
+.headline {
+    margin: 12px 0 0;
+
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.38;
+    letter-spacing: var(--tracking-title);
+    color: var(--text);
+}
+
+.searchForm {
+    margin: 20px 0 0;
+}
+
+.searchBar {
+    height: 56px;
+    padding: 0 6px 0 16px;
+
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    /* 안쪽 돋보기 아이콘이 currentColor로 이 색을 받음 */
+    color: var(--text-muted);
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+
+    border: 0;
+    background: transparent;
+    outline: none;
+
+    font-size: 17px;
+    color: var(--text);
+}
+
+.searchButton {
+    width: var(--touch);
+    height: var(--touch);
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--brand);
+    color: var(--on-brand);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchButton:hover {
+    background: var(--brand-hover);
+}
+
+.searchButtonLabel {
+    display: none;
+}
+
+/* ---- 내 주변 도서관 ---- */
+
+.nearby {
+    grid-area: nearby;
+    margin-top: 24px;
+    padding: 18px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nearbyTitle {
+    margin: 0;
+    font-size: 17px;
+    font-weight: var(--weight-bold);
+    color: var(--text);
+}
+
+.nearbyText {
+    margin: 0;
+    font-size: var(--text-md);
+    line-height: var(--leading-normal);
+    color: var(--text-3);
+}
+
+.locateButton {
+    height: 48px;
+    margin-top: 10px;
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--brand);
+
+    font-size: 15px;
+    font-weight: var(--weight-semibold);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* ---- 섹션 공통 (최근 검색어 / 인기 대출) ---- */
+
+.recent {
+    grid-area: recent;
+    margin-top: 28px;
+}
+
+.popular {
+    grid-area: popular;
+    margin-top: 28px;
+    min-width: 0;
+}
+
+.sectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sectionTitle {
+    margin: 0;
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    color: var(--text);
+}
+
+.textButton {
+    height: var(--touch);
+    padding: 0 2px;
+
+    border: 0;
+    background: transparent;
+
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+
+    display: flex;
+    align-items: center;
+}
+
+.textButton:hover {
+    color: var(--text-2);
+}
+
+/* ---- 최근 검색어 칩 ---- */
+
+.chips {
+    margin-top: 4px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    height: 40px;
+    padding: 0 14px;
+
+    background: var(--surface);
+    border-radius: var(--radius-full);
+
+    font-size: var(--text-md);
+    color: var(--text-2);
+
+    display: flex;
+    align-items: center;
+}
+
+.chip:hover {
+    background: var(--border);
+    color: var(--text-2);
+}
+
+/* ---- 인기 대출 ---- */
+
+.bookRow {
+    /* 모바일은 가로 스크롤. 좌우 패딩만큼 빼내서 화면 끝까지 흐르게 함 */
+    margin: 4px -20px 0;
+    padding: 0 20px;
+    list-style: none;
+
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+}
+
+.bookCard {
+    width: 120px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 7;
+    margin-bottom: 8px;
+
+    /* TODO: book.imageUrl 붙으면 배경 대신 이미지로 */
+    background: var(--surface);
+    border-radius: var(--radius-md);
+}
+
+.addButton {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: var(--touch);
+    height: var(--touch);
+
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--brand);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addButton:hover {
+    background: var(--brand-subtle);
+}
+
+.bookTitle {
+    font-size: 15px;
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+}
+
+.bookAuthors {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ==========================================================
+   600px 이상 = 태블릿/PC. 상단 SiteHeader가 뜨는 구간
+   ========================================================== */
+
+@media (min-width: 600px) {
+    .main {
+        width: min(100%, var(--content-max));
+        margin: 0 auto;
+        padding: 0 20px 56px;
+
+        grid-template-areas:
+            'hero'
+            'recent'
+            'nearby'
+            'popular';
+    }
+
+    .mobileHeader {
+        display: none;
+    }
+
+    .hero {
+        padding: 64px 0 32px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .headline {
+        margin: 0;
+        font-size: var(--text-3xl);
+        line-height: var(--leading-tight);
+        letter-spacing: -0.025em;
+        text-align: center;
+    }
+
+    .searchForm {
+        width: min(100%, 640px);
+        margin: 32px 0 0;
+    }
+
+    .searchBar {
+        height: 64px;
+        padding: 0 8px 0 22px;
+        gap: 12px;
+        border-radius: 18px;
+    }
+
+    .searchInput {
+        font-size: 18px;
+    }
+
+    /* 아이콘 버튼 → "검색" 글자 버튼 */
+    .searchButton {
+        width: auto;
+        height: 48px;
+        padding: 0 24px;
+        border-radius: 13px;
+
+        font-size: 16px;
+        font-weight: var(--weight-bold);
+    }
+
+    .searchButton svg {
+        display: none;
+    }
+
+    .searchButtonLabel {
+        display: inline;
+    }
+
+    /* 최근 검색어는 검색바 바로 아래 가운데로 */
+    .recent {
+        margin: 0 0 48px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .recent .sectionHead {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .chips {
+        justify-content: center;
+    }
+
+    .nearby {
+        margin-top: 0;
+        padding: 20px 22px;
+    }
+
+    .popular {
+        margin-top: 40px;
+    }
+
+    .sectionTitle {
+        font-size: var(--text-xl);
+    }
+
+    .textButton {
+        font-size: var(--text-md);
+    }
+
+    /* 가로 스크롤 → 그리드 */
+    .bookRow {
+        margin: 14px 0 0;
+        padding: 0;
+
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        overflow-x: visible;
+    }
+
+    .bookCard {
+        width: auto;
+        min-width: 0;
+    }
+}
+
+/* ==========================================================
+   900px 이상 = 인기 대출 옆에 "내 주변 도서관" 사이드바
+   ========================================================== */
+
+@media (min-width: 900px) {
+    .main {
+        grid-template-columns: minmax(0, 1fr) 340px;
+        grid-template-areas:
+            'hero    hero'
+            'recent  recent'
+            'popular nearby';
+        column-gap: 40px;
+    }
+
+    /* 카드가 인기 대출 높이만큼 늘어나지 않게 */
+    .nearby {
+        align-self: start;
+    }
+
+    .popular {
+        margin-top: 0;
+    }
+
+    .bookRow {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+}

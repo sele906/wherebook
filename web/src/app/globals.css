@@ -2,15 +2,23 @@
    책어디 디자인 토큰
    - 라이트: 종이 크림 + 네이비 / 다크: 먹색 + 크림 글씨
    - 테마 전환: <html data-theme="light|dark">, 없으면 시스템 설정 따름
-   - 폰트: IBM Plex Sans KR (Next.js라면 next/font/google로 불러와
-     --font-sans 변수에 연결하고 아래 @import는 지워도 됨)
+   - 폰트: Pretendard Variable을 layout.js에서 셀프 호스팅함 (dynamic-subset)
    ========================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
 :root {
   /* ---- 폰트 ---- */
-  --font-sans: "IBM Plex Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  /* 뒤쪽은 폰트 로드 실패 / 커버리지 밖 글자(한자 등)용 그물 */
+  --font-sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 
   --text-xs: 0.75rem;    /* 12px 탭 라벨, 배지 */
   --text-sm: 0.8125rem;  /* 13px 보조 정보 */
@@ -35,6 +43,7 @@
   --brand-hover: #22386F;
   --brand-subtle: #E4E1DC;   /* 잉크 번짐: 담김, 대출 가능 배지, 선택 상태 */
   --on-brand: #FFFFFF;       /* 브랜드 배경 위 글자 */
+  --logo-dim: #C9CEDB;       /* 로고 안쪽 양옆 책 (브랜드 배경 위 보조 도형) */
 
   /* ---- 배경·면 ---- */
   --bg: #F4EEE2;             /* 앱 배경 (종이) */
@@ -82,6 +91,7 @@
     --brand-hover: #B3C4F0;
     --brand-subtle: #26304A;
     --on-brand: #14171F;
+    --logo-dim: #5A6072;
 
     --bg: #14171F;
     --surface: #1F2330;
@@ -111,6 +121,7 @@
   --brand-hover: #B3C4F0;
   --brand-subtle: #26304A;
   --on-brand: #14171F;
+  --logo-dim: #5A6072;
 
   --bg: #14171F;
   --surface: #1F2330;
@@ -141,7 +152,6 @@
 }
 
 body {
-  margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);

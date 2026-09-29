@@ -1,4 +1,4 @@
-
+import { notFound } from "next/navigation";
 
 export default async function LibraryPage({ searchParams }) {
     const params = await searchParams;
