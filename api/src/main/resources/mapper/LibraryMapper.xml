@@ -111,6 +111,7 @@
             closed_days,
             operating_time,
             book_count,
+            dtl_region_code,
             <choose>
                 <when test="latitude != null and longitude != null">
                     ST_Distance(

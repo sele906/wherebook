@@ -1,0 +1,1162 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>책어디 UI 목업</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;display=swap">
+<style>
+.x{font-family:'IBM Plex Sans KR','Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+a{color:#2F4A94;text-decoration:none}a:hover{color:#22386F}
+button{font:inherit;cursor:pointer}
+input::placeholder{color:#5C5347}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+<style>html{scroll-behavior:smooth}body{margin:0;padding:40px;background:#E9E4DA;font-family:'IBM Plex Sans KR','Pretendard',sans-serif;color:#2A2419}h1.page{font-size:26px;margin:0 0 8px}h2.grp{font-size:18px;margin:48px 0 20px;color:#3A3329}.grid{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}</style></head><body>
+<h1 class="page">책어디 UI 목업</h1><h2 class="grp">모바일 · 라이트</h2><div class="grid"><figure id="Main" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">메인 · 기본</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 0 20px; display: flex; flex-direction: column">
+<header style="height: 56px; display: flex; align-items: center; gap: 6px; flex-shrink: 0">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#2F4A94"></rect><path d="M14 4.8a3.2 3.2 0 0 0-3.2 3.2c0 2.3 3.2 5.2 3.2 5.2s3.2-2.9 3.2-5.2A3.2 3.2 0 0 0 14 4.8z" fill="#F4EEE2"></path><circle cx="14" cy="8" r="1.1" fill="#2F4A94"></circle><rect x="8.6" y="16.4" width="3" height="4.8" rx="0.7" fill="#C9CEDB"></rect><rect x="12.3" y="14.8" width="3.4" height="6.4" rx="0.7" fill="#F4EEE2"></rect><rect x="16.4" y="16.4" width="2.8" height="4.8" rx="0.7" fill="#C9CEDB" transform="rotate(8 17.8 18.8)"></rect><rect x="7.8" y="21.4" width="12.4" height="1.5" rx="0.75" fill="#F4EEE2"></rect></svg>
+<span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em">책어디</span>
+<a href="#Settings" aria-label="설정" style="margin-left: auto; margin-right: -10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></a>
+</header>
+<h1 style="margin: 12px 0 0; font-size: 26px; font-weight: 700; line-height: 1.38; letter-spacing: -0.02em; color: #2A2419">빌리고 싶은 책,<br>어느 도서관에 있을까?</h1>
+<form action="/search" method="get" style="margin: 20px 0 0">
+<label for="Main-q" class="sr">책 검색</label>
+<div style="display: flex; align-items: center; gap: 10px; height: 56px; box-sizing: border-box; padding: 0 6px 0 16px; background: #EAE3D4; border-radius: 16px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="Main-q" name="q" type="search" placeholder="책 제목, 저자, ISBN" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #2A2419; outline: none">
+<button type="submit" aria-label="검색" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #2F4A94; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+</div>
+</form>
+<section style="margin-top: 24px; padding: 18px; border: 1px solid #E0D7C6; border-radius: 20px; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700; color: #2A2419">내 주변 도서관</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4238">위치를 켜면 가까운 도서관의 대출 가능 여부를 먼저 보여드려요.</p>
+<button type="button" style="margin-top: 10px; height: 48px; border: 0; border-radius: 12px; background: #E4E1DC; color: #2F4A94; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>내 위치로 찾기</button>
+</section>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #2A2419">최근 검색어</h2>
+<button type="button" style="height: 44px; padding: 0 2px; border: 0; background: transparent; font-size: 13px; color: #5C5347">전체 삭제</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px">
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">불편한 편의점</a>
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">세이노의 가르침</a>
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">한강</a>
+</div>
+</section>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #2A2419">이번 주 인기 대출</h2>
+<a href="#" style="height: 44px; display: flex; align-items: center; font-size: 13px; color: #5C5347">더보기</a>
+</div>
+<div style="display: flex; gap: 12px; margin: 4px -20px 0; padding: 0 20px; overflow-x: auto">
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #D9DEEC; margin-bottom: 8px">
+<button type="button" aria-label="소년이 온다 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #2A2419">소년이 온다</div>
+<div style="font-size: 13px; color: #5C5347">한강</div>
+</article>
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #EDE7DD; margin-bottom: 8px">
+<button type="button" aria-label="불편한 편의점 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #2A2419">불편한 편의점</div>
+<div style="font-size: 13px; color: #5C5347">김호연</div>
+</article>
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #E2DCCF; margin-bottom: 8px">
+<button type="button" aria-label="채식주의자 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #2A2419">채식주의자</div>
+<div style="font-size: 13px; color: #5C5347">한강</div>
+</article>
+</div>
+</section>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #E0D7C6; background: #F4EEE2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #2F4A94; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>
+</span>대출가방</a>
+<a href="#Map" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Focus" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">메인 · 검색 입력 중</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<form action="/search" method="get" style="margin: 0; height: 72px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2419" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<label for="Focus-q2" class="sr">책 검색</label>
+<div style="flex-grow: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 2px 0 14px; border: 2px solid #2F4A94; border-radius: 14px; display: flex; align-items: center; gap: 6px">
+<input id="Focus-q2" name="q" type="search" value="한강" placeholder="책 제목, 저자, ISBN" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #2A2419; outline: none">
+<button type="button" aria-label="검색어 지우기" style="width: 40px; height: 40px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #B7AD9C; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+</div>
+</form>
+<div style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 4px 0 0">
+<h2 style="margin: 8px 20px 4px; font-size: 13px; font-weight: 600; color: #5C5347">저자</h2>
+<a href="#" style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; color: #2A2419">
+<span style="width: 40px; height: 40px; border-radius: 999px; background: #E4E1DC; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600"><span style="color: #2F4A94">한강</span></span><span style="font-size: 13px; color: #5C5347">저자의 책 전체 보기</span></span>
+</a>
+<h2 style="margin: 16px 20px 4px; font-size: 13px; font-weight: 600; color: #5C5347">도서</h2>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #D9DEEC; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #2A2419"><span style="font-size: 16px; font-weight: 500">소년이 온다</span><span style="font-size: 13px; color: #5C5347"><span style="color: #2F4A94; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="소년이 온다 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #E2DCCF; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #2A2419"><span style="font-size: 16px; font-weight: 500">채식주의자</span><span style="font-size: 13px; color: #5C5347"><span style="color: #2F4A94; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="채식주의자 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #EDE7DD; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #2A2419"><span style="font-size: 16px; font-weight: 500">작별하지 않는다</span><span style="font-size: 13px; color: #5C5347"><span style="color: #2F4A94; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="작별하지 않는다 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #E4E1DC; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #2A2419"><span style="font-size: 16px; font-weight: 500">흰</span><span style="font-size: 13px; color: #5C5347"><span style="color: #2F4A94; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="흰 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="margin: 12px 20px 0; border-top: 1px solid #E0D7C6"></div>
+<a href="#" style="height: 56px; padding: 0 20px; display: flex; align-items: center; gap: 10px; color: #2F4A94; font-size: 15px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>‘한강’ 전체 검색 결과 보기</a>
+</div>
+</div></div></figure>
+<figure id="Map" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">내 주변 · 책 검색 후</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #E6DDCB">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px">
+<div style="position: absolute; left: -60px; top: 470px; width: 540px; height: 56px; background: #CFD8E6; transform: rotate(-12deg)"></div>
+<div style="position: absolute; left: 250px; top: 190px; width: 110px; height: 80px; background: #D8DEC8; border-radius: 16px"></div>
+<div style="position: absolute; left: 30px; top: 380px; width: 70px; height: 60px; background: #D8DEC8; border-radius: 14px"></div>
+<div style="position: absolute; left: -20px; top: 305px; width: 440px; height: 12px; background: #F4EEE2; transform: rotate(-4deg)"></div>
+<div style="position: absolute; left: -20px; top: 420px; width: 440px; height: 8px; background: #F4EEE2; transform: rotate(3deg)"></div>
+<div style="position: absolute; left: 130px; top: 120px; width: 12px; height: 520px; background: #F4EEE2; transform: rotate(6deg)"></div>
+<div style="position: absolute; left: 290px; top: 120px; width: 8px; height: 520px; background: #F4EEE2; transform: rotate(-3deg)"></div>
+<div style="position: absolute; left: 45px; top: 230px; width: 300px; height: 300px; box-sizing: border-box; border-radius: 999px; border: 2px solid rgba(47,74,148,0.55); background: rgba(47,74,148,0.08)"></div>
+<div style="position: absolute; left: 30px; top: 196px; width: 10px; height: 10px; border-radius: 999px; background: #B7AD9C"></div>
+<div style="position: absolute; left: 350px; top: 150px; width: 10px; height: 10px; border-radius: 999px; background: #B7AD9C"></div>
+<div style="position: absolute; left: 184px; top: 369px; width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; border: 4px solid #ffffff; box-shadow: 0 0 0 8px rgba(47,74,148,0.18)"></div>
+</div>
+
+<button type="button" aria-label="마포중앙도서관, 대출 가능" style="position: absolute; left: 62px; top: 256px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(42,36,25,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>마포중앙</button>
+<button type="button" aria-label="마포구립서강도서관, 대출 가능" style="position: absolute; left: 214px; top: 318px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(42,36,25,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>서강</button>
+<button type="button" aria-label="서대문도서관, 대출중" style="position: absolute; left: 196px; top: 436px; height: 36px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #9A8F7E; border-radius: 999px; background: #F4EEE2; color: #4A4238; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(42,36,25,0.12)">서대문 · 대출중</button>
+<button type="button" aria-label="아현도서관, 대출 가능" style="position: absolute; left: 76px; top: 450px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(42,36,25,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>아현</button>
+
+<div style="position: absolute; left: 12px; top: 12px; width: 366px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 52px; box-sizing: border-box; padding: 0 6px 0 4px; background: #F4EEE2; border-radius: 14px; box-shadow: 0 2px 12px rgba(42,36,25,0.12); display: flex; align-items: center; gap: 2px">
+<span aria-hidden="true" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"></path><path d="M5 17a3 3 0 0 1 3-3h11"></path></svg></span>
+<a href="#Focus" style="flex-grow: 1; min-width: 0; height: 44px; display: flex; align-items: center; font-size: 16px; font-weight: 600; color: #2A2419">소년이 온다</a>
+<button type="button" aria-label="책 선택 해제" style="width: 40px; height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #B7AD9C; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+<a href="#Libraries" style="height: 44px; padding: 0 10px; display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: #2F4A94"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>목록</a>
+</div>
+<div style="display: flex; gap: 8px">
+<div role="group" aria-label="검색 반경" style="flex-grow: 1; height: 44px; box-sizing: border-box; padding: 4px; background: #F4EEE2; border-radius: 12px; box-shadow: 0 2px 12px rgba(42,36,25,0.12); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">1km</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #2F4A94; color: #ffffff; font-size: 14px; font-weight: 700">3km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">5km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">10km</button>
+</div>
+<button type="button" aria-pressed="true" style="height: 44px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #2F4A94; border-radius: 12px; background: #E4E1DC; color: #2F4A94; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 12px rgba(42,36,25,0.12); flex-shrink: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>대출 가능만</button>
+</div>
+</div>
+
+<button type="button" style="position: absolute; left: 105px; top: 136px; width: 180px; height: 44px; border: 0; border-radius: 999px; background: #2A2419; color: #ffffff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 14px rgba(42,36,25,0.25)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"></path><path d="M20 4v5h-5"></path></svg>이 지역에서 다시 검색</button>
+
+<button type="button" aria-label="내 위치로 이동" style="position: absolute; right: 16px; top: 482px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 12px rgba(42,36,25,0.16); display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg></button>
+
+<section style="position: absolute; left: 0; top: 540px; width: 390px; height: 232px; overflow: hidden; background: #F4EEE2; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 20px rgba(42,36,25,0.10); display: flex; flex-direction: column">
+<div style="width: 40px; height: 4px; border-radius: 999px; background: #D3C9B7; margin: 10px auto 0"></div>
+<div style="padding: 14px 20px 6px; display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #2A2419">3곳에서 빌릴 수 있어요</h2>
+<p style="margin: 0; font-size: 13px; color: #5C5347">내 위치 기준 3km · 소장 도서관 4곳</p>
+</div>
+<button type="button" style="height: 44px; margin-top: -8px; padding: 0 2px; border: 0; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 2px">거리순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="font-size: 13px; color: #5C5347">0.6km · 도보 9분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출 가능</span>
+</a>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="font-size: 13px; color: #5C5347">1.2km · 도보 18분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출 가능</span>
+</a>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="font-size: 13px; color: #5C5347">2.1km · 버스 12분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #EAE3D4; color: #4A4238; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출중</span>
+</a>
+</section>
+<nav aria-label="주 메뉴" style="position: absolute; left: 0; top: 772px; width: 390px; height: 72px; box-sizing: border-box; border-top: 1px solid #E0D7C6; background: #F4EEE2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span>
+</span>대출가방</a>
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #2F4A94; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Bag" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">대출가방</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column">
+<header style="height: 56px; flex-shrink: 0; padding: 0 20px; display: flex; align-items: center; gap: 6px">
+<h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #2A2419">대출가방</h1>
+<span style="font-size: 16px; font-weight: 600; color: #2F4A94">4</span>
+</header>
+<div style="margin: 4px 20px 0; height: 52px; box-sizing: border-box; padding: 0 4px 0 14px; background: #EAE3D4; border-radius: 14px; display: flex; align-items: center; gap: 8px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+<span style="flex-grow: 1; font-size: 14px; color: #3A3329"><strong style="font-weight: 600">내 위치</strong> 기준 · 반경 <strong style="font-weight: 600">3km</strong></span>
+<button type="button" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: #2F4A94; font-size: 14px; font-weight: 600">변경</button>
+</div>
+<div style="margin-top: 8px; padding: 0 12px 0 20px; height: 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #EAE3D4">
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #3A3329; height: 44px"><input type="checkbox" checked="" style="width: 20px; height: 20px; margin: 0">전체 선택 (3/4)</label>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #5C5347; font-size: 13px">선택 삭제</button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #EAE3D4">
+<input type="checkbox" checked="" aria-label="소년이 온다 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #D9DEEC; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #2A2419">소년이 온다</div>
+<div style="font-size: 13px; color: #5C5347">한강</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #2F4A94; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 3곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="소년이 온다 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #EAE3D4">
+<input type="checkbox" checked="" aria-label="불편한 편의점 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #EDE7DD; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #2A2419">불편한 편의점</div>
+<div style="font-size: 13px; color: #5C5347">김호연</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #2F4A94; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 2곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="불편한 편의점 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #EAE3D4">
+<input type="checkbox" checked="" aria-label="채식주의자 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #E2DCCF; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #2A2419">채식주의자</div>
+<div style="font-size: 13px; color: #5C5347">한강</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #2F4A94; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 1곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="채식주의자 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px">
+<input type="checkbox" aria-label="세이노의 가르침 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #E6DDCB; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #4A4238">세이노의 가르침</div>
+<div style="font-size: 13px; color: #5C5347">세이노</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #9A4508; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A4508" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg>반경 안 모든 도서관 대출중</div>
+<a href="#" style="margin-top: 2px; font-size: 13px; font-weight: 600; color: #2F4A94; height: 32px; display: flex; align-items: center">반경 넓혀서 찾기</a>
+</div>
+<button type="button" aria-label="세이노의 가르침 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+</main>
+
+<div style="flex-shrink: 0; padding: 12px 20px 14px; background: #F4EEE2; box-shadow: 0 -6px 16px rgba(42,36,25,0.06); display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 13px; color: #5C5347; text-align: center">선택한 책을 가장 적은 도서관에서 빌리는 순서를 찾아드려요</p>
+<a href="#Route" style="height: 56px; border-radius: 14px; background: #2F4A94; color: #ffffff; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="6" r="2.5"></circle><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"></path></svg>3권으로 동선 짜기</a>
+</div>
+
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #E0D7C6; background: #F4EEE2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #2F4A94; font-size: 12px; font-weight: 600">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span>
+</span>대출가방</a>
+<a href="#Map" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Route" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">동선 추천</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Bag" aria-label="대출가방으로 돌아가기" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2419" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column">
+<h1 style="margin: 0; font-size: 18px; font-weight: 700; color: #2A2419">동선 추천</h1>
+<span style="font-size: 12px; color: #5C5347">선택한 3권 · 내 위치 기준</span>
+</div>
+</header>
+
+<div style="position: relative; height: 300px; flex-shrink: 0; background: #E6DDCB; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 300px">
+<div style="position: absolute; left: -40px; top: 240px; width: 480px; height: 44px; background: #CFD8E6; transform: rotate(-8deg)"></div>
+<div style="position: absolute; left: 230px; top: 150px; width: 100px; height: 70px; background: #D8DEC8; border-radius: 14px"></div>
+<div style="position: absolute; left: -20px; top: 120px; width: 440px; height: 10px; background: #F4EEE2; transform: rotate(-5deg)"></div>
+<div style="position: absolute; left: 150px; top: -20px; width: 10px; height: 360px; background: #F4EEE2; transform: rotate(8deg)"></div>
+<div style="position: absolute; left: 300px; top: -20px; width: 8px; height: 360px; background: #F4EEE2"></div>
+<svg width="390" height="300" viewBox="0 0 390 300" style="position: absolute; left: 0; top: 0"><polyline points="84,226 170,138 296,66" fill="none" stroke="#2F4A94" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 9"></polyline></svg>
+<div style="position: absolute; left: 73px; top: 215px; width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; border: 4px solid #ffffff; box-shadow: 0 0 0 8px rgba(47,74,148,0.18)"></div>
+</div>
+<button type="button" aria-label="1번 마포중앙도서관" style="position: absolute; left: 120px; top: 104px; height: 36px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(42,36,25,0.18)"><span style="width: 28px; height: 28px; border-radius: 999px; background: #F4EEE2; color: #2F4A94; font-weight: 700; display: flex; align-items: center; justify-content: center">1</span>마포중앙</button>
+<button type="button" aria-label="2번 마포구립서강도서관" style="position: absolute; left: 258px; top: 32px; height: 36px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(42,36,25,0.18)"><span style="width: 28px; height: 28px; border-radius: 999px; background: #F4EEE2; color: #2F4A94; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>서강</button>
+</div>
+
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 12px">
+<button type="button" aria-pressed="true" style="width: 100%; text-align: left; padding: 16px; box-sizing: border-box; border: 2px solid #2F4A94; border-radius: 16px; background: #F4EEE2; display: flex; flex-direction: column; gap: 14px">
+<span style="display: flex; align-items: center; justify-content: space-between; width: 100%">
+<span style="display: flex; align-items: center; gap: 6px"><span style="font-size: 17px; font-weight: 700; color: #2A2419">모두 빌리려면</span><span style="height: 22px; padding: 0 7px; border-radius: 6px; background: #E4E1DC; color: #2F4A94; font-size: 12px; font-weight: 600; display: flex; align-items: center">3권 전부</span></span>
+<span style="font-size: 14px; font-weight: 600; color: #2F4A94">2곳 · 약 1.7km</span>
+</span>
+<span style="display: flex; gap: 10px">
+<span style="width: 24px; height: 24px; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">1</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600; color: #2A2419">마포중앙도서관</span><span style="font-size: 13px; color: #5C5347">소년이 온다 · 불편한 편의점</span></span>
+</span>
+<span style="display: flex; gap: 10px">
+<span style="width: 24px; height: 24px; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">2</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600; color: #2A2419">마포구립서강도서관</span><span style="font-size: 13px; color: #5C5347">채식주의자</span></span>
+</span>
+</button>
+
+<button type="button" aria-pressed="false" style="width: 100%; text-align: left; padding: 16px; box-sizing: border-box; border: 1px solid #E0D7C6; border-radius: 16px; background: #F4EEE2; display: flex; flex-direction: column; gap: 8px">
+<span style="display: flex; align-items: center; justify-content: space-between; width: 100%">
+<span style="font-size: 17px; font-weight: 700; color: #2A2419">한 곳만 간다면</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4238">1곳 · 0.6km</span>
+</span>
+<span style="font-size: 15px; color: #3A3329">마포중앙도서관에서 <strong style="font-weight: 600">3권 중 2권</strong></span>
+<span style="font-size: 13px; font-weight: 600; color: #9A4508; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A4508" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg>채식주의자는 빠져요</span>
+</button>
+</main>
+
+<div style="flex-shrink: 0; padding: 12px 20px 20px; background: #F4EEE2">
+<a href="#" style="height: 56px; border-radius: 14px; background: #2F4A94; color: #ffffff; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"></path></svg>지도 앱으로 길찾기</a>
+</div>
+</div></div></figure>
+<figure id="Results" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">검색 · 책 검색 결과</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<form action="/search" method="get" style="margin: 0; height: 72px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Main" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2419" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<label for="Results-q3" class="sr">책 검색</label>
+<div style="flex-grow: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 2px 0 14px; background: #EAE3D4; border-radius: 14px; display: flex; align-items: center; gap: 6px">
+<input id="Results-q3" name="q" type="search" value="한강" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #2A2419; outline: none">
+<button type="button" aria-label="검색어 지우기" style="width: 40px; height: 40px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #B7AD9C; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+</div>
+</form>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden">
+<div style="padding: 0 12px 0 20px; height: 44px; display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 14px; color: #4A4238">도서 <strong style="color: #2A2419; font-weight: 700">32</strong>권</span>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #4A4238; font-size: 14px; display: flex; align-items: center; gap: 2px">정확도순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #EAE3D4">
+<a href="#Book" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #2A2419">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #D9DEEC; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">소년이 온다</span><span style="font-size: 13px; color: #5C5347">한강 · 창비 · 2014</span></span>
+</a>
+<button type="button" aria-pressed="true" aria-label="소년이 온다 대출가방에 담김" style="height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>담김</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #EAE3D4">
+<a href="#Book" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #2A2419">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #E2DCCF; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">채식주의자</span><span style="font-size: 13px; color: #5C5347">한강 · 창비 · 2007</span></span>
+</a>
+<button type="button" aria-pressed="true" aria-label="채식주의자 대출가방에 담김" style="height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>담김</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #EAE3D4">
+<a href="#Book" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #2A2419">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #EDE7DD; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">작별하지 않는다</span><span style="font-size: 13px; color: #5C5347">한강 · 문학동네 · 2021</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="작별하지 않는다 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #D3C9B7; border-radius: 10px; background: #F4EEE2; color: #3A3329; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3A3329" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #EAE3D4">
+<a href="#Book" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #2A2419">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #E4E1DC; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">흰</span><span style="font-size: 13px; color: #5C5347">한강 · 문학동네 · 2018</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="흰 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #D3C9B7; border-radius: 10px; background: #F4EEE2; color: #3A3329; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3A3329" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #EAE3D4">
+<a href="#Book" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #2A2419">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #E6ECE4; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">희랍어 시간</span><span style="font-size: 13px; color: #5C5347">한강 · 문학동네 · 2011</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="희랍어 시간 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #D3C9B7; border-radius: 10px; background: #F4EEE2; color: #3A3329; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3A3329" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #E0D7C6; background: #F4EEE2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #2F4A94; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><span style="position: relative; display: flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Libraries" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Book" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">책 상세</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 6px; display: flex; align-items: center">
+<a href="#Results" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2419" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+</header>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 0 20px">
+<div style="display: flex; gap: 18px; align-items: flex-end; padding-top: 4px">
+<div style="width: 112px; height: 160px; border-radius: 10px; background: #D9DEEC; flex-shrink: 0; box-shadow: 0 6px 18px rgba(42,36,25,0.10)"></div>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 4px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: #2A2419">소년이 온다</h1>
+<span style="font-size: 15px; color: #3A3329">한강</span>
+<span style="font-size: 13px; color: #5C5347">창비 · 2014</span>
+</div>
+</div>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #2A2419">내 주변에서 빌릴 수 있는 곳</h2>
+<span style="font-size: 13px; color: #5C5347">내 위치 기준 3km · 대출 가능 3곳</span>
+</div>
+<a href="#Map" style="height: 44px; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: #2F4A94">지도<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a>
+</div>
+<div style="margin-top: 8px">
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="font-size: 13px; color: #5C5347">0.6km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="font-size: 13px; color: #5C5347">1.2km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">아현도서관</span><span style="font-size: 13px; color: #5C5347">1.9km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="font-size: 13px; color: #5C5347">2.1km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #EAE3D4; color: #4A4238; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출중</span></a>
+</div>
+</section>
+</main>
+<div style="flex-shrink: 0; padding: 12px 20px 20px; display: flex; gap: 8px; box-shadow: 0 -6px 16px rgba(42,36,25,0.06)">
+<a href="#Map" style="height: 56px; padding: 0 18px; border-radius: 14px; background: #E4E1DC; color: #2F4A94; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">지도에서 보기</a>
+<button type="button" style="flex-grow: 1; height: 56px; border: 0; border-radius: 14px; background: #2F4A94; color: #ffffff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>대출가방에 담기</button>
+</div>
+</div></div></figure>
+<figure id="Libraries" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">내 주변 · 도서관 목록</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #2A2419">내 주변</h1>
+<div role="group" aria-label="보기 방식" style="height: 36px; padding: 3px; box-sizing: border-box; background: #EAE3D4; border-radius: 10px; display: flex; gap: 2px">
+<a href="#Map" style="padding: 0 12px; border-radius: 8px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #4A4238">지도</a>
+<span aria-current="true" style="padding: 0 12px; border-radius: 8px; background: #F4EEE2; box-shadow: 0 1px 3px rgba(42,36,25,0.12); display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #2A2419">목록</span>
+</div>
+</header>
+<form action="/nearby" method="get" style="margin: 4px 20px 0">
+<label for="Libraries-lq" class="sr">도서관 검색</label>
+<div style="height: 48px; box-sizing: border-box; padding: 0 14px; background: #EAE3D4; border-radius: 14px; display: flex; align-items: center; gap: 10px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="Libraries-lq" name="lib" type="search" placeholder="도서관 이름, 지역" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: #2A2419; outline: none">
+</div>
+</form>
+<div role="group" aria-label="검색 반경" style="margin: 10px 20px 0; height: 44px; box-sizing: border-box; padding: 4px; background: #EAE3D4; border-radius: 12px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">1km</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #2F4A94; color: #ffffff; font-size: 14px; font-weight: 700">3km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">5km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">10km</button>
+</div>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; margin-top: 8px">
+<div style="padding: 0 12px 0 20px; height: 44px; display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 14px; color: #4A4238">내 위치 기준 <strong style="color: #2A2419; font-weight: 700">7</strong>곳</span>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #4A4238; font-size: 14px; display: flex; align-items: center; gap: 2px">거리순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">0.6km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 22시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">1.2km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">아현도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">1.9km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #9A4508; font-weight: 600"><span style="width: 6px; height: 6px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #9A4508"></span>오늘 휴관</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">2.1km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #EAE3D4">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포소금나루도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">2.6km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #E0D7C6; background: #F4EEE2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5C5347; font-size: 12px; font-weight: 500"><span style="position: relative; display: flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Libraries" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #2F4A94; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Settings" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">설정</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Main" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2419" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="margin: 0; font-size: 18px; font-weight: 700; color: #2A2419">설정</h1>
+</header>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden">
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #5C5347">언어 · Language</h2>
+<div style="padding: 0 20px">
+<div role="group" aria-label="언어" style="height: 44px; box-sizing: border-box; padding: 4px; background: #EAE3D4; border-radius: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #F4EEE2; color: #2A2419; font-size: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(42,36,25,0.12);">시스템</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500;">한국어</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500;">English</button>
+</div>
+<p style="margin: 8px 2px 0; font-size: 13px; line-height: 1.5; color: #5C5347">책 제목과 도서관 이름은 한국어로 표시돼요.</p>
+</div>
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #5C5347">화면 모드</h2>
+<div style="padding: 0 20px">
+<div role="group" aria-label="화면 모드" style="height: 44px; box-sizing: border-box; padding: 4px; background: #EAE3D4; border-radius: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #F4EEE2; color: #2A2419; font-size: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(42,36,25,0.12);">시스템</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500;">라이트</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500;">다크</button>
+</div>
+</div>
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #5C5347">기준 위치</h2>
+<div role="radiogroup" aria-label="기준 위치">
+<button type="button" role="radio" aria-checked="false" style="width: 100%; min-height: 60px; padding: 8px 20px; box-sizing: border-box; border: 0; background: transparent; text-align: left; display: flex; align-items: center; gap: 12px"><span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; border: 2px solid #B7AD9C; flex-shrink: 0"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 500; color: #2A2419">현재 위치</span><span style="font-size: 13px; color: #5C5347">위치 권한을 사용해요</span></span></button>
+<button type="button" role="radio" aria-checked="true" style="width: 100%; min-height: 60px; padding: 8px 20px; box-sizing: border-box; border: 0; background: transparent; text-align: left; display: flex; align-items: center; gap: 12px"><span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; border: 7px solid #2F4A94; flex-shrink: 0"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 500; color: #2A2419">직접 선택</span><span style="font-size: 13px; color: #5C5347">서울 마포구</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+<div style="margin: 16px 20px 0; border-top: 1px solid #EAE3D4"></div>
+<div style="margin-top: 8px">
+<a href="#" style="height: 56px; padding: 0 16px 0 20px; display: flex; align-items: center; justify-content: space-between; color: #2A2419; font-size: 16px">피드백 보내기<span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #5C5347"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></span></a>
+<a href="#" style="height: 56px; padding: 0 16px 0 20px; display: flex; align-items: center; justify-content: space-between; color: #2A2419; font-size: 16px">앱 정보<span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #5C5347"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></span></a>
+</div>
+</main>
+</div></div></figure></div><h2 class="grp">모바일 · 다크</h2><div class="grid"><figure id="Main-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 메인 · 기본</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 0 20px; display: flex; flex-direction: column">
+<header style="height: 56px; display: flex; align-items: center; gap: 6px; flex-shrink: 0">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#8FA8E8"></rect><path d="M14 4.8a3.2 3.2 0 0 0-3.2 3.2c0 2.3 3.2 5.2 3.2 5.2s3.2-2.9 3.2-5.2A3.2 3.2 0 0 0 14 4.8z" fill="#14171F"></path><circle cx="14" cy="8" r="1.1" fill="#8FA8E8"></circle><rect x="8.6" y="16.4" width="3" height="4.8" rx="0.7" fill="#5A6072"></rect><rect x="12.3" y="14.8" width="3.4" height="6.4" rx="0.7" fill="#14171F"></rect><rect x="16.4" y="16.4" width="2.8" height="4.8" rx="0.7" fill="#5A6072" transform="rotate(8 17.8 18.8)"></rect><rect x="7.8" y="21.4" width="12.4" height="1.5" rx="0.75" fill="#14171F"></rect></svg>
+<span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em">책어디</span>
+<a href="#Settings-dark" aria-label="설정" style="margin-left: auto; margin-right: -10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9C1B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></a>
+</header>
+<h1 style="margin: 12px 0 0; font-size: 26px; font-weight: 700; line-height: 1.38; letter-spacing: -0.02em; color: #F4EEE2">빌리고 싶은 책,<br>어느 도서관에 있을까?</h1>
+<form action="/search" method="get" style="margin: 20px 0 0">
+<label for="Main-dark-q" class="sr">책 검색</label>
+<div style="display: flex; align-items: center; gap: 10px; height: 56px; box-sizing: border-box; padding: 0 6px 0 16px; background: #1F2330; border-radius: 16px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="Main-dark-q" name="q" type="search" placeholder="책 제목, 저자, ISBN" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #F4EEE2; outline: none">
+<button type="submit" aria-label="검색" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #8FA8E8; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+</div>
+</form>
+<section style="margin-top: 24px; padding: 18px; border: 1px solid #2C3242; border-radius: 20px; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700; color: #F4EEE2">내 주변 도서관</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #C9C1B3">위치를 켜면 가까운 도서관의 대출 가능 여부를 먼저 보여드려요.</p>
+<button type="button" style="margin-top: 10px; height: 48px; border: 0; border-radius: 12px; background: #26304A; color: #8FA8E8; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>내 위치로 찾기</button>
+</section>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #F4EEE2">최근 검색어</h2>
+<button type="button" style="height: 44px; padding: 0 2px; border: 0; background: transparent; font-size: 13px; color: #ADA597">전체 삭제</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px">
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #1F2330; border-radius: 999px; font-size: 14px; color: #E3DCCF">불편한 편의점</a>
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #1F2330; border-radius: 999px; font-size: 14px; color: #E3DCCF">세이노의 가르침</a>
+<a href="#" style="height: 40px; padding: 0 14px; display: flex; align-items: center; background: #1F2330; border-radius: 999px; font-size: 14px; color: #E3DCCF">한강</a>
+</div>
+</section>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700; color: #F4EEE2">이번 주 인기 대출</h2>
+<a href="#" style="height: 44px; display: flex; align-items: center; font-size: 13px; color: #ADA597">더보기</a>
+</div>
+<div style="display: flex; gap: 12px; margin: 4px -20px 0; padding: 0 20px; overflow-x: auto">
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #2A3350; margin-bottom: 8px">
+<button type="button" aria-label="소년이 온다 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #14171F; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #F4EEE2">소년이 온다</div>
+<div style="font-size: 13px; color: #ADA597">한강</div>
+</article>
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #3A342B; margin-bottom: 8px">
+<button type="button" aria-label="불편한 편의점 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #14171F; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #F4EEE2">불편한 편의점</div>
+<div style="font-size: 13px; color: #ADA597">김호연</div>
+</article>
+<article style="width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; background: #34302A; margin-bottom: 8px">
+<button type="button" aria-label="채식주의자 대출가방에 담기" style="position: absolute; right: 6px; bottom: 6px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #14171F; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="font-size: 15px; font-weight: 600; color: #F4EEE2">채식주의자</div>
+<div style="font-size: 13px; color: #ADA597">한강</div>
+</article>
+</div>
+</section>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #2C3242; background: #14171F; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8FA8E8; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>
+</span>대출가방</a>
+<a href="#Map-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Focus-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 메인 · 검색 입력 중</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<form action="/search" method="get" style="margin: 0; height: 72px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4EEE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<label for="Focus-dark-q2" class="sr">책 검색</label>
+<div style="flex-grow: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 2px 0 14px; border: 2px solid #8FA8E8; border-radius: 14px; display: flex; align-items: center; gap: 6px">
+<input id="Focus-dark-q2" name="q" type="search" value="한강" placeholder="책 제목, 저자, ISBN" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #F4EEE2; outline: none">
+<button type="button" aria-label="검색어 지우기" style="width: 40px; height: 40px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #5A6072; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+</div>
+</form>
+<div style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 4px 0 0">
+<h2 style="margin: 8px 20px 4px; font-size: 13px; font-weight: 600; color: #ADA597">저자</h2>
+<a href="#" style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; color: #F4EEE2">
+<span style="width: 40px; height: 40px; border-radius: 999px; background: #26304A; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600"><span style="color: #8FA8E8">한강</span></span><span style="font-size: 13px; color: #ADA597">저자의 책 전체 보기</span></span>
+</a>
+<h2 style="margin: 16px 20px 4px; font-size: 13px; font-weight: 600; color: #ADA597">도서</h2>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #2A3350; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #F4EEE2"><span style="font-size: 16px; font-weight: 500">소년이 온다</span><span style="font-size: 13px; color: #ADA597"><span style="color: #8FA8E8; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="소년이 온다 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #34302A; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #F4EEE2"><span style="font-size: 16px; font-weight: 500">채식주의자</span><span style="font-size: 13px; color: #ADA597"><span style="color: #8FA8E8; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="채식주의자 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #3A342B; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #F4EEE2"><span style="font-size: 16px; font-weight: 500">작별하지 않는다</span><span style="font-size: 13px; color: #ADA597"><span style="color: #8FA8E8; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="작별하지 않는다 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="height: 64px; padding: 0 12px 0 20px; display: flex; align-items: center; gap: 12px">
+<span style="width: 40px; height: 52px; border-radius: 6px; background: #26304A; flex-shrink: 0"></span>
+<a href="#" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; color: #F4EEE2"><span style="font-size: 16px; font-weight: 500">흰</span><span style="font-size: 13px; color: #ADA597"><span style="color: #8FA8E8; font-weight: 600">한강</span></span></a>
+<button type="button" aria-label="흰 대출가방에 담기" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="margin: 12px 20px 0; border-top: 1px solid #2C3242"></div>
+<a href="#" style="height: 56px; padding: 0 20px; display: flex; align-items: center; gap: 10px; color: #8FA8E8; font-size: 15px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>‘한강’ 전체 검색 결과 보기</a>
+</div>
+</div></div></figure>
+<figure id="Map-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 내 주변 · 책 검색 후</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #1B1F29">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px">
+<div style="position: absolute; left: -60px; top: 470px; width: 540px; height: 56px; background: #1C2640; transform: rotate(-12deg)"></div>
+<div style="position: absolute; left: 250px; top: 190px; width: 110px; height: 80px; background: #1E2A22; border-radius: 16px"></div>
+<div style="position: absolute; left: 30px; top: 380px; width: 70px; height: 60px; background: #1E2A22; border-radius: 14px"></div>
+<div style="position: absolute; left: -20px; top: 305px; width: 440px; height: 12px; background: #262B38; transform: rotate(-4deg)"></div>
+<div style="position: absolute; left: -20px; top: 420px; width: 440px; height: 8px; background: #262B38; transform: rotate(3deg)"></div>
+<div style="position: absolute; left: 130px; top: 120px; width: 12px; height: 520px; background: #262B38; transform: rotate(6deg)"></div>
+<div style="position: absolute; left: 290px; top: 120px; width: 8px; height: 520px; background: #262B38; transform: rotate(-3deg)"></div>
+<div style="position: absolute; left: 45px; top: 230px; width: 300px; height: 300px; box-sizing: border-box; border-radius: 999px; border: 2px solid rgba(143,168,232,0.55); background: rgba(143,168,232,0.08)"></div>
+<div style="position: absolute; left: 30px; top: 196px; width: 10px; height: 10px; border-radius: 999px; background: #5A6072"></div>
+<div style="position: absolute; left: 350px; top: 150px; width: 10px; height: 10px; border-radius: 999px; background: #5A6072"></div>
+<div style="position: absolute; left: 184px; top: 369px; width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; border: 4px solid #14171F; box-shadow: 0 0 0 8px rgba(143,168,232,0.18)"></div>
+</div>
+
+<button type="button" aria-label="마포중앙도서관, 대출 가능" style="position: absolute; left: 62px; top: 256px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>마포중앙</button>
+<button type="button" aria-label="마포구립서강도서관, 대출 가능" style="position: absolute; left: 214px; top: 318px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>서강</button>
+<button type="button" aria-label="서대문도서관, 대출중" style="position: absolute; left: 196px; top: 436px; height: 36px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #7D8497; border-radius: 999px; background: #14171F; color: #C9C1B3; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.12)">서대문 · 대출중</button>
+<button type="button" aria-label="아현도서관, 대출 가능" style="position: absolute; left: 76px; top: 450px; height: 36px; padding: 0 12px 0 9px; border: 0; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.18)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>아현</button>
+
+<div style="position: absolute; left: 12px; top: 12px; width: 366px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 52px; box-sizing: border-box; padding: 0 6px 0 4px; background: #14171F; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); display: flex; align-items: center; gap: 2px">
+<span aria-hidden="true" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"></path><path d="M5 17a3 3 0 0 1 3-3h11"></path></svg></span>
+<a href="#Focus-dark" style="flex-grow: 1; min-width: 0; height: 44px; display: flex; align-items: center; font-size: 16px; font-weight: 600; color: #F4EEE2">소년이 온다</a>
+<button type="button" aria-label="책 선택 해제" style="width: 40px; height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #5A6072; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+<a href="#Libraries-dark" style="height: 44px; padding: 0 10px; display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: #8FA8E8"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>목록</a>
+</div>
+<div style="display: flex; gap: 8px">
+<div role="group" aria-label="검색 반경" style="flex-grow: 1; height: 44px; box-sizing: border-box; padding: 4px; background: #14171F; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">1km</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #8FA8E8; color: #14171F; font-size: 14px; font-weight: 700">3km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">5km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">10km</button>
+</div>
+<button type="button" aria-pressed="true" style="height: 44px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #8FA8E8; border-radius: 12px; background: #26304A; color: #8FA8E8; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); flex-shrink: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>대출 가능만</button>
+</div>
+</div>
+
+<button type="button" style="position: absolute; left: 105px; top: 136px; width: 180px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; color: #14171F; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.25)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"></path><path d="M20 4v5h-5"></path></svg>이 지역에서 다시 검색</button>
+
+<button type="button" aria-label="내 위치로 이동" style="position: absolute; right: 16px; top: 482px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #14171F; box-shadow: 0 2px 12px rgba(0,0,0,0.16); display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg></button>
+
+<section style="position: absolute; left: 0; top: 540px; width: 390px; height: 232px; overflow: hidden; background: #14171F; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.10); display: flex; flex-direction: column">
+<div style="width: 40px; height: 4px; border-radius: 999px; background: #3A4152; margin: 10px auto 0"></div>
+<div style="padding: 14px 20px 6px; display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #F4EEE2">3곳에서 빌릴 수 있어요</h2>
+<p style="margin: 0; font-size: 13px; color: #ADA597">내 위치 기준 3km · 소장 도서관 4곳</p>
+</div>
+<button type="button" style="height: 44px; margin-top: -8px; padding: 0 2px; border: 0; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 2px">거리순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C1B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="font-size: 13px; color: #ADA597">0.6km · 도보 9분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출 가능</span>
+</a>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="font-size: 13px; color: #ADA597">1.2km · 도보 18분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출 가능</span>
+</a>
+<a href="#" style="height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2">
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="font-size: 13px; color: #ADA597">2.1km · 버스 12분</span></span>
+<span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #1F2330; color: #C9C1B3; font-size: 13px; font-weight: 600; display: flex; align-items: center">대출중</span>
+</a>
+</section>
+<nav aria-label="주 메뉴" style="position: absolute; left: 0; top: 772px; width: 390px; height: 72px; box-sizing: border-box; border-top: 1px solid #2C3242; background: #14171F; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span>
+</span>대출가방</a>
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8FA8E8; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Bag-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 대출가방</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column">
+<header style="height: 56px; flex-shrink: 0; padding: 0 20px; display: flex; align-items: center; gap: 6px">
+<h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #F4EEE2">대출가방</h1>
+<span style="font-size: 16px; font-weight: 600; color: #8FA8E8">4</span>
+</header>
+<div style="margin: 4px 20px 0; height: 52px; box-sizing: border-box; padding: 0 4px 0 14px; background: #1F2330; border-radius: 14px; display: flex; align-items: center; gap: 8px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9C1B3" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+<span style="flex-grow: 1; font-size: 14px; color: #E3DCCF"><strong style="font-weight: 600">내 위치</strong> 기준 · 반경 <strong style="font-weight: 600">3km</strong></span>
+<button type="button" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: #8FA8E8; font-size: 14px; font-weight: 600">변경</button>
+</div>
+<div style="margin-top: 8px; padding: 0 12px 0 20px; height: 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1F2330">
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #E3DCCF; height: 44px"><input type="checkbox" checked="" style="width: 20px; height: 20px; margin: 0">전체 선택 (3/4)</label>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #ADA597; font-size: 13px">선택 삭제</button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #1F2330">
+<input type="checkbox" checked="" aria-label="소년이 온다 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #2A3350; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #F4EEE2">소년이 온다</div>
+<div style="font-size: 13px; color: #ADA597">한강</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #8FA8E8; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 3곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="소년이 온다 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #1F2330">
+<input type="checkbox" checked="" aria-label="불편한 편의점 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #3A342B; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #F4EEE2">불편한 편의점</div>
+<div style="font-size: 13px; color: #ADA597">김호연</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #8FA8E8; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 2곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="불편한 편의점 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid #1F2330">
+<input type="checkbox" checked="" aria-label="채식주의자 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #34302A; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #F4EEE2">채식주의자</div>
+<div style="font-size: 13px; color: #ADA597">한강</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #8FA8E8; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>반경 안 1곳에서 대출 가능</div>
+</div>
+<button type="button" aria-label="채식주의자 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="padding: 14px 12px 14px 20px; display: flex; align-items: flex-start; gap: 12px">
+<input type="checkbox" aria-label="세이노의 가르침 선택" style="width: 20px; height: 20px; margin: 4px 0 0; flex-shrink: 0">
+<div style="width: 56px; height: 76px; border-radius: 8px; background: #1B1F29; flex-shrink: 0"></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 16px; font-weight: 600; color: #C9C1B3">세이노의 가르침</div>
+<div style="font-size: 13px; color: #ADA597">세이노</div>
+<div style="margin-top: 6px; font-size: 13px; font-weight: 600; color: #F0A868; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0A868" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg>반경 안 모든 도서관 대출중</div>
+<a href="#" style="margin-top: 2px; font-size: 13px; font-weight: 600; color: #8FA8E8; height: 32px; display: flex; align-items: center">반경 넓혀서 찾기</a>
+</div>
+<button type="button" aria-label="세이노의 가르침 빼기" style="width: 44px; height: 44px; margin-top: -8px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+</main>
+
+<div style="flex-shrink: 0; padding: 12px 20px 14px; background: #14171F; box-shadow: 0 -6px 16px rgba(0,0,0,0.06); display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 13px; color: #ADA597; text-align: center">선택한 책을 가장 적은 도서관에서 빌리는 순서를 찾아드려요</p>
+<a href="#Route-dark" style="height: 56px; border-radius: 14px; background: #8FA8E8; color: #14171F; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="6" r="2.5"></circle><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"></path></svg>3권으로 동선 짜기</a>
+</div>
+
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #2C3242; background: #14171F; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8FA8E8; font-size: 12px; font-weight: 600">
+<span style="position: relative; display: flex">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+<span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span>
+</span>대출가방</a>
+<a href="#Map-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Route-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 동선 추천</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Bag-dark" aria-label="대출가방으로 돌아가기" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4EEE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column">
+<h1 style="margin: 0; font-size: 18px; font-weight: 700; color: #F4EEE2">동선 추천</h1>
+<span style="font-size: 12px; color: #ADA597">선택한 3권 · 내 위치 기준</span>
+</div>
+</header>
+
+<div style="position: relative; height: 300px; flex-shrink: 0; background: #1B1F29; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 300px">
+<div style="position: absolute; left: -40px; top: 240px; width: 480px; height: 44px; background: #1C2640; transform: rotate(-8deg)"></div>
+<div style="position: absolute; left: 230px; top: 150px; width: 100px; height: 70px; background: #1E2A22; border-radius: 14px"></div>
+<div style="position: absolute; left: -20px; top: 120px; width: 440px; height: 10px; background: #262B38; transform: rotate(-5deg)"></div>
+<div style="position: absolute; left: 150px; top: -20px; width: 10px; height: 360px; background: #262B38; transform: rotate(8deg)"></div>
+<div style="position: absolute; left: 300px; top: -20px; width: 8px; height: 360px; background: #262B38"></div>
+<svg width="390" height="300" viewBox="0 0 390 300" style="position: absolute; left: 0; top: 0"><polyline points="84,226 170,138 296,66" fill="none" stroke="#8FA8E8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 9"></polyline></svg>
+<div style="position: absolute; left: 73px; top: 215px; width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; border: 4px solid #14171F; box-shadow: 0 0 0 8px rgba(143,168,232,0.18)"></div>
+</div>
+<button type="button" aria-label="1번 마포중앙도서관" style="position: absolute; left: 120px; top: 104px; height: 36px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.18)"><span style="width: 28px; height: 28px; border-radius: 999px; background: #14171F; color: #8FA8E8; font-weight: 700; display: flex; align-items: center; justify-content: center">1</span>마포중앙</button>
+<button type="button" aria-label="2번 마포구립서강도서관" style="position: absolute; left: 258px; top: 32px; height: 36px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.18)"><span style="width: 28px; height: 28px; border-radius: 999px; background: #14171F; color: #8FA8E8; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>서강</button>
+</div>
+
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 12px">
+<button type="button" aria-pressed="true" style="width: 100%; text-align: left; padding: 16px; box-sizing: border-box; border: 2px solid #8FA8E8; border-radius: 16px; background: #14171F; display: flex; flex-direction: column; gap: 14px">
+<span style="display: flex; align-items: center; justify-content: space-between; width: 100%">
+<span style="display: flex; align-items: center; gap: 6px"><span style="font-size: 17px; font-weight: 700; color: #F4EEE2">모두 빌리려면</span><span style="height: 22px; padding: 0 7px; border-radius: 6px; background: #26304A; color: #8FA8E8; font-size: 12px; font-weight: 600; display: flex; align-items: center">3권 전부</span></span>
+<span style="font-size: 14px; font-weight: 600; color: #8FA8E8">2곳 · 약 1.7km</span>
+</span>
+<span style="display: flex; gap: 10px">
+<span style="width: 24px; height: 24px; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">1</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600; color: #F4EEE2">마포중앙도서관</span><span style="font-size: 13px; color: #ADA597">소년이 온다 · 불편한 편의점</span></span>
+</span>
+<span style="display: flex; gap: 10px">
+<span style="width: 24px; height: 24px; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">2</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600; color: #F4EEE2">마포구립서강도서관</span><span style="font-size: 13px; color: #ADA597">채식주의자</span></span>
+</span>
+</button>
+
+<button type="button" aria-pressed="false" style="width: 100%; text-align: left; padding: 16px; box-sizing: border-box; border: 1px solid #2C3242; border-radius: 16px; background: #14171F; display: flex; flex-direction: column; gap: 8px">
+<span style="display: flex; align-items: center; justify-content: space-between; width: 100%">
+<span style="font-size: 17px; font-weight: 700; color: #F4EEE2">한 곳만 간다면</span>
+<span style="font-size: 14px; font-weight: 600; color: #C9C1B3">1곳 · 0.6km</span>
+</span>
+<span style="font-size: 15px; color: #E3DCCF">마포중앙도서관에서 <strong style="font-weight: 600">3권 중 2권</strong></span>
+<span style="font-size: 13px; font-weight: 600; color: #F0A868; display: flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0A868" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg>채식주의자는 빠져요</span>
+</button>
+</main>
+
+<div style="flex-shrink: 0; padding: 12px 20px 20px; background: #14171F">
+<a href="#" style="height: 56px; border-radius: 14px; background: #8FA8E8; color: #14171F; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"></path></svg>지도 앱으로 길찾기</a>
+</div>
+</div></div></figure>
+<figure id="Results-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 검색 · 책 검색 결과</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<form action="/search" method="get" style="margin: 0; height: 72px; flex-shrink: 0; padding: 0 16px 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Main-dark" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4EEE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<label for="Results-dark-q3" class="sr">책 검색</label>
+<div style="flex-grow: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 2px 0 14px; background: #1F2330; border-radius: 14px; display: flex; align-items: center; gap: 6px">
+<input id="Results-dark-q3" name="q" type="search" value="한강" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 17px; color: #F4EEE2; outline: none">
+<button type="button" aria-label="검색어 지우기" style="width: 40px; height: 40px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #5A6072; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+</div>
+</form>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden">
+<div style="padding: 0 12px 0 20px; height: 44px; display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 14px; color: #C9C1B3">도서 <strong style="color: #F4EEE2; font-weight: 700">32</strong>권</span>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #C9C1B3; font-size: 14px; display: flex; align-items: center; gap: 2px">정확도순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C1B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #1F2330">
+<a href="#Book-dark" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #F4EEE2">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #2A3350; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">소년이 온다</span><span style="font-size: 13px; color: #ADA597">한강 · 창비 · 2014</span></span>
+</a>
+<button type="button" aria-pressed="true" aria-label="소년이 온다 대출가방에 담김" style="height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>담김</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #1F2330">
+<a href="#Book-dark" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #F4EEE2">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #34302A; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">채식주의자</span><span style="font-size: 13px; color: #ADA597">한강 · 창비 · 2007</span></span>
+</a>
+<button type="button" aria-pressed="true" aria-label="채식주의자 대출가방에 담김" style="height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>담김</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #1F2330">
+<a href="#Book-dark" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #F4EEE2">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #3A342B; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">작별하지 않는다</span><span style="font-size: 13px; color: #ADA597">한강 · 문학동네 · 2021</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="작별하지 않는다 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #3A4152; border-radius: 10px; background: #14171F; color: #E3DCCF; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E3DCCF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #1F2330">
+<a href="#Book-dark" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #F4EEE2">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #26304A; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">흰</span><span style="font-size: 13px; color: #ADA597">한강 · 문학동네 · 2018</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="흰 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #3A4152; border-radius: 10px; background: #14171F; color: #E3DCCF; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E3DCCF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+<div style="padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #1F2330">
+<a href="#Book-dark" style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #F4EEE2">
+<span style="width: 60px; height: 84px; border-radius: 8px; background: #2B342C; flex-shrink: 0"></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-size: 16px; font-weight: 600">희랍어 시간</span><span style="font-size: 13px; color: #ADA597">한강 · 문학동네 · 2011</span></span>
+</a>
+<button type="button" aria-pressed="false" aria-label="희랍어 시간 대출가방에 담기" style="height: 36px; padding: 0 10px; border: 1px solid #3A4152; border-radius: 10px; background: #14171F; color: #E3DCCF; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E3DCCF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>담기</button>
+</div>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #2C3242; background: #14171F; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main-dark" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8FA8E8; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><span style="position: relative; display: flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Libraries-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Book-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 책 상세</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 6px; display: flex; align-items: center">
+<a href="#Results-dark" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4EEE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+</header>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 0 20px">
+<div style="display: flex; gap: 18px; align-items: flex-end; padding-top: 4px">
+<div style="width: 112px; height: 160px; border-radius: 10px; background: #2A3350; flex-shrink: 0; box-shadow: 0 6px 18px rgba(0,0,0,0.10)"></div>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 4px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: #F4EEE2">소년이 온다</h1>
+<span style="font-size: 15px; color: #E3DCCF">한강</span>
+<span style="font-size: 13px; color: #ADA597">창비 · 2014</span>
+</div>
+</div>
+<section style="margin-top: 28px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #F4EEE2">내 주변에서 빌릴 수 있는 곳</h2>
+<span style="font-size: 13px; color: #ADA597">내 위치 기준 3km · 대출 가능 3곳</span>
+</div>
+<a href="#Map-dark" style="height: 44px; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: #8FA8E8">지도<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a>
+</div>
+<div style="margin-top: 8px">
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="font-size: 13px; color: #ADA597">0.6km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="font-size: 13px; color: #ADA597">1.2km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">아현도서관</span><span style="font-size: 13px; color: #ADA597">1.9km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #26304A; color: #8FA8E8; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2;"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="font-size: 13px; color: #ADA597">2.1km</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #1F2330; color: #C9C1B3; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출중</span></a>
+</div>
+</section>
+</main>
+<div style="flex-shrink: 0; padding: 12px 20px 20px; display: flex; gap: 8px; box-shadow: 0 -6px 16px rgba(0,0,0,0.06)">
+<a href="#Map-dark" style="height: 56px; padding: 0 18px; border-radius: 14px; background: #26304A; color: #8FA8E8; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">지도에서 보기</a>
+<button type="button" style="flex-grow: 1; height: 56px; border: 0; border-radius: 14px; background: #8FA8E8; color: #14171F; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>대출가방에 담기</button>
+</div>
+</div></div></figure>
+<figure id="Libraries-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 내 주변 · 도서관 목록</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #F4EEE2">내 주변</h1>
+<div role="group" aria-label="보기 방식" style="height: 36px; padding: 3px; box-sizing: border-box; background: #1F2330; border-radius: 10px; display: flex; gap: 2px">
+<a href="#Map-dark" style="padding: 0 12px; border-radius: 8px; display: flex; align-items: center; font-size: 13px; font-weight: 500; color: #C9C1B3">지도</a>
+<span aria-current="true" style="padding: 0 12px; border-radius: 8px; background: #14171F; box-shadow: 0 1px 3px rgba(0,0,0,0.12); display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #F4EEE2">목록</span>
+</div>
+</header>
+<form action="/nearby" method="get" style="margin: 4px 20px 0">
+<label for="Libraries-dark-lq" class="sr">도서관 검색</label>
+<div style="height: 48px; box-sizing: border-box; padding: 0 14px; background: #1F2330; border-radius: 14px; display: flex; align-items: center; gap: 10px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="Libraries-dark-lq" name="lib" type="search" placeholder="도서관 이름, 지역" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: #F4EEE2; outline: none">
+</div>
+</form>
+<div role="group" aria-label="검색 반경" style="margin: 10px 20px 0; height: 44px; box-sizing: border-box; padding: 4px; background: #1F2330; border-radius: 12px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">1km</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #8FA8E8; color: #14171F; font-size: 14px; font-weight: 700">3km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">5km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500">10km</button>
+</div>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden; margin-top: 8px">
+<div style="padding: 0 12px 0 20px; height: 44px; display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 14px; color: #C9C1B3">내 위치 기준 <strong style="color: #F4EEE2; font-weight: 700">7</strong>곳</span>
+<button type="button" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #C9C1B3; font-size: 14px; display: flex; align-items: center; gap: 2px">거리순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C1B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #ADA597">0.6km</span><span style="width: 1px; height: 10px; background: #3A4152"></span><span style="display: flex; align-items: center; gap: 5px; color: #E3DCCF"><span style="width: 6px; height: 6px; border-radius: 999px; background: #8FA8E8"></span>운영 중 · 22시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #ADA597">1.2km</span><span style="width: 1px; height: 10px; background: #3A4152"></span><span style="display: flex; align-items: center; gap: 5px; color: #E3DCCF"><span style="width: 6px; height: 6px; border-radius: 999px; background: #8FA8E8"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">아현도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #ADA597">1.9km</span><span style="width: 1px; height: 10px; background: #3A4152"></span><span style="display: flex; align-items: center; gap: 5px; color: #F0A868; font-weight: 600"><span style="width: 6px; height: 6px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #F0A868"></span>오늘 휴관</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #ADA597">2.1km</span><span style="width: 1px; height: 10px; background: #3A4152"></span><span style="display: flex; align-items: center; gap: 5px; color: #E3DCCF"><span style="width: 6px; height: 6px; border-radius: 999px; background: #8FA8E8"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #F4EEE2; border-bottom: 1px solid #1F2330">
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-size: 16px; font-weight: 600">마포소금나루도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #ADA597">2.6km</span><span style="width: 1px; height: 10px; background: #3A4152"></span><span style="display: flex; align-items: center; gap: 5px; color: #E3DCCF"><span style="width: 6px; height: 6px; border-radius: 999px; background: #8FA8E8"></span>운영 중 · 18시까지</span></span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</main>
+<nav aria-label="주 메뉴" style="height: 72px; flex-shrink: 0; border-top: 1px solid #2C3242; background: #14171F; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+<a href="#Main-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>검색</a>
+<a href="#Bag-dark" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #ADA597; font-size: 12px; font-weight: 500"><span style="position: relative; display: flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ADA597" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -4px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #8FA8E8; color: #14171F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Libraries-dark" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8FA8E8; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FA8E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+</nav>
+</div></div></figure>
+<figure id="Settings-dark" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">다크 · 설정</figcaption><div style="width:390px;height:844px;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #14171F; overflow: hidden">
+<header style="height: 56px; flex-shrink: 0; padding: 0 6px; display: flex; align-items: center; gap: 4px">
+<a href="#Main-dark" aria-label="뒤로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4EEE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="margin: 0; font-size: 18px; font-weight: 700; color: #F4EEE2">설정</h1>
+</header>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden">
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #ADA597">언어 · Language</h2>
+<div style="padding: 0 20px">
+<div role="group" aria-label="언어" style="height: 44px; box-sizing: border-box; padding: 4px; background: #1F2330; border-radius: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #14171F; color: #F4EEE2; font-size: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">시스템</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500;">한국어</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500;">English</button>
+</div>
+<p style="margin: 8px 2px 0; font-size: 13px; line-height: 1.5; color: #ADA597">책 제목과 도서관 이름은 한국어로 표시돼요.</p>
+</div>
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #ADA597">화면 모드</h2>
+<div style="padding: 0 20px">
+<div role="group" aria-label="화면 모드" style="height: 44px; box-sizing: border-box; padding: 4px; background: #1F2330; border-radius: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500;">시스템</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #C9C1B3; font-size: 14px; font-weight: 500;">라이트</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #2C3242; color: #F4EEE2; font-size: 14px; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">다크</button>
+</div>
+</div>
+<h2 style="margin: 24px 20px 8px; font-size: 13px; font-weight: 600; color: #ADA597">기준 위치</h2>
+<div role="radiogroup" aria-label="기준 위치">
+<button type="button" role="radio" aria-checked="false" style="width: 100%; min-height: 60px; padding: 8px 20px; box-sizing: border-box; border: 0; background: transparent; text-align: left; display: flex; align-items: center; gap: 12px"><span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; border: 2px solid #5A6072; flex-shrink: 0"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 500; color: #F4EEE2">현재 위치</span><span style="font-size: 13px; color: #ADA597">위치 권한을 사용해요</span></span></button>
+<button type="button" role="radio" aria-checked="true" style="width: 100%; min-height: 60px; padding: 8px 20px; box-sizing: border-box; border: 0; background: transparent; text-align: left; display: flex; align-items: center; gap: 12px"><span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 999px; border: 7px solid #8FA8E8; flex-shrink: 0"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 500; color: #F4EEE2">직접 선택</span><span style="font-size: 13px; color: #ADA597">서울 마포구</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+<div style="margin: 16px 20px 0; border-top: 1px solid #1F2330"></div>
+<div style="margin-top: 8px">
+<a href="#" style="height: 56px; padding: 0 16px 0 20px; display: flex; align-items: center; justify-content: space-between; color: #F4EEE2; font-size: 16px">피드백 보내기<span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #ADA597"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></span></a>
+<a href="#" style="height: 56px; padding: 0 16px 0 20px; display: flex; align-items: center; justify-content: space-between; color: #F4EEE2; font-size: 16px">앱 정보<span style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #ADA597"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D8497" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></span></a>
+</div>
+</main>
+</div></div></figure></div><h2 class="grp">웹</h2><div class="grid"><figure id="WebMain" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">웹 · 메인</figcaption><div style="width:1440px;height:900px;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 40px; border-bottom: 1px solid #E0D7C6; display: flex; align-items: center; gap: 32px">
+<a href="#WebMain" style="display: flex; align-items: center; gap: 8px; color: #2A2419; flex-shrink: 0"><svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#2F4A94"></rect><path d="M14 4.8a3.2 3.2 0 0 0-3.2 3.2c0 2.3 3.2 5.2 3.2 5.2s3.2-2.9 3.2-5.2A3.2 3.2 0 0 0 14 4.8z" fill="#F4EEE2"></path><circle cx="14" cy="8" r="1.1" fill="#2F4A94"></circle><rect x="8.6" y="16.4" width="3" height="4.8" rx="0.7" fill="#C9CEDB"></rect><rect x="12.3" y="14.8" width="3.4" height="6.4" rx="0.7" fill="#F4EEE2"></rect><rect x="16.4" y="16.4" width="2.8" height="4.8" rx="0.7" fill="#C9CEDB" transform="rotate(8 17.8 18.8)"></rect><rect x="7.8" y="21.4" width="12.4" height="1.5" rx="0.75" fill="#F4EEE2"></rect></svg><span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em">책어디</span></a>
+<div style="flex-grow: 1; display: flex; justify-content: center"></div>
+<nav aria-label="주 메뉴" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0">
+<a href="#WebMap" style="height: 44px; padding: 0 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: #3A3329; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+<a href="#Bag" style="height: 44px; padding: 0 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: #3A3329; font-size: 15px; font-weight: 500"><span style="position: relative; display: flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -6px; right: -10px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Settings" aria-label="설정" style="width: 44px; height: 44px; margin-left: 4px; border-radius: 12px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></a>
+</nav>
+</header>
+<main style="flex-grow: 1; min-height: 0; overflow: hidden">
+<section style="padding: 64px 0 52px; display: flex; flex-direction: column; align-items: center">
+<h1 style="margin: 0; font-size: 40px; font-weight: 700; line-height: 1.3; letter-spacing: -0.025em; color: #2A2419; text-align: center">빌리고 싶은 책,<br>어느 도서관에 있을까?</h1>
+<form action="/search" method="get" style="margin: 32px 0 0; width: 640px">
+<label for="WebMain-wq" class="sr">책 검색</label>
+<div style="display: flex; align-items: center; gap: 12px; height: 64px; box-sizing: border-box; padding: 0 8px 0 22px; background: #EAE3D4; border-radius: 18px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="WebMain-wq" name="q" type="search" placeholder="책 제목, 저자, ISBN" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 18px; color: #2A2419; outline: none">
+<button type="submit" style="height: 48px; padding: 0 24px; border: 0; border-radius: 13px; background: #2F4A94; color: #ffffff; font-size: 16px; font-weight: 700">검색</button>
+</div>
+</form>
+<div style="margin-top: 16px; display: flex; align-items: center; gap: 8px">
+<span style="font-size: 13px; color: #5C5347; margin-right: 4px">최근 검색</span>
+<a href="#WebMap" style="height: 40px; padding: 0 16px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">불편한 편의점</a>
+<a href="#WebMap" style="height: 40px; padding: 0 16px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">세이노의 가르침</a>
+<a href="#WebMap" style="height: 40px; padding: 0 16px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">한강</a>
+<a href="#WebMap" style="height: 40px; padding: 0 16px; display: flex; align-items: center; background: #EAE3D4; border-radius: 999px; font-size: 14px; color: #3A3329">트렌드 코리아</a>
+</div>
+</section>
+<div style="width: 1120px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start">
+<section style="flex-grow: 1; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #2A2419">이번 주 인기 대출</h2>
+<a href="#" style="height: 44px; display: flex; align-items: center; font-size: 14px; color: #5C5347">더보기</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px">
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #D9DEEC; margin-bottom: 10px"></a>
+<button type="button" aria-label="소년이 온다 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">소년이 온다</a>
+<span style="font-size: 13px; color: #5C5347">한강</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #EDE7DD; margin-bottom: 10px"></a>
+<button type="button" aria-label="불편한 편의점 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">불편한 편의점</a>
+<span style="font-size: 13px; color: #5C5347">김호연</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #E2DCCF; margin-bottom: 10px"></a>
+<button type="button" aria-label="채식주의자 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">채식주의자</a>
+<span style="font-size: 13px; color: #5C5347">한강</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #E6ECE4; margin-bottom: 10px"></a>
+<button type="button" aria-label="작별하지 않는다 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">작별하지 않는다</a>
+<span style="font-size: 13px; color: #5C5347">한강</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #E4E1DC; margin-bottom: 10px"></a>
+<button type="button" aria-label="세이노의 가르침 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">세이노의 가르침</a>
+<span style="font-size: 13px; color: #5C5347">세이노</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<a href="#Book" style="position: relative; display: block; aspect-ratio: 5 / 7; border-radius: 12px; background: #EAE3D4; margin-bottom: 10px"></a>
+<button type="button" aria-label="흰 대출가방에 담기" style="position: relative; align-self: flex-end; margin: -64px 8px 20px 0; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #F4EEE2; box-shadow: 0 2px 8px rgba(42,36,25,0.14); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<a href="#Book" style="font-size: 15px; font-weight: 600; color: #2A2419">흰</a>
+<span style="font-size: 13px; color: #5C5347">한강</span>
+</article>
+</div>
+</section>
+<aside style="width: 340px; flex-shrink: 0; box-sizing: border-box; padding: 20px 22px 8px; border: 1px solid #E0D7C6; border-radius: 20px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #2A2419">내 주변 도서관</h2>
+<a href="#WebMap" style="height: 44px; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: #2F4A94">지도<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a>
+</div>
+<p style="margin: 0 0 4px; font-size: 13px; color: #5C5347">서울 마포구 기준</p>
+<a href="#WebMap" style="padding: 12px 0; display: flex; flex-direction: column; gap: 4px; color: #2A2419; border-bottom: 1px solid #E0D7C6;"><span style="font-size: 15px; font-weight: 600">마포중앙도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">0.6km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329; font-weight: 500"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 22시까지</span></span></a>
+<a href="#WebMap" style="padding: 12px 0; display: flex; flex-direction: column; gap: 4px; color: #2A2419; border-bottom: 1px solid #E0D7C6;"><span style="font-size: 15px; font-weight: 600">마포구립서강도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">1.2km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #3A3329; font-weight: 500"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2F4A94"></span>운영 중 · 18시까지</span></span></a>
+<a href="#WebMap" style="padding: 12px 0; display: flex; flex-direction: column; gap: 4px; color: #2A2419;"><span style="font-size: 15px; font-weight: 600">아현도서관</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px"><span style="color: #5C5347">1.9km</span><span style="width: 1px; height: 10px; background: #D3C9B7"></span><span style="display: flex; align-items: center; gap: 5px; color: #9A4508; font-weight: 600"><span style="width: 6px; height: 6px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #9A4508"></span>오늘 휴관</span></span></a>
+</aside>
+</div>
+</main>
+</div></div></figure>
+<figure id="WebMap" style="margin:0;display:flex;flex-direction:column;gap:10px"><figcaption style="font:600 14px/1.4 sans-serif;color:#3A3329">웹 · 내 주변 (책 검색 후)</figcaption><div style="width:1440px;height:900px;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.12)"><div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4EEE2; overflow: hidden">
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 40px; border-bottom: 1px solid #E0D7C6; display: flex; align-items: center; gap: 32px">
+<a href="#WebMain" style="display: flex; align-items: center; gap: 8px; color: #2A2419; flex-shrink: 0"><svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#2F4A94"></rect><path d="M14 4.8a3.2 3.2 0 0 0-3.2 3.2c0 2.3 3.2 5.2 3.2 5.2s3.2-2.9 3.2-5.2A3.2 3.2 0 0 0 14 4.8z" fill="#F4EEE2"></path><circle cx="14" cy="8" r="1.1" fill="#2F4A94"></circle><rect x="8.6" y="16.4" width="3" height="4.8" rx="0.7" fill="#C9CEDB"></rect><rect x="12.3" y="14.8" width="3.4" height="6.4" rx="0.7" fill="#F4EEE2"></rect><rect x="16.4" y="16.4" width="2.8" height="4.8" rx="0.7" fill="#C9CEDB" transform="rotate(8 17.8 18.8)"></rect><rect x="7.8" y="21.4" width="12.4" height="1.5" rx="0.75" fill="#F4EEE2"></rect></svg><span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em">책어디</span></a>
+<div style="flex-grow: 1; display: flex; justify-content: center"><form action="/search" method="get" style="margin: 0; width: 480px">
+<label for="WebMap-wmq" class="sr">책 검색</label>
+<div style="height: 46px; box-sizing: border-box; padding: 0 4px 0 16px; background: #EAE3D4; border-radius: 14px; display: flex; align-items: center; gap: 10px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C5347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input id="WebMap-wmq" name="q" type="search" value="소년이 온다" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: #2A2419; outline: none">
+<button type="button" aria-label="검색어 지우기" style="width: 40px; height: 40px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 20px; height: 20px; border-radius: 999px; background: #B7AD9C; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span></button>
+</div>
+</form></div>
+<nav aria-label="주 메뉴" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0">
+<a href="#WebMap" aria-current="page" style="background: #E4E1DC; height: 44px; padding: 0 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: #2F4A94; font-size: 15px; font-weight: 700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>내 주변</a>
+<a href="#Bag" style="height: 44px; padding: 0 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: #3A3329; font-size: 15px; font-weight: 500"><span style="position: relative; display: flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg><span style="position: absolute; top: -6px; right: -10px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span></span>대출가방</a>
+<a href="#Settings" aria-label="설정" style="width: 44px; height: 44px; margin-left: 4px; border-radius: 12px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></a>
+</nav>
+</header>
+<div style="flex-grow: 1; min-height: 0; display: flex">
+<aside style="width: 420px; flex-shrink: 0; border-right: 1px solid #E0D7C6; display: flex; flex-direction: column; overflow: hidden">
+<div style="padding: 20px 24px 16px; display: flex; gap: 14px; align-items: center; border-bottom: 1px solid #E0D7C6">
+<a href="#Book" style="width: 48px; height: 66px; border-radius: 6px; background: #D9DEEC; flex-shrink: 0"></a>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><a href="#Book" style="font-size: 17px; font-weight: 700; color: #2A2419">소년이 온다</a><span style="font-size: 13px; color: #5C5347">한강 · 창비 · 2014</span></div>
+<button type="button" style="height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>담김</button>
+</div>
+<div style="padding: 16px 24px 4px; display: flex; gap: 8px">
+<div role="group" aria-label="검색 반경" style="flex-grow: 1; height: 44px; box-sizing: border-box; padding: 4px; background: #EAE3D4; border-radius: 12px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px">
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">1km</button>
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 9px; background: #2F4A94; color: #ffffff; font-size: 14px; font-weight: 700">3km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">5km</button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 9px; background: transparent; color: #4A4238; font-size: 14px; font-weight: 500">10km</button>
+</div>
+<button type="button" aria-pressed="true" style="height: 44px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #2F4A94; border-radius: 12px; background: #E4E1DC; color: #2F4A94; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; flex-shrink: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>대출 가능만</button>
+</div>
+<div style="padding: 14px 24px 10px; display: flex; align-items: flex-end; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 3px"><h1 style="margin: 0; font-size: 20px; font-weight: 700; color: #2A2419">4곳에서 빌릴 수 있어요</h1><span style="font-size: 13px; color: #5C5347">서울 마포구 기준 3km · 소장 5곳</span></div>
+<button type="button" style="height: 44px; padding: 0 4px; border: 0; background: transparent; color: #4A4238; font-size: 14px; display: flex; align-items: center; gap: 2px">거리순<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A4238" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<div style="border-top: 1px solid #E0D7C6">
+<a href="#" aria-current="true" style="height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #E0D7C6; background: #E4E1DC; box-shadow: inset 3px 0 0 #2F4A94;"><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포중앙도서관</span><span style="font-size: 13px; color: #5C5347">0.6km · 도보 9분</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #E0D7C6; "><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">마포구립서강도서관</span><span style="font-size: 13px; color: #5C5347">1.2km · 도보 18분</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #E0D7C6; "><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">아현도서관</span><span style="font-size: 13px; color: #5C5347">1.9km · 버스 10분</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #E4E1DC; color: #2F4A94; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출 가능</span></a>
+<a href="#" style="height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #2A2419; border-bottom: 1px solid #E0D7C6; "><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 600">서대문도서관</span><span style="font-size: 13px; color: #5C5347">2.1km · 버스 12분</span></span><span style="height: 28px; padding: 0 10px; border-radius: 8px; background: #EAE3D4; color: #4A4238; font-size: 13px; font-weight: 600; display: flex; align-items: center; flex-shrink: 0">대출중</span></a>
+</div>
+</aside>
+<section aria-label="지도" style="position: relative; flex-grow: 1; min-width: 0; background: #E6DDCB; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1020px; height: 828px">
+<div style="position: absolute; left: -80px; top: 640px; width: 1200px; height: 70px; background: #CFD8E6; transform: rotate(-9deg)"></div>
+<div style="position: absolute; left: 700px; top: 180px; width: 170px; height: 120px; background: #D8DEC8; border-radius: 20px"></div>
+<div style="position: absolute; left: 120px; top: 460px; width: 120px; height: 90px; background: #D8DEC8; border-radius: 18px"></div>
+<div style="position: absolute; left: -40px; top: 300px; width: 1100px; height: 14px; background: #F4EEE2; transform: rotate(-4deg)"></div>
+<div style="position: absolute; left: -40px; top: 500px; width: 1100px; height: 10px; background: #F4EEE2; transform: rotate(3deg)"></div>
+<div style="position: absolute; left: -40px; top: 150px; width: 1100px; height: 7px; background: #F4EEE2; transform: rotate(1deg)"></div>
+<div style="position: absolute; left: 360px; top: -40px; width: 14px; height: 920px; background: #F4EEE2; transform: rotate(6deg)"></div>
+<div style="position: absolute; left: 640px; top: -40px; width: 10px; height: 920px; background: #F4EEE2; transform: rotate(-3deg)"></div>
+<div style="position: absolute; left: 860px; top: -40px; width: 7px; height: 920px; background: #F4EEE2; transform: rotate(4deg)"></div>
+<div style="position: absolute; left: 180px; top: -40px; width: 7px; height: 920px; background: #F4EEE2; transform: rotate(-5deg)"></div>
+<div style="position: absolute; left: 250px; top: 154px; width: 520px; height: 520px; box-sizing: border-box; border-radius: 999px; border: 2px solid rgba(47,74,148,0.5); background: rgba(47,74,148,0.07)"></div>
+<div style="position: absolute; left: 140px; top: 190px; width: 12px; height: 12px; border-radius: 999px; background: #B7AD9C"></div>
+<div style="position: absolute; left: 910px; top: 130px; width: 12px; height: 12px; border-radius: 999px; background: #B7AD9C"></div>
+<div style="position: absolute; left: 900px; top: 720px; width: 12px; height: 12px; border-radius: 999px; background: #B7AD9C"></div>
+<div style="position: absolute; left: 498px; top: 402px; width: 24px; height: 24px; box-sizing: border-box; border-radius: 999px; background: #2F4A94; border: 4px solid #ffffff; box-shadow: 0 0 0 9px rgba(47,74,148,0.16)"></div>
+</div>
+<button type="button" aria-label="마포중앙, 대출 가능" style="position: absolute; left: 330px; top: 290px; height: 44px; padding: 0 14px 0 10px; border: 3px solid #F4EEE2; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(42,36,25,0.22)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>마포중앙</button>
+<button type="button" aria-label="서강, 대출 가능" style="position: absolute; left: 630px; top: 340px; height: 36px; padding: 0 14px 0 10px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(42,36,25,0.22)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>서강</button>
+<button type="button" aria-label="아현, 대출 가능" style="position: absolute; left: 400px; top: 520px; height: 36px; padding: 0 14px 0 10px; border: 0; border-radius: 999px; background: #2F4A94; color: #ffffff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(42,36,25,0.22)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>아현</button>
+<button type="button" aria-label="서대문, 대출중" style="position: absolute; left: 600px; top: 580px; height: 36px; padding: 0 12px; box-sizing: border-box; border: 1.5px solid #9A8F7E; border-radius: 999px; background: #F4EEE2; color: #4A4238; font-size: 13px; font-weight: 600; display: flex; align-items: center; box-shadow: 0 3px 10px rgba(42,36,25,0.14)">서대문 · 대출중</button>
+
+<button type="button" style="position: absolute; left: 420px; top: 24px; width: 190px; height: 44px; border: 0; border-radius: 999px; background: #2A2419; color: #ffffff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 14px rgba(42,36,25,0.25)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"></path><path d="M20 4v5h-5"></path></svg>이 지역에서 다시 검색</button>
+<div style="position: absolute; right: 24px; bottom: 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="width: 44px; border-radius: 12px; background: #F4EEE2; box-shadow: 0 2px 12px rgba(42,36,25,0.16); display: flex; flex-direction: column; overflow: hidden">
+<button type="button" aria-label="확대" style="height: 44px; border: 0; border-bottom: 1px solid #E0D7C6; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3329" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<button type="button" aria-label="축소" style="height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3329" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+</div>
+<button type="button" aria-label="내 위치로 이동" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #F4EEE2; box-shadow: 0 2px 12px rgba(42,36,25,0.16); display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg></button>
+</div>
+</section>
+</div>
+</div></div></figure></div></body></html>
