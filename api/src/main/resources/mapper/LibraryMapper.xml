@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sele906.api.library.mapper.LibraryMapper">
+<mapper namespace="com.sele906.chaekeodi.library.mapper.LibraryMapper">
 
     <select id="findOne"
             resultType="Library">
