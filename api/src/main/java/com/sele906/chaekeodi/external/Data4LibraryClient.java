@@ -4,6 +4,7 @@ import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
 import com.sele906.chaekeodi.library.domain.Library;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Data4LibraryClient {
@@ -24,7 +26,7 @@ public class Data4LibraryClient {
     @Value("${LIB_API_KEY}")
     private String authKey;
 
-    //도서관 목록
+    //도서관 목록 검색
     public LibraryPage fetchLibraries(int pageNo, int pageSize) {
 
         JsonNode res = get("/libSrch", Map.of(
@@ -42,7 +44,7 @@ public class Data4LibraryClient {
 
     public record LibraryPage(List<Library> libraries, int numFound) {}
 
-    //도서 목록
+    //도서 목록 검색
     public BookPage fetchBooks(String title, int pageNo, int pageSize) {
         JsonNode body = get("/srchBooks", Map.of(
                 "title", title, "pageNo", pageNo, "pageSize", pageSize))
@@ -100,6 +102,75 @@ public class Data4LibraryClient {
         book.setImageUrl(text(b, "bookImageURL"));
         return book;
     }
+
+    //소장 도서관 찾기
+    public List<String> fetchLibByBook(String isbn, String regionCode) {
+
+        List<String> regions = new ArrayList<>();
+
+        // 현재 지역 추가
+        regions.add(regionCode);
+
+        // 인접 지역 추가
+        regions.addAll(ADJACENT.getOrDefault(regionCode, List.of()));
+
+        // 도서관 코드 저장
+        List<String> libCodes = new ArrayList<>();
+
+        // 지역 하나씩 조회
+        for (String region : regions) {
+            try {
+                JsonNode res = get("/libSrchByBook", Map.of(
+                        "isbn", isbn,
+                        "region", region,
+                        "pageSize", 100
+                ));
+
+                JsonNode libs = res.path("response").path("libs");
+
+                // 이 지역에 소장 도서관이 없으면
+                // 다음 지역으로 넘어가기
+                if (!libs.isArray() || libs.isEmpty()) {
+                    continue;
+                }
+
+                // 도서관 코드 꺼내기
+                for (JsonNode item : libs) {
+
+                    JsonNode lib = item.path("lib");
+
+                    String libCode =
+                            lib.path("libCode").asText();
+
+                    if (!libCode.isBlank() && !libCodes.contains(libCode)) {
+                        libCodes.add(libCode);
+                    }
+                }
+
+                //디버그용
+                int numFound = res.path("response").path("numFound").asInt();
+                log.debug("region={} numFound={} 수집={}", region, numFound, libs.size());
+
+            } catch (Exception e) {
+                log.warn("소장 도서관 조회 실패 isbn={} region={}", isbn, region, e);
+            }
+        }
+
+        return libCodes;
+    }
+
+    // 인접 광역 매핑
+    private static final Map<String, List<String>> ADJACENT = Map.of(
+            "23", List.of("31"),              // 인천 ↔ 경기
+            "31", List.of("11", "23", "32"),  // 경기 ↔ 서울·인천·강원
+            "11", List.of("31"),              // 서울 ↔ 경기
+            "21", List.of("38"),              // 부산 ↔ 경남
+            "22", List.of("37"),              // 대구 ↔ 경북
+            "24", List.of("36"),              // 광주 ↔ 전남
+            "25", List.of("34", "33"),        // 대전 ↔ 충남·충북
+            "26", List.of("38"),              // 울산 ↔ 경남
+            "29", List.of("34", "33")         // 세종 ↔ 충남·충북
+    );
 
     // 공통 호출
     private JsonNode get(String path, Map<String, Object> params) {

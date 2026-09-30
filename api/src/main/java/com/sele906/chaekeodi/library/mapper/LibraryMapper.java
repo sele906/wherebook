@@ -1,9 +1,9 @@
 package com.sele906.chaekeodi.library.mapper;
 
-import com.sele906.chaekeodi.library.domain.Library;
-import com.sele906.chaekeodi.library.domain.LibrarySearchItem;
-import com.sele906.chaekeodi.library.domain.LibrarySearchRequest;
+import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
+import com.sele906.chaekeodi.library.domain.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,4 +13,5 @@ public interface LibraryMapper {
     List<LibrarySearchItem> searchLibraries(LibrarySearchRequest request);
     int countLibraries(LibrarySearchRequest request);
     Library getLibraryByLibCode(String libCode);
+    List<LibrarySearchItem> searchLibByDistance(LibrarySearchByBookRequest request);
 }

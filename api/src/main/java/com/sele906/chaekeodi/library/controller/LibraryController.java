@@ -1,17 +1,22 @@
 package com.sele906.chaekeodi.library.controller;
 
-import com.sele906.chaekeodi.library.domain.LibrarySearchRequest;
-import com.sele906.chaekeodi.library.domain.LibrarySearchResponse;
+import com.sele906.chaekeodi.external.Data4LibraryClient;
+import com.sele906.chaekeodi.library.domain.*;
+import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import com.sele906.chaekeodi.library.service.LibraryService;
-import com.sele906.chaekeodi.library.domain.Library;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/libraries")
 public class LibraryController {
+
+    private final Data4LibraryClient client;
+    private final LibraryMapper libraryMapper;
 
     private final LibraryService libraryService;
 

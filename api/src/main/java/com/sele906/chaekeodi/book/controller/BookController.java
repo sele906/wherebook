@@ -4,6 +4,8 @@ import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchResponse;
 import com.sele906.chaekeodi.book.service.BookService;
+import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
+import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -6,8 +6,13 @@ import com.sele906.chaekeodi.book.domain.BookSearchResponse;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.Data4LibraryClient;
+import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
+import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookResponse;
+import com.sele906.chaekeodi.library.domain.LibrarySearchItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
