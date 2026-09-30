@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOriginPatterns(
                         "http://localhost:3000",
-                        "https://bookpin-*.vercel.app"
+                        "https://wherebook.vercel.app"
                 )
                 .allowedMethods(
                         "GET",
