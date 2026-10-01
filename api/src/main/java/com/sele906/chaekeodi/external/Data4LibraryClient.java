@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.external;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
+import com.sele906.chaekeodi.holding.domain.CallNumberCandidate;
 import com.sele906.chaekeodi.library.domain.Library;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +12,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.HtmlUtils;
 import tools.jackson.databind.JsonNode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -26,7 +24,7 @@ public class Data4LibraryClient {
     @Value("${LIB_API_KEY}")
     private String authKey;
 
-    //도서관 목록 검색
+    //도서관 목록 호출
     public LibraryPage fetchLibraries(int pageNo, int pageSize) {
 
         JsonNode res = get("/libSrch", Map.of(
@@ -44,7 +42,7 @@ public class Data4LibraryClient {
 
     public record LibraryPage(List<Library> libraries, int numFound) {}
 
-    //도서 목록 검색
+    //도서 목록 호출
     public BookPage fetchBooks(String title, int pageNo, int pageSize) {
         JsonNode body = get("/srchBooks", Map.of(
                 "title", title, "pageNo", pageNo, "pageSize", pageSize))
@@ -74,7 +72,7 @@ public class Data4LibraryClient {
 
     public record BookPage(List<BookSearchItem> books, int numFound) {}
 
-    //도서 상세정보
+    //도서 상세정보 호출
     public Optional<Book> fetchBookByIsbn13(String isbn13) {
 
         JsonNode res = get("/srchDtlList", Map.of(
@@ -103,7 +101,7 @@ public class Data4LibraryClient {
         return book;
     }
 
-    //소장 도서관 찾기
+    //소장 도서관 호출
     public List<String> fetchLibByBook(String isbn, String regionCode) {
 
         List<String> regions = new ArrayList<>();
@@ -171,6 +169,54 @@ public class Data4LibraryClient {
             "26", List.of("38"),              // 울산 ↔ 경남
             "29", List.of("34", "33")         // 세종 ↔ 충남·충북
     );
+
+    //청구기호 호출
+    public List<CallNumberCandidate> fetchCallNumber(String isbn13, String libCode, String dtlKdc) {
+
+        List<CallNumberCandidate> candidates = new ArrayList<>();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", "ALL");
+        params.put("libCode", libCode);
+        params.put("isbn13", isbn13);
+        params.put("pageSize", 100);
+        if (dtlKdc != null) {
+            params.put("dtl_kdc", dtlKdc);
+        }
+
+        JsonNode docs = get("/itemSrch", params).path("response").path("docs");
+
+        //여러 청구기호 후보 리스트로 전환
+        for (JsonNode d : docs) {
+            JsonNode doc = d.path("doc");
+            String classNo = text(doc, "class_no");
+            String regDate = text(doc, "reg_date");
+
+            for (JsonNode wrapper : doc.path("callNumbers")) {
+                JsonNode cn = wrapper.path("callNumber");
+
+                candidates.add(new CallNumberCandidate(
+                        classNo,
+                        text(cn, "book_code"),
+                        displayOrNull(text(cn, "separate_shelf_name")),
+                        displayOrNull(text(cn, "shelf_loc_name")),
+                        regDate
+                ));
+            }
+        }
+        return candidates;
+    }
+
+    // 청구기호 데이터 정제
+    // 저장은 원본, 출력만 정제
+    private static final Set<String> MEANINGLESS = Set.of("적용안함", "해당없음", "미적용", "없음", "-");
+
+    private String displayOrNull(String value) {
+        if (value == null || value.isBlank() || MEANINGLESS.contains(value.trim())) {
+            return null;
+        }
+        return value;
+    }
 
     // 공통 호출
     private JsonNode get(String path, Map<String, Object> params) {
