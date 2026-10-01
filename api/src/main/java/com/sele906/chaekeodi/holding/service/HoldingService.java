@@ -220,4 +220,15 @@ public class HoldingService {
 
         return latestDate;
     }
+
+    //도서 소장/대출가능 여부
+    public LoanStatusResponse getLoanStatus(String isbn13, String libCode) {
+        try {
+            var status = client.fetchLoanStatus(isbn13, libCode);
+            return new LoanStatusResponse(status.isBookExists(), status.isLoanAvailable(), "OK");
+        } catch (Exception e) {
+            log.warn("대출 여부 조회 실패 isbn={} libCode={}", isbn13, libCode, e);
+            return new LoanStatusResponse(false, false, "ERROR");
+        }
+    }
 }

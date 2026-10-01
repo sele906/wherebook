@@ -3,6 +3,7 @@ package com.sele906.chaekeodi.external;
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
 import com.sele906.chaekeodi.holding.domain.CallNumberCandidate;
+import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import com.sele906.chaekeodi.library.domain.Library;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -216,6 +217,21 @@ public class Data4LibraryClient {
             return null;
         }
         return value;
+    }
+
+    //도서 소장/대출가능 여부
+    public LoanStatus fetchLoanStatus(String isbn13, String libCode) {
+        JsonNode result = get("/bookExist", Map.of(
+                "libCode", libCode,
+                "isbn13", isbn13
+        )).path("response").path("result");
+
+
+
+        return new LoanStatus(
+                "Y".equals(result.path("hasBook").asText()),
+                "Y".equals(result.path("loanAvailable").asText())
+        );
     }
 
     // 공통 호출
