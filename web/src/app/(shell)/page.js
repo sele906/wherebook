@@ -1,3 +1,4 @@
+import Form from 'next/form';
 import Link from 'next/link';
 
 import BrandLogo from '@/components/BrandLogo';
@@ -46,7 +47,8 @@ export default function Home() {
                     어느 도서관에 있을까?
                 </h1>
 
-                <form action="/search" method="get" className={styles.searchForm}>
+                {/* next/form: 제출하면 새로고침 없이 이동 (JS 없으면 일반 GET 폼) */}
+                <Form action="/search" role="search" className={styles.searchForm}>
                     <label htmlFor="home-q" className="sr-only">
                         책 검색
                     </label>
@@ -69,7 +71,7 @@ export default function Home() {
                             </span>
                         </button>
                     </div>
-                </form>
+                </Form>
             </section>
 
             <section className={styles.nearby} aria-labelledby="nearby-heading">

@@ -25,6 +25,12 @@
     gap: var(--space-1);
 }
 
+/* loading.jsx: 검색창 자리 */
+.barSkeleton {
+    flex: 1;
+    min-width: 0;
+}
+
 .back {
     width: var(--touch);
     height: var(--touch);
@@ -70,54 +76,6 @@
     margin: 0;
     padding: 0;
     list-style: none;
-}
-
-/* ---- 페이지 이동 ---- */
-
-.pager {
-    padding: var(--space-6) var(--gutter) 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
-
-/* Secondary 버튼 모양 */
-.pagerLink {
-    min-height: var(--touch);
-    padding: 0 var(--space-4);
-
-    border-radius: var(--radius-md);
-    background: var(--brand-subtle);
-    color: var(--brand);
-
-    font-size: var(--text-md);
-    font-weight: var(--weight-semibold);
-    white-space: nowrap;
-
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-}
-
-.pagerLink:hover {
-    background: var(--border);
-    color: var(--brand);
-}
-
-.pagerLink:active {
-    background: var(--border-strong);
-}
-
-.pagerSpacer {
-    min-width: var(--touch);
-}
-
-.pagerStatus {
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
 }
 
 /* ---- 안내 (검색어 없음 / 결과 없음 / 오류) ---- */
@@ -171,31 +129,6 @@
 .action:hover {
     background: var(--border);
     color: var(--brand);
-}
-
-/* ---- 로딩 ---- */
-
-/* 300ms 안에 끝나면 스켈레톤이 아예 안 보이게 늦게 나타남 */
-.skeleton {
-    animation: appear 150ms ease-out 300ms both;
-}
-
-@keyframes appear {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.countSkeleton {
-    width: 5rem;
-    height: var(--text-md);
-    margin: calc((var(--touch) - var(--text-md)) / 2) var(--gutter);
-
-    background: var(--surface);
-    border-radius: var(--radius-sm);
 }
 
 /* ==========================================================

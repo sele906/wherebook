@@ -8,8 +8,9 @@ import { ApiError, getBook, getLoanStatuses, LOAN_BATCH_SIZE, searchLibrariesByB
 import BackLink from '@/components/BackLink';
 import LibraryRow, { LibraryRowSkeleton } from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
+import { LoadingArea } from '@/components/Skeleton';
 import { PlusIcon } from '@/components/icons';
-import { DEFAULT_BASE, formatKm, readRadiusKm } from '@/lib/location';
+import { DEFAULT_BASE, describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
 import MoreLibraries from './MoreLibraries';
@@ -129,7 +130,7 @@ export default async function BookPage({ params, searchParams }) {
                     내 주변에서 빌릴 수 있는 곳
                 </h2>
                 {/* 기준 위치는 항상 글자로 */}
-                <p className={styles.base}>{`${DEFAULT_BASE.label} 기준 ${formatKm(radiusKm)}`}</p>
+                <p className={styles.base}>{describeBase(radiusKm)}</p>
 
                 <Suspense key={radiusKm} fallback={<HoldingsSkeleton />}>
                     <Holdings isbn13={isbn13} radiusKm={radiusKm} checkLoan={!isBot} />
@@ -267,14 +268,13 @@ function Notice({ title, action }) {
 
 function HoldingsSkeleton() {
     return (
-        <div className={styles.skeleton} role="status">
-            <span className="sr-only">소장 도서관을 찾고 있어요</span>
-            <ul className={styles.libList} aria-hidden="true">
+        <LoadingArea label="소장 도서관을 찾고 있어요">
+            <ul className={styles.libList}>
                 {Array.from({ length: 4 }, (_, i) => (
                     <LibraryRowSkeleton key={i} />
                 ))}
             </ul>
-        </div>
+        </LoadingArea>
     );
 }
 

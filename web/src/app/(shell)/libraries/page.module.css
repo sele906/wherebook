@@ -1,0 +1,164 @@
+/*
+ * 내 주변 도서관 목록. 모바일·웹 모두 한 단, 본문은 --list-max 폭으로 가운데.
+ * TODO: 지도 화면이 생기면 웹(1024px~)은 왼쪽 패널(--panel-w) + 오른쪽 지도로 바뀜 (DESIGN.md).
+ */
+
+.main {
+    width: min(100%, var(--list-max));
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--space-8);
+}
+
+.title {
+    min-height: var(--header-h);
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-title);
+    color: var(--text);
+}
+
+.search {
+    margin: var(--space-1) 0 0;
+    display: flex;
+}
+
+/* ---- 반경 세그먼트 ---- */
+
+.radius {
+    margin-top: var(--space-3);
+    padding: var(--space-1);
+
+    background: var(--surface);
+    border-radius: var(--radius-md);
+
+    display: flex;
+    gap: var(--space-1);
+}
+
+.radiusItem {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--touch);
+
+    border-radius: var(--radius-sm);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    color: var(--text-3);
+    white-space: nowrap;
+}
+
+.radiusItem:hover {
+    color: var(--text);
+}
+
+.radiusItem:active {
+    background: var(--border);
+}
+
+/* 선택 = 바탕 + 브랜드 색 + 굵기 (색만으로 구분하지 않음) */
+.radiusItem[aria-current='true'],
+.radiusItem[aria-current='true']:hover {
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--brand);
+    font-weight: var(--weight-semibold);
+}
+
+/* loading.jsx: 반경 세그먼트 자리 */
+.radiusSkeleton {
+    margin-top: var(--space-3);
+}
+
+/* ---- 결과 ---- */
+
+.base {
+    min-height: var(--touch);
+    margin: var(--space-2) 0 0;
+
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chevron {
+    flex-shrink: 0;
+    display: flex;
+    color: var(--icon-muted);
+}
+
+/* 결과 없음 / 오류 */
+.notice {
+    margin-top: var(--space-2);
+    padding: var(--space-6) var(--space-4);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+
+    text-align: center;
+}
+
+.noticeTitle {
+    max-width: var(--reading-max);
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--text-2);
+}
+
+/* Secondary 버튼 */
+.secondary {
+    min-height: var(--control-md);
+    padding: 0 var(--space-5);
+
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--brand);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+
+    display: flex;
+    align-items: center;
+}
+
+.secondary:hover {
+    background: var(--border);
+    color: var(--brand);
+}
+
+/* ==========================================================
+   1024px 이상 = 웹. 위에 SiteHeader가 있으니 여백만 넓힘
+   ========================================================== */
+
+@media (min-width: 1024px) {
+    .main {
+        padding-top: var(--space-6);
+    }
+
+    .title {
+        font-size: var(--text-2xl);
+    }
+}

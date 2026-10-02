@@ -112,22 +112,3 @@
     color: var(--brand);
 }
 
-/* ---- 스켈레톤 ---- */
-
-.skeleton {
-    display: block;
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-}
-
-.skeletonTitle {
-    width: 10rem;
-    max-width: 100%;
-    height: var(--text-base);
-}
-
-.skeletonMeta {
-    width: 7rem;
-    max-width: 100%;
-    height: var(--text-sm);
-}

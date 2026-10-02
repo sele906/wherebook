@@ -2,10 +2,13 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 
 import { ApiError, searchBooks } from '@/api';
-import BookRow, { BookRowSkeleton } from '@/components/BookRow';
+import BookRow from '@/components/BookRow';
+import Pager, { readPage } from '@/components/Pager';
+import { PendingForm, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
-import { BackIcon, NextIcon } from '@/components/icons';
+import { BackIcon } from '@/components/icons';
 
+import ResultsSkeleton from './ResultsSkeleton';
 import styles from './page.module.css';
 
 /*
@@ -23,11 +26,6 @@ const numberFormat = new Intl.NumberFormat('ko-KR');
 function readQuery(value) {
     const raw = Array.isArray(value) ? value[0] : value;
     return (raw ?? '').trim();
-}
-
-function readPage(value) {
-    const n = Number.parseInt(Array.isArray(value) ? value[0] : value, 10);
-    return Number.isFinite(n) && n > 0 ? n : 1;
 }
 
 function searchHref(q, page) {
@@ -52,23 +50,31 @@ export default async function SearchPage({ searchParams }) {
 
     return (
         <main className={styles.main}>
-            <form action="/search" method="get" role="search" className={styles.bar}>
-                <Link href="/" className={styles.back} aria-label="검색 처음 화면으로">
-                    <BackIcon size={24} />
-                </Link>
-                {/* key: 검색어가 바뀌면 입력창 초기값을 다시 받음 */}
-                <SearchField key={q} id="search-q" name="q" label="책 검색" defaultValue={q} placeholder="책 제목" />
-            </form>
+            {/* 검색·페이지 이동을 누르는 즉시 결과 자리를 스켈레톤으로 (PendingNav 설명 참고) */}
+            <PendingNavProvider>
+                <PendingForm action="/search" role="search" className={styles.bar}>
+                    <Link href="/" className={styles.back} aria-label="검색 처음 화면으로">
+                        <BackIcon size={24} />
+                    </Link>
+                    {/* key: 검색어가 바뀌면 입력창 초기값을 다시 받음 */}
+                    <SearchField key={q} id="search-q" name="q" label="책 검색" defaultValue={q} placeholder="책 제목" />
+                </PendingForm>
 
-            <h1 className="sr-only">{q ? `‘${q}’ 검색 결과` : '책 검색'}</h1>
+                <h1 className="sr-only">{q ? `‘${q}’ 검색 결과` : '책 검색'}</h1>
 
-            {q ? (
-                <Suspense key={`${q}:${page}`} fallback={<ResultsSkeleton />}>
-                    <Results q={q} page={page} />
-                </Suspense>
-            ) : (
-                <Message title="찾고 싶은 책 제목을 입력해 주세요" text="책 제목으로 검색하면 어느 도서관에 있는지 알려드려요." />
-            )}
+                <PendingSwap fallback={<ResultsSkeleton />}>
+                    {q ? (
+                        <Suspense key={`${q}:${page}`} fallback={<ResultsSkeleton />}>
+                            <Results q={q} page={page} />
+                        </Suspense>
+                    ) : (
+                        <Message
+                            title="찾고 싶은 책 제목을 입력해 주세요"
+                            text="책 제목으로 검색하면 어느 도서관에 있는지 알려드려요."
+                        />
+                    )}
+                </PendingSwap>
+            </PendingNavProvider>
         </main>
     );
 }
@@ -130,37 +136,13 @@ async function Results({ q, page }) {
                 ))}
             </ul>
 
-            {totalPages > 1 && <Pager q={q} page={page} totalPages={totalPages} />}
+            <Pager
+                page={page}
+                totalPages={totalPages}
+                hrefFor={(p) => searchHref(q, p)}
+                label="검색 결과 페이지"
+            />
         </>
-    );
-}
-
-function Pager({ q, page, totalPages }) {
-    return (
-        <nav className={styles.pager} aria-label="검색 결과 페이지">
-            {/* 없는 쪽은 빈 자리만 두어 가운데 숫자가 흔들리지 않게 함 */}
-            {page > 1 ? (
-                <Link href={searchHref(q, page - 1)} rel="prev" prefetch={false} className={styles.pagerLink}>
-                    <BackIcon size={18} />
-                    이전
-                </Link>
-            ) : (
-                <span className={styles.pagerSpacer} />
-            )}
-
-            <span className={styles.pagerStatus}>
-                {`${numberFormat.format(page)} / ${numberFormat.format(totalPages)}`}
-            </span>
-
-            {page < totalPages ? (
-                <Link href={searchHref(q, page + 1)} rel="next" prefetch={false} className={styles.pagerLink}>
-                    다음
-                    <NextIcon size={18} />
-                </Link>
-            ) : (
-                <span className={styles.pagerSpacer} />
-            )}
-        </nav>
     );
 }
 
@@ -170,20 +152,6 @@ function Message({ title, text, action }) {
             <p className={styles.messageTitle}>{title}</p>
             {text && <p className={styles.messageText}>{text}</p>}
             {action}
-        </div>
-    );
-}
-
-function ResultsSkeleton() {
-    return (
-        <div className={styles.skeleton} role="status">
-            <span className="sr-only">검색하고 있어요</span>
-            <div className={styles.countSkeleton} aria-hidden="true" />
-            <ul className={styles.list} aria-hidden="true">
-                {Array.from({ length: 6 }, (_, i) => (
-                    <BookRowSkeleton key={i} />
-                ))}
-            </ul>
         </div>
     );
 }

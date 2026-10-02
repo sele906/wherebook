@@ -43,25 +43,11 @@
 }
 
 .meta {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
     font-size: var(--text-sm);
     color: var(--text-muted);
 }
 
-/* ---- 스켈레톤 ---- */
-
-.bar {
-    display: block;
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-}
-
-.barName {
-    width: 9rem;
-    max-width: 100%;
-    height: var(--text-base);
-}
-
-.barMeta {
-    width: 3rem;
-    height: var(--text-sm);
-}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { toHttps } from '@/lib/url';
 
 import { PlusIcon } from './icons';
+import { Skeleton } from './Skeleton';
 import styles from './BookRow.module.css';
 
 /*
@@ -46,10 +47,10 @@ export function BookRowSkeleton() {
     return (
         <li className={styles.row} aria-hidden="true">
             <span className={styles.link}>
-                <span className={`${styles.cover} ${styles.skeleton}`} />
+                <span className={styles.cover} />
                 <span className={styles.text}>
-                    <span className={`${styles.skeleton} ${styles.skeletonTitle}`} />
-                    <span className={`${styles.skeleton} ${styles.skeletonMeta}`} />
+                    <Skeleton width="10rem" />
+                    <Skeleton width="7rem" height="var(--text-sm)" />
                 </span>
             </span>
         </li>
