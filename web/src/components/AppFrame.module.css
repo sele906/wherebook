@@ -15,3 +15,9 @@
     min-height: 0;
     overflow-y: auto;
 }
+
+/* 안쪽 요소가 보이는 화면 폭을 100cqw로 알 수 있게 (하단 고정 바처럼 화면 끝까지 붙는 요소가 씀).
+   스크롤 영역(.scroll)에 바로 걸면 cqw에 세로 스크롤바 폭까지 들어가 가로로 넘치므로 안쪽 감싸개에 건다 */
+.content {
+    container-type: inline-size;
+}

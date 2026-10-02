@@ -17,7 +17,9 @@ export default function AppFrame({ children, nav = true }) {
         <div className={styles.frame}>
             <SiteHeader />
 
-            <div className={styles.scroll}>{children}</div>
+            <div className={styles.scroll}>
+                <div className={styles.content}>{children}</div>
+            </div>
 
             {nav && <TabBar />}
         </div>

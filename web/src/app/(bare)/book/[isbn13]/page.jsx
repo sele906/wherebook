@@ -6,7 +6,7 @@ import { userAgentFromString } from 'next/server';
 
 import { ApiError, getBook, getLoanStatuses, LOAN_BATCH_SIZE, searchLibrariesByBook } from '@/api';
 import BackLink from '@/components/BackLink';
-import LibraryRow, { LibraryRowSkeleton } from '@/components/LibraryRow';
+import { LibraryRowSkeleton } from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 import { LoadingArea } from '@/components/Skeleton';
 import { PlusIcon } from '@/components/icons';
@@ -14,6 +14,7 @@ import { isValidIsbn13 } from '@/lib/ids';
 import { DEFAULT_BASE, describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
+import HoldingRow from './HoldingRow';
 import MoreLibraries from './MoreLibraries';
 import styles from './page.module.css';
 
@@ -23,6 +24,7 @@ import styles from './page.module.css';
  * 소장 도서관은 LOAN_BATCH_SIZE(6)곳씩 나눠 보여준다.
  *   - 첫 묶음: 서버에서 그림. 목록이 먼저 뜨고, 6곳의 대출 배지는 한 번에 조회해서 함께 채움.
  *   - 다음 묶음: "더 보기"(MoreLibraries)를 누르면 6곳씩 붙이고 그 6곳만 조회.
+ * 도서관 행을 누르면 펼쳐지면서 그 도서관 하나의 청구기호를 조회해 보여준다 (HoldingRow).
  * 봇(검색엔진 크롤러)에게는 대출 여부를 조회하지 않는다 (정보나루 호출량 보호).
  *
  * 쿼리: r = 반경 km (1·3·5·10)
@@ -212,7 +214,7 @@ async function Holdings({ isbn13, radiusKm, checkLoan }) {
     return (
         <>
             {/* 첫 묶음: 이름은 바로, 대출 배지는 6곳 결과가 다 오면 한 번에 */}
-            <Suspense fallback={<LibraryList libraries={first} pending={checkLoan} />}>
+            <Suspense fallback={<LibraryList isbn13={isbn13} libraries={first} pending={checkLoan} />}>
                 <FirstBatch isbn13={isbn13} libraries={first} checkLoan={checkLoan} />
             </Suspense>
 
@@ -234,16 +236,17 @@ async function FirstBatch({ isbn13, libraries, checkLoan }) {
           )
         : null;
 
-    return <LibraryList libraries={libraries} statuses={statuses} />;
+    return <LibraryList isbn13={isbn13} libraries={libraries} statuses={statuses} />;
 }
 
-// statuses가 없으면 배지 없이, pending이면 배지 자리에 스켈레톤
-function LibraryList({ libraries, statuses, pending }) {
+// statuses가 없으면 배지 없이, pending이면 배지 자리에 스켈레톤. 행을 펼치면 청구기호 (HoldingRow)
+function LibraryList({ isbn13, libraries, statuses, pending }) {
     return (
         <ul className={styles.libList}>
             {libraries.map((lib) => (
-                <LibraryRow
+                <HoldingRow
                     key={lib.libCode}
+                    isbn13={isbn13}
                     library={lib}
                     badge={
                         pending ? <LoanBadgeSkeleton /> : statuses && <LoanBadge status={statuses[lib.libCode]} />

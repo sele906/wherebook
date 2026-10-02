@@ -226,8 +226,10 @@
     position: sticky;
     bottom: 0;
 
-    margin: var(--space-8) calc(-1 * var(--gutter)) 0;
-    padding: var(--space-3) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+    /* 본문 폭(100%)과 화면 폭(100cqw, AppFrame) 차이만큼 양옆으로 늘려 화면 끝까지 붙이고,
+       안쪽 버튼은 본문 폭에 맞춘다. 모바일(본문 = 화면 - 좌우 여백)과 태블릿(본문 가운데 정렬) 모두 성립 */
+    margin: var(--space-8) calc((100% - 100cqw) / 2) 0;
+    padding: var(--space-3) calc((100cqw - 100%) / 2) calc(var(--space-5) + env(safe-area-inset-bottom));
 
     background: var(--bg);
     box-shadow: var(--shadow-sheet);

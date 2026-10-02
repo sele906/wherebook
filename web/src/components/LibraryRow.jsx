@@ -10,14 +10,14 @@ import styles from './LibraryRow.module.css';
  * 둘째 줄은 "거리 · detail" (detail 예: 주소). 둘 다 없으면 생략.
  * 서버·클라이언트 양쪽에서 쓰는 모양 전용 컴포넌트 (데이터 조회 없음).
  */
-export default function LibraryRow({ library, detail, badge, linkRef }) {
+export default function LibraryRow({ library, detail, badge }) {
     const meta = [library.distance != null ? formatDistance(library.distance) : null, detail]
         .filter(Boolean)
         .join(' · ');
 
     return (
         <li className={styles.item}>
-            <Link href={`/libraries/${library.libCode}`} className={styles.row} ref={linkRef}>
+            <Link href={`/libraries/${library.libCode}`} className={styles.row}>
                 <span className={styles.text}>
                     <span className={styles.name}>{library.name}</span>
                     {meta && <span className={styles.meta}>{meta}</span>}

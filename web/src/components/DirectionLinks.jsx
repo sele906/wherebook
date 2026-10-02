@@ -12,6 +12,7 @@ import styles from './DirectionLinks.module.css';
  * - 네이버 지도: 공개된 길찾기 웹 주소 형식이 없어 이름으로 검색한 화면을 연다 (거기서 길찾기)
  *
  * 버튼 줄이 좁으면(컨테이너 폭 기준) 짧은 이름("네이버")으로 바뀐다. 고정 폭 없음.
+ * 버튼 묶음 이름: 보이는 제목이 있으면 labelledBy(제목 id), 없으면 label(스크린리더용 글자).
  *
  * TODO: 앱으로 감싸게 되면 이 컴포넌트만 운영체제 기능으로 교체.
  *       안드로이드 = geo:위도,경도?q=이름 으로 열어 운영체제 "앱 선택" 창 사용,
@@ -39,12 +40,12 @@ function directionLinks({ name, address, latitude, longitude }) {
     ].filter(Boolean);
 }
 
-export default function DirectionLinks({ library, labelledBy }) {
+export default function DirectionLinks({ library, labelledBy, label }) {
     const links = directionLinks(library);
 
     return (
         <div className={styles.container}>
-            <ul className={styles.list} aria-labelledby={labelledBy}>
+            <ul className={styles.list} aria-labelledby={labelledBy} aria-label={labelledBy ? undefined : label}>
                 {links.map((link) => (
                     <li key={link.label} className={styles.item}>
                         <a

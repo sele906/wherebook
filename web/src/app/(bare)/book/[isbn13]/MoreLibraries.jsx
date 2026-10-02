@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 
-import LibraryRow from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 
 import { loadLoanStatuses } from './actions';
+import HoldingRow from './HoldingRow';
 import styles from './MoreLibraries.module.css';
 
 const numberFormat = new Intl.NumberFormat('ko-KR');
@@ -20,12 +20,12 @@ export default function MoreLibraries({ isbn13, libraries, batchSize, checkLoan 
     const [shownCount, setShownCount] = useState(0);
     const [statuses, setStatuses] = useState({});
     const [, startTransition] = useTransition();
-    const firstNewLinkRef = useRef(null);
+    const firstNewRowRef = useRef(null);
     const [focusIndex, setFocusIndex] = useState(null);
 
     // 새로 붙은 첫 행으로 포커스를 옮겨 키보드·스크린리더 사용자가 이어서 볼 수 있게
     useEffect(() => {
-        if (focusIndex !== null) firstNewLinkRef.current?.focus();
+        if (focusIndex !== null) firstNewRowRef.current?.focus();
     }, [focusIndex]);
 
     const shown = libraries.slice(0, shownCount);
@@ -57,10 +57,11 @@ export default function MoreLibraries({ isbn13, libraries, batchSize, checkLoan 
             {shown.length > 0 && (
                 <ul className={styles.list}>
                     {shown.map((lib, i) => (
-                        <LibraryRow
+                        <HoldingRow
                             key={lib.libCode}
+                            isbn13={isbn13}
                             library={lib}
-                            linkRef={i === focusIndex ? firstNewLinkRef : undefined}
+                            summaryRef={i === focusIndex ? firstNewRowRef : undefined}
                             badge={
                                 checkLoan &&
                                 (lib.libCode in statuses ? <LoanBadge status={statuses[lib.libCode]} /> : <LoanBadgeSkeleton />)
