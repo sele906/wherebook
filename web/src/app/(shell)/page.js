@@ -29,7 +29,7 @@ const POPULAR_BOOKS = [
 export default function Home() {
     return (
         <main className={styles.main}>
-            {/* 모바일 전용 헤더. 600px 이상에서는 SiteHeader가 대신함 */}
+            {/* 모바일·태블릿 헤더. 1024px 이상에서는 SiteHeader가 대신함 */}
             <header className={styles.mobileHeader}>
                 <BrandLogo size={28} />
                 <span className={styles.wordmark}>책어디</span>
@@ -45,7 +45,7 @@ export default function Home() {
                     어느 도서관에 있을까?
                 </h1>
 
-                <form action="/books" className={styles.searchForm}>
+                <form action="/books" method="get" className={styles.searchForm}>
                     <label htmlFor="home-title" className="sr-only">
                         책 검색
                     </label>
@@ -58,7 +58,7 @@ export default function Home() {
                             placeholder="책 제목, 저자, ISBN"
                             className={styles.searchInput}
                         />
-                        {/* 모바일은 아이콘만, 600px 이상은 "검색" 글자 버튼 (목업 그대로) */}
+                        {/* 모바일은 아이콘만, 768px 이상은 "검색" 글자 버튼 (목업 그대로) */}
                         <button type="submit" className={styles.searchButton} aria-label="검색">
                             <SearchIcon size={20} strokeWidth={2.2} />
                             <span className={styles.searchButtonLabel} aria-hidden="true">
@@ -98,7 +98,7 @@ export default function Home() {
                             href={`/books?title=${encodeURIComponent(keyword)}`}
                             className={styles.chip}
                         >
-                            {keyword}
+                            <span className={styles.chipLabel}>{keyword}</span>
                         </Link>
                     ))}
                 </div>

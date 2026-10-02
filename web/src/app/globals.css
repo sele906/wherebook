@@ -2,12 +2,8 @@
    책어디 디자인 토큰
    - 라이트: 종이 크림 + 네이비 / 다크: 먹색 + 크림 글씨
    - 테마 전환: <html data-theme="light|dark">, 없으면 시스템 설정 따름
-   - 폰트: Pretendard Variable을 layout.js에서 셀프 호스팅함 (dynamic-subset)
+   - 폰트: layout.js에서 next/font로 불러와 --font-noto-kr 에 걸어둠 (TODO: 폰트 확정 전)
    ========================================================== */
-
-* {
-  box-sizing: border-box;
-}
 
 html,
 body {
@@ -17,8 +13,10 @@ body {
 
 :root {
   /* ---- 폰트 ---- */
-  /* 뒤쪽은 폰트 로드 실패 / 커버리지 밖 글자(한자 등)용 그물 */
-  --font-sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  /* 한글·영문 모두 같은 폰트 하나로 그린다 (Noto Sans KR에 라틴 글자 포함).
+     뒤쪽은 폰트 로드 실패 / 커버리지 밖 글자(한자 등)용 그물.
+     TODO: 영어 화면에서 다른 라틴 폰트를 쓰기로 하면 :root:lang(en) { --font-sans: ... } 로 덮는다 */
+  --font-sans: var(--font-noto-kr), "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 
   --text-xs: 0.75rem;    /* 12px 탭 라벨, 배지 */
   --text-sm: 0.8125rem;  /* 13px 보조 정보 */
@@ -43,7 +41,6 @@ body {
   --brand-hover: #22386F;
   --brand-subtle: #E4E1DC;   /* 잉크 번짐: 담김, 대출 가능 배지, 선택 상태 */
   --on-brand: #FFFFFF;       /* 브랜드 배경 위 글자 */
-  --logo-dim: #C9CEDB;       /* 로고 안쪽 양옆 책 (브랜드 배경 위 보조 도형) */
 
   /* ---- 배경·면 ---- */
   --bg: #F4EEE2;             /* 앱 배경 (종이) */
@@ -73,8 +70,25 @@ body {
   --shadow-float: 0 2px 12px rgba(42, 36, 25, 0.12);  /* 지도 위 떠 있는 요소 */
   --shadow-sheet: 0 -4px 20px rgba(42, 36, 25, 0.10);
 
+  /* ---- 간격 (4px 단위만) ---- */
+  --space-1: 0.25rem;        /* 4px */
+  --space-2: 0.5rem;         /* 8px  관련 요소끼리 */
+  --space-3: 0.75rem;        /* 12px */
+  --space-4: 1rem;           /* 16px */
+  --space-5: 1.25rem;        /* 20px 모바일 좌우 여백 */
+  --space-6: 1.5rem;         /* 24px 섹션 사이 */
+  --space-8: 2rem;           /* 32px */
+  --space-10: 2.5rem;        /* 40px */
+  --space-12: 3rem;          /* 48px */
+  --space-16: 4rem;          /* 64px */
+
   /* ---- 크기 ---- */
   --touch: 44px;             /* 최소 터치 영역 */
+  --control-md: 48px;        /* 보조 버튼 */
+  --control-lg: 56px;        /* 주요 버튼, 모바일 검색창 */
+  --control-xl: 64px;        /* 웹 검색창 */
+  --gutter: var(--space-5);  /* 화면 좌우 여백 */
+  --reading-max: 40em;       /* 긴 문단 한 줄 최대 폭 (한글 40자 안팎) */
   --header-h: 56px;          /* 모바일 헤더 */
   --tabbar-h: 72px;          /* 모바일 하단 탭 */
   --web-header-h: 72px;
@@ -91,7 +105,6 @@ body {
     --brand-hover: #B3C4F0;
     --brand-subtle: #26304A;
     --on-brand: #14171F;
-    --logo-dim: #5A6072;
 
     --bg: #14171F;
     --surface: #1F2330;
@@ -121,7 +134,6 @@ body {
   --brand-hover: #B3C4F0;
   --brand-subtle: #26304A;
   --on-brand: #14171F;
-  --logo-dim: #5A6072;
 
   --bg: #14171F;
   --surface: #1F2330;
@@ -155,6 +167,9 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
+  /* 한글은 어절 단위로 줄바꿈, 영어 긴 단어·URL은 넘치기 전에 끊는다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -172,6 +187,10 @@ button,
 input {
   font: inherit;
   color: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 input::placeholder {

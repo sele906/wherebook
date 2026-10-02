@@ -3,14 +3,13 @@
 }
 
 .brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    min-height: var(--touch);
     flex-shrink: 0;
 
-    font-size: 21px;
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-title);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
     color: var(--text);
 }
 
@@ -18,17 +17,25 @@
     color: var(--text);
 }
 
+.wordmark {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-title);
+    white-space: nowrap;
+}
+
 .nav {
     margin-left: auto;
+    min-width: 0;
+
     display: flex;
     align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
+    gap: var(--space-2);
 }
 
 .navLink,
 .iconLink {
-    height: var(--touch);
+    min-height: var(--touch);
     border-radius: var(--radius-md);
 
     display: flex;
@@ -36,18 +43,25 @@
     justify-content: center;
 
     color: var(--text-2);
-    font-size: 15px;
+    font-size: var(--text-md);
     font-weight: var(--weight-medium);
 }
 
 .navLink {
-    padding: 0 14px;
-    gap: 8px;
+    min-width: 0;
+    padding: 0 var(--space-4);
+    gap: var(--space-2);
+}
+
+/* 영어 문구가 길어져도 헤더 한 줄을 넘지 않게 */
+.navLabel {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .iconLink {
-    width: var(--touch);
-    margin-left: 4px;
+    min-width: var(--touch);
 }
 
 .navLink:hover,
@@ -56,18 +70,31 @@
     color: var(--text);
 }
 
-/* 600px 이상 = 태블릿/PC. 이때만 헤더가 뜨고 TabBar가 숨음 */
-@media (min-width: 600px) {
+.navLink:active,
+.iconLink:active {
+    background: var(--border);
+}
+
+/* 활성 = 색 + 굵기 + 바탕 (색만으로 구분하지 않음) */
+.navLink[aria-current='page'],
+.iconLink[aria-current='page'] {
+    background: var(--brand-subtle);
+    color: var(--brand);
+    font-weight: var(--weight-semibold);
+}
+
+/* 1024px 이상 = 웹. 이때만 헤더가 뜨고 TabBar가 숨음 */
+@media (min-width: 1024px) {
     .header {
         flex-shrink: 0;
-        height: var(--web-header-h);
-        padding: 0 40px;
+        min-height: var(--web-header-h);
+        padding: 0 var(--space-10);
 
         border-bottom: 1px solid var(--border);
         background: var(--bg);
 
         display: flex;
         align-items: center;
-        gap: 32px;
+        gap: var(--space-8);
     }
 }
