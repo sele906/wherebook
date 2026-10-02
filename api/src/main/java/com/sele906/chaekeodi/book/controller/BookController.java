@@ -17,6 +17,7 @@ public class BookController {
 
     private final BookService bookService;
 
+    //도서 검색
     @GetMapping
     public ResponseEntity<BookSearchResponse> searchBooks(
             @ModelAttribute BookSearchRequest request
@@ -26,6 +27,7 @@ public class BookController {
         return ResponseEntity.ok(response);
     }
 
+    //도서 상세정보
     @GetMapping("/{isbn13}")
     public ResponseEntity<Book> getBookDetail(
             @PathVariable("isbn13") String isbn13

@@ -20,11 +20,13 @@ public class LibraryController {
 
     private final LibraryService libraryService;
 
+    //도서관 db 업데이트용
     @PostMapping("/syncLibraries")
     public int syncLibraries() {
         return libraryService.syncLibraries();
     }
 
+    //도서관 검색
     @GetMapping
     public ResponseEntity<LibrarySearchResponse> searchLibraries(
             @ModelAttribute LibrarySearchRequest request
@@ -33,6 +35,7 @@ public class LibraryController {
         return ResponseEntity.ok(response);
     }
 
+    //도서관 상세정보
     @GetMapping("/{libCode}")
     public ResponseEntity<Library> getLibrary(
             @PathVariable("libCode") String libCode
