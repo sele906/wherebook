@@ -1,27 +1,31 @@
 import { notFound } from "next/navigation";
+import { ApiError, getLibrary } from "@/api";
 
 export default async function LibraryPage({params}) {
   const { libCode } = await params;
 
-  const response = await fetch(
-    `${process.env.API_URL}/api/libraries/${libCode}`
-  );
+  let library;
+  let errorStatus = null;
+  try {
+    library = await getLibrary(libCode);
+  } catch (e) {
+    if (!(e instanceof ApiError)) throw e;
+    errorStatus = e.status;
+  }
 
   // Spring에서 404가 오면 Next의 404 페이지로 이동
-  if (response.status === 404) {
+  if (errorStatus === 404) {
     notFound();
   }
 
-  if (!response.ok) {
+  if (errorStatus !== null) {
     return (
       <main>
         <h1>도서관 조회 실패</h1>
-        <p>status: {response.status}</p>
+        <p>status: {errorStatus}</p>
       </main>
     );
   }
-
-  const library = await response.json();
 
   return (
     <main>
@@ -30,6 +34,8 @@ export default async function LibraryPage({params}) {
       <section>
         <h2>도서관 정보</h2>
 
+        <p>도서관코드: {library.libCode}</p>
+        <p>도서관명: {library.name}</p>
         <p>주소: {library.address}</p>
         <p>전화번호: {library.tel}</p>
         <p>휴관일: {library.closedDays}</p>

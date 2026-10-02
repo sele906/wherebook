@@ -1,27 +1,31 @@
 import { notFound } from "next/navigation";
+import { ApiError, getBook } from "@/api";
 
 export default async function BookPage({params}) {
   const { isbn13 } = await params;
 
-  const response = await fetch(
-    `${process.env.API_URL}/api/books/${isbn13}`
-  );
+  let book;
+  let errorStatus = null;
+  try {
+    book = await getBook(isbn13);
+  } catch (e) {
+    if (!(e instanceof ApiError)) throw e;
+    errorStatus = e.status;
+  }
 
   // Spring에서 404가 오면 Next의 404 페이지로 이동
-  if (response.status === 404) {
+  if (errorStatus === 404) {
     notFound();
   }
 
-  if (!response.ok) {
+  if (errorStatus !== null) {
     return (
       <main>
         <h1>책 조회 실패</h1>
-        <p>status: {response.status}</p>
+        <p>status: {errorStatus}</p>
       </main>
     );
   }
-
-  const book = await response.json();
 
   return (
     <main>
