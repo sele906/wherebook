@@ -12,6 +12,8 @@ import {
     LuLocateFixed,
     LuPlus,
     LuChevronLeft,
+    LuChevronRight,
+    LuX,
 } from 'react-icons/lu';
 
 function wrap(Icon) {
@@ -27,3 +29,5 @@ export const GearIcon = wrap(LuSettings);
 export const LocateIcon = wrap(LuLocateFixed);
 export const PlusIcon = wrap(LuPlus);
 export const BackIcon = wrap(LuChevronLeft);
+export const NextIcon = wrap(LuChevronRight);
+export const CloseIcon = wrap(LuX);

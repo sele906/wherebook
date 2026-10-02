@@ -1,0 +1,62 @@
+import Link from 'next/link';
+
+import { PlusIcon } from './icons';
+import styles from './BookRow.module.css';
+
+/*
+ * 책 목록 한 행. 왼쪽 표지·제목·메타 전체가 책 상세 링크 하나, 오른쪽 "담기"는 링크 밖.
+ * 책 제목·저자·출판사는 데이터 원문 그대로 (번역·가공 안 함).
+ *
+ * TODO: 책 상세 경로가 /book/[isbn13] 으로 바뀌면 href 수정.
+ */
+
+// 정보나루 표지 주소 중 http:// 가 섞여 있어 https 페이지에서 막히지 않게 올림
+function toHttps(url) {
+    return url?.replace(/^http:\/\//, 'https://');
+}
+
+export default function BookRow({ book }) {
+    const meta = [book.authors, book.publisher, book.publicationYear].filter(Boolean).join(' · ');
+    const cover = toHttps(book.imageUrl);
+
+    return (
+        <li className={styles.row}>
+            <Link href={`/books/${book.isbn13}`} className={styles.link}>
+                <span className={styles.cover}>
+                    {cover && (
+                        // 표지는 여러 외부 호스트라 next/image 대신 img로 지연 로딩만 함. 자리는 .cover가 5:7로 잡음
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cover} alt={`${book.title} 표지`} loading="lazy" decoding="async" />
+                    )}
+                </span>
+                <span className={styles.text}>
+                    <span className={styles.title}>{book.title}</span>
+                    {meta && <span className={styles.meta}>{meta}</span>}
+                </span>
+            </Link>
+
+            {/* TODO: 대출가방 API 붙이면 담기/빼기 연결 (낙관적 업데이트, 실패 시 되돌림).
+                      담긴 책은 aria-pressed="true" + --brand-subtle 바탕 + "담김" 으로 바뀜.
+                      지금은 모양만 있는 임시 버튼. */}
+            <button type="button" className={styles.add} aria-pressed="false" aria-label={`${book.title} 대출가방에 담기`}>
+                <PlusIcon size={16} strokeWidth={2.4} />
+                <span aria-hidden="true">담기</span>
+            </button>
+        </li>
+    );
+}
+
+/* 로딩 중 같은 모양으로 자리만 잡아두는 행 */
+export function BookRowSkeleton() {
+    return (
+        <li className={styles.row} aria-hidden="true">
+            <span className={styles.link}>
+                <span className={`${styles.cover} ${styles.skeleton}`} />
+                <span className={styles.text}>
+                    <span className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                    <span className={`${styles.skeleton} ${styles.skeletonMeta}`} />
+                </span>
+            </span>
+        </li>
+    );
+}

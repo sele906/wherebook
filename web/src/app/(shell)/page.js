@@ -7,12 +7,13 @@ import styles from './page.module.css';
 
 /*
  * 목업 Main 화면.
- * 지금 실제로 붙는 건 검색 폼뿐 — /books?title= 로 넘김.
+ * 지금 실제로 붙는 건 검색 폼뿐 — /search?q= 로 넘김.
  *
  * TODO: 최근 검색어 — localStorage에 저장하고 읽어오기 (클라이언트 컴포넌트로 분리 필요)
  * TODO: 인기 대출 — 정보나루 인기대출 엔드포인트가 백엔드에 생기면 교체.
  *       지금은 목업에 있던 샘플 그대로임.
  * TODO: 표지 이미지 — book.imageUrl 붙기 전까지 --surface 색 박스로 둠
+ * TODO: 인기 대출 "더보기" — 인기 대출 목록 화면이 생기면 섹션 제목 옆에 링크 추가
  */
 
 const RECENT_KEYWORDS = ['불편한 편의점', '세이노의 가르침', '한강'];
@@ -45,17 +46,19 @@ export default function Home() {
                     어느 도서관에 있을까?
                 </h1>
 
-                <form action="/books" method="get" className={styles.searchForm}>
-                    <label htmlFor="home-title" className="sr-only">
+                <form action="/search" method="get" className={styles.searchForm}>
+                    <label htmlFor="home-q" className="sr-only">
                         책 검색
                     </label>
+                    {/* 지우기(✕) 버튼은 일부러 없음 — 메인은 빈 검색창에서 시작하고, 검색 버튼 옆이 복잡해짐 */}
                     <div className={styles.searchBar}>
                         <SearchIcon size={20} />
                         <input
-                            id="home-title"
-                            name="title"
+                            id="home-q"
+                            name="q"
                             type="search"
-                            placeholder="책 제목, 저자, ISBN"
+                            placeholder="책 제목"
+                            enterKeyHint="search"
                             className={styles.searchInput}
                         />
                         {/* 모바일은 아이콘만, 768px 이상은 "검색" 글자 버튼 (목업 그대로) */}
@@ -95,7 +98,7 @@ export default function Home() {
                     {RECENT_KEYWORDS.map((keyword) => (
                         <Link
                             key={keyword}
-                            href={`/books?title=${encodeURIComponent(keyword)}`}
+                            href={`/search?q=${encodeURIComponent(keyword)}`}
                             className={styles.chip}
                         >
                             <span className={styles.chipLabel}>{keyword}</span>
@@ -109,9 +112,6 @@ export default function Home() {
                     <h2 id="popular-heading" className={styles.sectionTitle}>
                         이번 주 인기 대출
                     </h2>
-                    <Link href="/books" className={styles.textButton}>
-                        더보기
-                    </Link>
                 </div>
                 <ul className={styles.bookRow}>
                     {POPULAR_BOOKS.map((book) => (

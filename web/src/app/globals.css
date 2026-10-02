@@ -93,6 +93,7 @@ body {
   --tabbar-h: 72px;          /* 모바일 하단 탭 */
   --web-header-h: 72px;
   --content-max: 1120px;     /* 웹 본문 최대 폭 */
+  --list-max: 48rem;         /* 목록 화면(검색 결과 등) 본문 최대 폭 */
   --panel-w: 420px;          /* 웹 지도 왼쪽 패널 */
 
   color-scheme: light;
@@ -191,6 +192,11 @@ input {
 
 button {
   cursor: pointer;
+}
+
+/* 검색창의 브라우저 기본 ✕는 숨기고 SearchField의 지우기 버튼을 씀 */
+input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
 }
 
 input::placeholder {

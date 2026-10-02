@@ -1,0 +1,213 @@
+/*
+ * 검색 결과. 모바일: 뒤로 + 검색창 바 / 웹(1024px~): SiteHeader가 있으니 뒤로는 숨김.
+ * 목록은 --list-max 폭으로 가운데 정렬. 행 좌우 여백은 BookRow가 --gutter로 잡음.
+ */
+
+.main {
+    width: min(100%, var(--list-max));
+    margin: 0 auto;
+    padding-bottom: var(--space-8);
+}
+
+/* ---- 검색 바 (스크롤해도 위에 붙어 있음) ---- */
+
+.bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    margin: 0;
+    padding: var(--space-3) var(--gutter) var(--space-3) var(--space-1);
+    background: var(--bg);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.back {
+    width: var(--touch);
+    height: var(--touch);
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-2);
+}
+
+.back:hover {
+    color: var(--text);
+}
+
+.back:active {
+    background: var(--surface);
+}
+
+/* ---- 결과 수 ---- */
+
+.count {
+    min-height: var(--touch);
+    margin: 0;
+    padding: 0 var(--gutter);
+
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-md);
+    color: var(--text-3);
+}
+
+.count strong {
+    margin: 0 0.15em;
+    font-weight: var(--weight-bold);
+    color: var(--text);
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* ---- 페이지 이동 ---- */
+
+.pager {
+    padding: var(--space-6) var(--gutter) 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+/* Secondary 버튼 모양 */
+.pagerLink {
+    min-height: var(--touch);
+    padding: 0 var(--space-4);
+
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--brand);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.pagerLink:hover {
+    background: var(--border);
+    color: var(--brand);
+}
+
+.pagerLink:active {
+    background: var(--border-strong);
+}
+
+.pagerSpacer {
+    min-width: var(--touch);
+}
+
+.pagerStatus {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- 안내 (검색어 없음 / 결과 없음 / 오류) ---- */
+
+.message {
+    padding: var(--space-12) var(--gutter);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+
+    text-align: center;
+}
+
+.messageTitle {
+    max-width: var(--reading-max);
+    margin: 0;
+
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--text);
+}
+
+.messageText {
+    max-width: var(--reading-max);
+    margin: 0;
+
+    font-size: var(--text-md);
+    color: var(--text-muted);
+}
+
+/* 다시 시도 / 첫 페이지로 — Secondary 버튼 */
+.action {
+    min-height: var(--control-md);
+    margin-top: var(--space-2);
+    padding: 0 var(--space-5);
+
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--brand);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+
+    display: flex;
+    align-items: center;
+}
+
+.action:hover {
+    background: var(--border);
+    color: var(--brand);
+}
+
+/* ---- 로딩 ---- */
+
+/* 300ms 안에 끝나면 스켈레톤이 아예 안 보이게 늦게 나타남 */
+.skeleton {
+    animation: appear 150ms ease-out 300ms both;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.countSkeleton {
+    width: 5rem;
+    height: var(--text-md);
+    margin: calc((var(--touch) - var(--text-md)) / 2) var(--gutter);
+
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+}
+
+/* ==========================================================
+   1024px 이상 = 웹. 위에 SiteHeader가 있으니 뒤로 버튼 숨김
+   ========================================================== */
+
+@media (min-width: 1024px) {
+    .bar {
+        padding: var(--space-6) var(--gutter) var(--space-3);
+    }
+
+    .back {
+        display: none;
+    }
+}

@@ -1,0 +1,68 @@
+.field {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--control-md);
+    padding: 0 0 0 var(--space-4);
+
+    background: var(--surface);
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+/* 입력창 포커스는 바탕 전체에 외곽선으로 보여줌 */
+.field:focus-within {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+.input {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--touch);
+
+    border: 0;
+    background: transparent;
+    outline: none;
+
+    /* 16px 미만이면 iOS가 확대하므로 base 이상 */
+    font-size: var(--text-base);
+    color: var(--text);
+}
+
+.clear {
+    width: var(--touch);
+    height: var(--touch);
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearDot {
+    width: var(--space-5);
+    height: var(--space-5);
+
+    border-radius: var(--radius-full);
+    background: var(--control-muted);
+    color: var(--bg);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear:hover .clearDot {
+    background: var(--icon-muted);
+}
+
+.clear:focus-visible {
+    outline-offset: -2px;
+}
