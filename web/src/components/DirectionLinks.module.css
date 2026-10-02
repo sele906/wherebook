@@ -1,0 +1,74 @@
+/* 버튼 줄의 실제 폭을 기준으로 이름 길이를 바꾼다 (화면 폭이 아니라) */
+.container {
+    container-type: inline-size;
+}
+
+/* 같은 크기 칸으로 한 줄 (좌표가 없으면 카카오가 빠져 2칸) */
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+}
+
+.item {
+    min-width: 0;
+}
+
+/* Secondary 버튼 */
+.option {
+    min-height: var(--touch);
+    padding: 0 var(--space-2);
+
+    border-radius: var(--radius-md);
+    background: var(--brand-subtle);
+    color: var(--brand);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+}
+
+.option svg {
+    flex-shrink: 0;
+}
+
+.option:hover {
+    background: var(--border);
+    color: var(--brand);
+}
+
+.option:active {
+    background: var(--border-strong);
+}
+
+.full,
+.short {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.short {
+    display: none;
+}
+
+/* 버튼 줄이 좁으면 아이콘 + 짧은 이름 */
+@container (max-width: 25rem) {
+    .full {
+        display: none;
+    }
+
+    .short {
+        display: inline;
+    }
+}

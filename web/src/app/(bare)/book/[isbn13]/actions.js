@@ -1,6 +1,7 @@
 'use server';
 
 import { getLoanStatuses, LOAN_BATCH_SIZE } from '@/api';
+import { isValidIsbn13, isValidLibCode } from '@/lib/ids';
 
 /*
  * "더 보기"로 펼친 도서관 묶음의 대출 가능 여부를 한 번에 조회.
@@ -8,14 +9,14 @@ import { getLoanStatuses, LOAN_BATCH_SIZE } from '@/api';
  * 한 번에 LOAN_BATCH_SIZE 곳까지만 받는다 (정보나루 호출량 보호).
  */
 export async function loadLoanStatuses(isbn13, libCodes) {
-    if (typeof isbn13 !== 'string' || !/^97[89]\d{10}$/.test(isbn13)) {
+    if (typeof isbn13 !== 'string' || !isValidIsbn13(isbn13)) {
         throw new Error('잘못된 ISBN');
     }
     if (
         !Array.isArray(libCodes) ||
         libCodes.length === 0 ||
         libCodes.length > LOAN_BATCH_SIZE ||
-        !libCodes.every((code) => typeof code === 'string' && /^\d{1,12}$/.test(code))
+        !libCodes.every((code) => typeof code === 'string' && isValidLibCode(code))
     ) {
         throw new Error('잘못된 도서관 코드');
     }

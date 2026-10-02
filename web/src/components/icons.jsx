@@ -15,6 +15,7 @@ import {
     LuChevronRight,
     LuX,
     LuCheck,
+    LuMap,
 } from 'react-icons/lu';
 
 function wrap(Icon) {
@@ -33,3 +34,4 @@ export const BackIcon = wrap(LuChevronLeft);
 export const NextIcon = wrap(LuChevronRight);
 export const CloseIcon = wrap(LuX);
 export const CheckIcon = wrap(LuCheck);
+export const MapIcon = wrap(LuMap);

@@ -10,6 +10,7 @@ import LibraryRow, { LibraryRowSkeleton } from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 import { LoadingArea } from '@/components/Skeleton';
 import { PlusIcon } from '@/components/icons';
+import { isValidIsbn13 } from '@/lib/ids';
 import { DEFAULT_BASE, describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
@@ -33,10 +34,6 @@ import styles from './page.module.css';
 
 // next/server의 isBot이 못 잡는 국내 검색엔진 크롤러 (네이버 Yeti, 다음 Daumoa 등)
 const EXTRA_BOTS = /yeti|daum|bot|crawl|spider|slurp/i;
-
-function isValidIsbn13(value) {
-    return /^97[89]\d{10}$/.test(value);
-}
 
 async function loadBook(isbn13) {
     if (!isValidIsbn13(isbn13)) notFound();

@@ -45,3 +45,15 @@ export function formatKm(km) {
 export function describeBase(radiusKm) {
     return `${DEFAULT_BASE.label} 기준 ${formatKm(radiusKm)}`;
 }
+
+// 기준 위치에서 좌표까지의 직선 거리(m). 하버사인 공식
+export function distanceFromBase(latitude, longitude) {
+    if (latitude == null || longitude == null) return null;
+    const toRad = (deg) => (deg * Math.PI) / 180;
+    const dLat = toRad(latitude - DEFAULT_BASE.latitude);
+    const dLng = toRad(longitude - DEFAULT_BASE.longitude);
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(DEFAULT_BASE.latitude)) * Math.cos(toRad(latitude)) * Math.sin(dLng / 2) ** 2;
+    return 2 * 6371000 * Math.asin(Math.sqrt(a));
+}

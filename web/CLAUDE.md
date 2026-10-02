@@ -24,7 +24,7 @@
 - 기본은 **Server Component**. `'use client'`는 상호작용이 꼭 필요한 가장 작은 컴포넌트에만 붙인다.
 - 아래 페이지는 핵심 내용이 **서버에서 렌더링된 HTML에 들어 있어야** 한다. 작업 후 페이지 소스 보기로 확인한다.
   - `/book/[isbn]` — 책 제목, 저자, 소장 도서관
-  - `/library/[libCode]` — 도서관 이름, 주소, 운영 정보
+  - `/libraries/[libCode]` — 도서관 이름, 주소, 운영 정보
   - 지역별 도서관 목록
 - 위 페이지는 `generateMetadata`로 제목·설명을 페이지마다 만든다. `<h1>`은 페이지당 하나.
 - `/search?q=` 검색 결과는 `noindex`.

@@ -1,0 +1,167 @@
+/*
+ * 도서관 상세. 모바일·웹 모두 한 단, 본문은 --list-max 폭으로 가운데.
+ * TODO: 지도가 생기면 웹(1024px~)은 오른쪽에 지도를 두는 두 단으로.
+ */
+
+.main {
+    width: min(100%, var(--list-max));
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--space-12);
+}
+
+/* ---- 뒤로 ---- */
+
+.topBar {
+    min-height: var(--header-h);
+    margin-left: calc(-1 * var(--space-3));
+
+    display: flex;
+    align-items: center;
+}
+
+.back {
+    width: var(--touch);
+    height: var(--touch);
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-2);
+}
+
+.back:hover {
+    color: var(--text);
+}
+
+.back:active {
+    background: var(--surface);
+}
+
+/* ---- 머리 ---- */
+
+.head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.title {
+    margin: 0;
+
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-title);
+    color: var(--text);
+}
+
+.address {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-base);
+    color: var(--text-2);
+}
+
+.distance {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.directions {
+    margin-top: var(--space-3);
+}
+
+/* ---- 섹션 ---- */
+
+.section {
+    margin-top: var(--space-8);
+}
+
+.sectionTitle {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--text);
+}
+
+/* 라벨 | 내용 두 칸. 라벨 폭은 영어로 바뀌어도 늘어나게 고정하지 않음 */
+.info {
+    margin: var(--space-3) 0 0;
+}
+
+.infoRow {
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border);
+
+    display: grid;
+    grid-template-columns: minmax(4.5rem, max-content) minmax(0, 1fr);
+    column-gap: var(--space-4);
+}
+
+.infoRow:last-child {
+    border-bottom: 1px solid var(--border);
+}
+
+.infoRow dt {
+    font-size: var(--text-md);
+    color: var(--text-muted);
+}
+
+.infoRow dd {
+    margin: 0;
+    max-width: var(--reading-max);
+
+    font-size: var(--text-base);
+    color: var(--text);
+}
+
+.line {
+    display: block;
+}
+
+.line + .line {
+    margin-top: var(--space-1);
+}
+
+.link {
+    min-height: var(--touch);
+    margin: calc((var(--touch) - 1lh) / -2) 0;
+
+    display: inline-flex;
+    align-items: center;
+
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+}
+
+.note {
+    max-width: var(--reading-max);
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ==========================================================
+   768px 이상 = 태블릿·웹. 한 단 유지, 제목만 키움
+   ========================================================== */
+
+@media (min-width: 768px) {
+    .title {
+        font-size: var(--text-2xl);
+    }
+}
+
+@media (min-width: 1024px) {
+    .main {
+        padding-top: var(--space-8);
+    }
+
+    .topBar {
+        display: none;
+    }
+}
