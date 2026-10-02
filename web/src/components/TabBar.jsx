@@ -12,7 +12,7 @@ import styles from './TabBar.module.css';
 
 // match: 이 경로들 아래에 있으면 해당 탭을 활성으로 봄
 const TABS = [
-    { href: '/', label: '검색', Icon: SearchIcon, match: ['/', '/search', '/books'] },
+    { href: '/', label: '검색', Icon: SearchIcon, match: ['/', '/search'] },
     { href: '/bag', label: '대출가방', Icon: BagIcon, match: ['/bag'] },
     { href: '/libraries', label: '내 주변', Icon: PinIcon, match: ['/libraries'] },
 ];

@@ -1,0 +1,38 @@
+.badge {
+    padding: var(--space-1) var(--space-2);
+    flex-shrink: 0;
+
+    border-radius: var(--radius-sm);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-normal);
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.available {
+    background: var(--brand-subtle);
+    color: var(--brand);
+}
+
+.onLoan {
+    background: var(--surface);
+    color: var(--text-3);
+}
+
+/* 실패는 바탕 없이 글자만 — 상태 배지와 헷갈리지 않게 */
+.failed {
+    padding-inline: 0;
+    font-weight: var(--weight-regular);
+    color: var(--text-muted);
+}
+
+/* 자리만 잡는 스켈레톤. 글자는 폭을 맞추려고 넣고 투명 처리 */
+.skeleton {
+    background: var(--surface);
+    color: transparent;
+}

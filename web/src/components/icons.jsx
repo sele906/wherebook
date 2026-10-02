@@ -14,6 +14,7 @@ import {
     LuChevronLeft,
     LuChevronRight,
     LuX,
+    LuCheck,
 } from 'react-icons/lu';
 
 function wrap(Icon) {
@@ -31,3 +32,4 @@ export const PlusIcon = wrap(LuPlus);
 export const BackIcon = wrap(LuChevronLeft);
 export const NextIcon = wrap(LuChevronRight);
 export const CloseIcon = wrap(LuX);
+export const CheckIcon = wrap(LuCheck);

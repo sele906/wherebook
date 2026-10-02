@@ -5,4 +5,6 @@ export {
   searchLibrariesByBook,
   getCallNumber,
   getLoanStatus,
+  getLoanStatuses,
+  LOAN_BATCH_SIZE,
 } from "./holdings";

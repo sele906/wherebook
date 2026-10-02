@@ -1,0 +1,67 @@
+.item + .item {
+    border-top: 1px solid var(--border);
+}
+
+.row {
+    min-height: var(--control-xl);
+    padding: var(--space-2) 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    color: var(--text);
+}
+
+.row:hover {
+    color: var(--text);
+}
+
+.row:hover .name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.row:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-sm);
+}
+
+.text {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.name {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+}
+
+.meta {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ---- 스켈레톤 ---- */
+
+.bar {
+    display: block;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+}
+
+.barName {
+    width: 9rem;
+    max-width: 100%;
+    height: var(--text-base);
+}
+
+.barMeta {
+    width: 3rem;
+    height: var(--text-sm);
+}

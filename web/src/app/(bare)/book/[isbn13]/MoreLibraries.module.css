@@ -1,0 +1,31 @@
+/* 첫 묶음 목록 바로 아래에 이어 붙으므로 구분선만 이어줌 */
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+
+/* Text 버튼 */
+.more {
+    width: 100%;
+    min-height: var(--touch);
+    margin-top: var(--space-1);
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--brand);
+}
+
+.more:hover {
+    color: var(--brand-hover);
+    background: var(--surface);
+}
+
+.more:active {
+    background: var(--border);
+}
