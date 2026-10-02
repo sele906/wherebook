@@ -6,7 +6,7 @@
  */
 import {
     LuSearch,
-    LuShoppingBag,
+    LuBookMarked,
     LuMapPin,
     LuSettings,
     LuLocateFixed,
@@ -25,7 +25,7 @@ function wrap(Icon) {
 }
 
 export const SearchIcon = wrap(LuSearch);
-export const BagIcon = wrap(LuShoppingBag);
+export const BorrowListIcon = wrap(LuBookMarked);
 export const PinIcon = wrap(LuMapPin);
 export const GearIcon = wrap(LuSettings);
 export const LocateIcon = wrap(LuLocateFixed);

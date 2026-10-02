@@ -119,11 +119,11 @@ export default function Home() {
                     {POPULAR_BOOKS.map((book) => (
                         <li key={book.title} className={styles.bookCard}>
                             <div className={styles.cover}>
-                                {/* TODO: 대출가방 담기 → 대출가방 상태 붙일 때 연결 */}
+                                {/* TODO: 빌릴 책에 추가 → 빌릴 책 API(/api/borrow-list) 붙일 때 연결 */}
                                 <button
                                     type="button"
                                     className={styles.addButton}
-                                    aria-label={`${book.title} 대출가방에 담기`}
+                                    aria-label={`${book.title} 빌릴 책에 추가`}
                                 >
                                     <PlusIcon size={20} strokeWidth={2.2} />
                                 </button>

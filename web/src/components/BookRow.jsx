@@ -7,7 +7,7 @@ import { Skeleton } from './Skeleton';
 import styles from './BookRow.module.css';
 
 /*
- * 책 목록 한 행. 왼쪽 표지·제목·메타 전체가 책 상세 링크 하나, 오른쪽 "담기"는 링크 밖.
+ * 책 목록 한 행. 왼쪽 표지·제목·메타 전체가 책 상세 링크 하나, 오른쪽 "추가"는 링크 밖.
  * 책 제목·저자·출판사는 데이터 원문 그대로 (번역·가공 안 함).
  */
 
@@ -31,12 +31,12 @@ export default function BookRow({ book }) {
                 </span>
             </Link>
 
-            {/* TODO: 대출가방 API 붙이면 담기/빼기 연결 (낙관적 업데이트, 실패 시 되돌림).
-                      담긴 책은 aria-pressed="true" + --brand-subtle 바탕 + "담김" 으로 바뀜.
+            {/* TODO: 빌릴 책 API(/api/borrow-list) 붙이면 추가/빼기 연결 (낙관적 업데이트, 실패 시 되돌림).
+                      추가한 책은 aria-pressed="true" + --brand-subtle 바탕 + "추가됨" 으로 바뀜.
                       지금은 모양만 있는 임시 버튼. */}
-            <button type="button" className={styles.add} aria-pressed="false" aria-label={`${book.title} 대출가방에 담기`}>
+            <button type="button" className={styles.add} aria-pressed="false" aria-label={`${book.title} 빌릴 책에 추가`}>
                 <PlusIcon size={16} strokeWidth={2.4} />
-                <span aria-hidden="true">담기</span>
+                <span aria-hidden="true">추가</span>
             </button>
         </li>
     );

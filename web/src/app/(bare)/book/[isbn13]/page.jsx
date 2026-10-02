@@ -118,9 +118,9 @@ export default async function BookPage({ params, searchParams }) {
                     {book.authors && <p className={styles.authors}>{book.authors}</p>}
                     {meta && <p className={styles.meta}>{meta}</p>}
                 </div>
-                {/* 웹(1024px~) 전용 담기 버튼 — 왼쪽 책 정보와 함께 스크롤을 따라옴 */}
+                {/* 웹(1024px~) 전용 추가 버튼 — 왼쪽 책 정보와 함께 스크롤을 따라옴 */}
                 <div className={styles.headActions}>
-                    <AddToBagButton />
+                    <AddToBorrowListButton />
                 </div>
             </header>
 
@@ -145,9 +145,9 @@ export default async function BookPage({ params, searchParams }) {
                 </section>
             )}
 
-            {/* 모바일·태블릿 전용 담기 바 — 화면 아래 고정. 웹에서는 위 headActions가 대신함 */}
+            {/* 모바일·태블릿 전용 추가 바 — 화면 아래 고정. 웹에서는 위 headActions가 대신함 */}
             <div className={styles.actions}>
-                <AddToBagButton />
+                <AddToBorrowListButton />
             </div>
 
             <BookJsonLd book={book} cover={cover} />
@@ -156,12 +156,12 @@ export default async function BookPage({ params, searchParams }) {
 }
 
 // 화면에 하나뿐인 Primary 버튼. 모바일 하단 바와 웹 왼쪽 중 한 곳에만 보이도록 CSS로 나눔
-// TODO: 대출가방 API 붙이면 담기 연결 (낙관적 업데이트, 실패 시 되돌림). 지금은 모양만 있는 임시 버튼
-function AddToBagButton() {
+// TODO: 빌릴 책 API(/api/borrow-list) 붙이면 추가 연결 (낙관적 업데이트, 실패 시 되돌림). 지금은 모양만 있는 임시 버튼
+function AddToBorrowListButton() {
     return (
         <button type="button" className={styles.primary}>
             <PlusIcon size={20} strokeWidth={2.4} />
-            대출가방에 담기
+            빌릴 책에 추가
         </button>
     );
 }
