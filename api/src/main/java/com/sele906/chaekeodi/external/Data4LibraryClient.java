@@ -103,59 +103,78 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 호출
-    public List<String> fetchLibByBook(String isbn, String regionCode) {
+    public List<String> fetchLibByBook(String isbn, List<String> regions) {
 
-        List<String> regions = new ArrayList<>();
+        // 중복 제거도 같이
+        Set<String> libCodes = new LinkedHashSet<>();
 
-        // 현재 지역 추가
-        regions.add(regionCode);
+        int pageSize = 100;
 
-        // 인접 지역 추가
-        regions.addAll(ADJACENT.getOrDefault(regionCode, List.of()));
-
-        // 도서관 코드 저장
-        List<String> libCodes = new ArrayList<>();
-
+        // 느림!! 보완 필요!!
         // 지역 하나씩 조회
         for (String region : regions) {
+
+            int pageNo = 1;
+
             try {
-                JsonNode res = get("/libSrchByBook", Map.of(
-                        "isbn", isbn,
-                        "region", region,
-                        "pageSize", 100
-                ));
+                while (true) {
 
-                JsonNode libs = res.path("response").path("libs");
+                    JsonNode res = get("/libSrchByBook", Map.of(
+                            "isbn", isbn,
+                            "region", region,
+                            "pageNo", pageNo,
+                            "pageSize", pageSize
+                    ));
 
-                // 이 지역에 소장 도서관이 없으면
-                // 다음 지역으로 넘어가기
-                if (!libs.isArray() || libs.isEmpty()) {
-                    continue;
-                }
+                    JsonNode response = res.path("response");
+                    JsonNode libs = response.path("libs");
 
-                // 도서관 코드 꺼내기
-                for (JsonNode item : libs) {
+                    int numFound = response.path("numFound").asInt();
 
-                    JsonNode lib = item.path("lib");
-
-                    String libCode =
-                            lib.path("libCode").asText();
-
-                    if (!libCode.isBlank() && !libCodes.contains(libCode)) {
-                        libCodes.add(libCode);
+                    // 더 이상 결과 없음
+                    if (!libs.isArray() || libs.isEmpty()) {
+                        break;
                     }
-                }
 
-                //디버그용
-                int numFound = res.path("response").path("numFound").asInt();
-                log.debug("region={} numFound={} 수집={}", region, numFound, libs.size());
+                    for (JsonNode item : libs) {
+
+                        String libCode = item.path("lib")
+                                .path("libCode")
+                                .asText();
+
+                        if (!libCode.isBlank()) {
+                            libCodes.add(libCode);
+                        }
+                    }
+
+                    log.debug(
+                            "region={} page={} numFound={} 현재페이지={} 누적={}",
+                            region,
+                            pageNo,
+                            numFound,
+                            libs.size(),
+                            libCodes.size()
+                    );
+
+                    // 마지막 페이지
+                    if (pageNo * pageSize >= numFound) {
+                        break;
+                    }
+
+                    pageNo++;
+                }
 
             } catch (Exception e) {
-                log.warn("소장 도서관 조회 실패 isbn={} region={}", isbn, region, e);
+                log.warn(
+                        "소장 도서관 조회 실패 isbn={} region={}",
+                        isbn,
+                        region,
+                        e
+                );
             }
         }
 
-        return libCodes;
+        return new ArrayList<>(libCodes);
     }
 
     // 인접 광역 매핑

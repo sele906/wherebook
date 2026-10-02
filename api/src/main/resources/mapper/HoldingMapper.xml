@@ -45,4 +45,18 @@
             fetched_at = now()
     </insert>
 
+    <select id="findNearestRegionWithLocationAndRadius" resultType="string">
+        SELECT DISTINCT region_code
+        FROM library
+        WHERE location IS NOT NULL
+        AND ST_DWithin(
+            location,
+            ST_SetSRID(
+                ST_MakePoint(#{longitude}, #{latitude}),
+                4326
+            )::geography,
+            #{radius}
+        );
+    </select>
+
 </mapper>

@@ -2,9 +2,11 @@ package com.sele906.chaekeodi.holding.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class LibrarySearchByBookRequest {
     private String region;
 
