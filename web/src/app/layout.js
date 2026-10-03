@@ -11,6 +11,8 @@
  */
 import { Noto_Sans_KR } from 'next/font/google';
 
+import BaseCookieSync from '@/components/BaseCookieSync';
+
 import './globals.css';
 
 const notoSansKr = Noto_Sans_KR({
@@ -55,7 +57,10 @@ export default function RootLayout({ children }) {
             <head>
                 <script dangerouslySetInnerHTML={{ __html: themeScript }} />
             </head>
-            <body>{children}</body>
+            <body>
+                {children}
+                <BaseCookieSync />
+            </body>
         </html>
     );
 }

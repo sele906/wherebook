@@ -7,8 +7,8 @@ import Pager, { readPage } from '@/components/Pager';
 import { PendingForm, PendingLink, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
 import { NextIcon } from '@/components/icons';
+import { getBase } from '@/lib/getBase';
 import {
-    DEFAULT_BASE,
     DEFAULT_RADIUS_KM,
     RADIUS_STEPS_KM,
     describeBase,
@@ -24,7 +24,7 @@ import styles from './page.module.css';
  * 기준 위치에서 반경 안의 도서관을 거리순으로. 검색어도 반경 안에서만 찾는다.
  * 보는 사람 위치에 따라 내용이 바뀌는 화면이라 noindex (링크는 따라가게 follow).
  *
- * TODO: 기준 위치 — 위치 입력 UI가 생기면 쿠키의 기준 위치를 쓴다. 지금은 DEFAULT_BASE(서울 시청).
+ * 기준 위치는 쿠키(getBase)에서, 없으면 서울 시청.
  * TODO: 지도/목록 전환 — 지도 화면이 생기면 h1 옆에 추가. 지도와 목록은 같은 API 응답을 공유.
  * TODO: 운영 상태("운영 중 · 22시까지" / "오늘 휴관") — 운영시간·휴관일 데이터 정제 필요.
  *       지금 operatingTime·closedDays는 자유 형식 글이라 계산할 수 없음 (백엔드 작업).
@@ -60,6 +60,7 @@ export default async function LibrariesPage({ searchParams }) {
     const q = readQuery(params.q);
     const radiusKm = readRadiusKm(params.r);
     const page = readPage(params.page);
+    const base = await getBase();
 
     return (
         <main className={styles.main}>
@@ -99,8 +100,8 @@ export default async function LibrariesPage({ searchParams }) {
 
                 {/* 이동 중에는 바뀔 반경을 아직 모르므로 기준 위치 문구도 자리만 잡음 */}
                 <PendingSwap fallback={<ResultsSkeleton />}>
-                    <Suspense key={`${q}:${radiusKm}:${page}`} fallback={<ResultsSkeleton radiusKm={radiusKm} />}>
-                        <Results q={q} radiusKm={radiusKm} page={page} />
+                    <Suspense key={`${q}:${radiusKm}:${page}`} fallback={<ResultsSkeleton base={base} radiusKm={radiusKm} />}>
+                        <Results base={base} q={q} radiusKm={radiusKm} page={page} />
                     </Suspense>
                 </PendingSwap>
             </PendingNavProvider>
@@ -108,13 +109,13 @@ export default async function LibrariesPage({ searchParams }) {
     );
 }
 
-async function Results({ q, radiusKm, page }) {
+async function Results({ base, q, radiusKm, page }) {
     let data = null;
     try {
         data = await searchLibraries({
             keyword: q || undefined,
-            latitude: DEFAULT_BASE.latitude,
-            longitude: DEFAULT_BASE.longitude,
+            latitude: base.latitude,
+            longitude: base.longitude,
             radius: radiusKm * 1000,
             page,
             size: PAGE_SIZE,
@@ -126,7 +127,7 @@ async function Results({ q, radiusKm, page }) {
     if (!data) {
         return (
             <>
-                <p className={styles.base}>{describeBase(radiusKm)}</p>
+                <p className={styles.base}>{describeBase(base, radiusKm)}</p>
                 <Notice
                     title="도서관 정보를 불러오지 못했어요"
                     action={
@@ -153,7 +154,7 @@ async function Results({ q, radiusKm, page }) {
     if (totalCount === 0) {
         return (
             <>
-                <p className={styles.base}>{describeBase(radiusKm)}</p>
+                <p className={styles.base}>{describeBase(base, radiusKm)}</p>
                 <Notice
                     title={
                         q
@@ -170,7 +171,7 @@ async function Results({ q, radiusKm, page }) {
     if (libraries.length === 0) {
         return (
             <>
-                <p className={styles.base}>{describeBase(radiusKm)}</p>
+                <p className={styles.base}>{describeBase(base, radiusKm)}</p>
                 <Notice
                     title="이 페이지에는 도서관이 없어요"
                     action={
@@ -186,7 +187,7 @@ async function Results({ q, radiusKm, page }) {
     return (
         <>
             <p className={styles.base}>
-                {`${describeBase(radiusKm)} · 도서관 ${numberFormat.format(totalCount)}곳`}
+                {`${describeBase(base, radiusKm)} · 도서관 ${numberFormat.format(totalCount)}곳`}
             </p>
 
             <ul className={styles.list}>

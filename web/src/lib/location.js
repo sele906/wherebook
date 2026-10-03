@@ -1,8 +1,9 @@
 /*
  * 기준 위치(내 위치 / 직접 고른 지역 / 지도 중심).
  *
- * TODO: 위치 입력 UI가 생기면 사용자가 고른 기준을 쿠키에 저장하고 서버에서 읽어 쓴다.
- *       그 전까지는 모든 화면이 아래 기본값(서울 시청)을 기준으로 한다.
+ * 사용자가 고른 기준의 원본은 브라우저 localStorage (lib/locationStore.js).
+ * 서버 화면은 그 값을 옮겨 적은 쿠키를 getBase()(lib/getBase.js)로 읽고, 없으면 아래 기본값(서울 시청).
+ * GPS 좌표는 쿠키에 넣지 않는다 (CLAUDE.md "기준 위치 저장").
  */
 export const DEFAULT_BASE = {
     label: '서울 시청',
@@ -42,18 +43,18 @@ export function formatKm(km) {
 }
 
 // 기준 위치는 항상 글자로 (DESIGN.md) — "서울 시청 기준 3km"
-export function describeBase(radiusKm) {
-    return `${DEFAULT_BASE.label} 기준 ${formatKm(radiusKm)}`;
+export function describeBase(base, radiusKm) {
+    return `${base.label} 기준 ${formatKm(radiusKm)}`;
 }
 
-// 기준 위치에서 좌표까지의 직선 거리(m). 하버사인 공식
-export function distanceFromBase(latitude, longitude) {
+// 기준 위치(base)에서 좌표까지의 직선 거리(m). 하버사인 공식
+export function distanceFrom(base, latitude, longitude) {
     if (latitude == null || longitude == null) return null;
     const toRad = (deg) => (deg * Math.PI) / 180;
-    const dLat = toRad(latitude - DEFAULT_BASE.latitude);
-    const dLng = toRad(longitude - DEFAULT_BASE.longitude);
+    const dLat = toRad(latitude - base.latitude);
+    const dLng = toRad(longitude - base.longitude);
     const a =
         Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(DEFAULT_BASE.latitude)) * Math.cos(toRad(latitude)) * Math.sin(dLng / 2) ** 2;
+        Math.cos(toRad(base.latitude)) * Math.cos(toRad(latitude)) * Math.sin(dLng / 2) ** 2;
     return 2 * 6371000 * Math.asin(Math.sqrt(a));
 }

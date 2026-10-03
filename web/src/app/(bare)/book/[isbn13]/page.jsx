@@ -11,7 +11,8 @@ import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 import { LoadingArea } from '@/components/Skeleton';
 import { PlusIcon } from '@/components/icons';
 import { isValidIsbn13 } from '@/lib/ids';
-import { DEFAULT_BASE, describeBase, formatKm, readRadiusKm } from '@/lib/location';
+import { getBase } from '@/lib/getBase';
+import { describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
 import HoldingRow from './HoldingRow';
@@ -29,7 +30,7 @@ import styles from './page.module.css';
  *
  * 쿼리: r = 반경 km (1·3·5·10)
  *
- * TODO: 기준 위치 — 위치 입력 UI가 생기면 쿠키의 기준 위치를 쓴다. 지금은 DEFAULT_BASE(서울 시청).
+ * 기준 위치는 쿠키(getBase)에서, 없으면 서울 시청. 검색로봇은 쿠키가 없으므로 항상 서울 시청 기준.
  * TODO: "지도에서 보기" 버튼·"지도" 링크 — 지도 화면이 생기면 추가.
  * TODO: canonical — 사이트 주소(metadataBase)가 정해지면 쿼리 없는 /book/{isbn13} 으로 지정.
  */
@@ -88,6 +89,7 @@ export default async function BookPage({ params, searchParams }) {
     const book = await loadBook(isbn13);
 
     const radiusKm = readRadiusKm(query.r);
+    const base = await getBase();
 
     const ua = (await headers()).get('user-agent') ?? '';
     const isBot = userAgentFromString(ua).isBot || EXTRA_BOTS.test(ua);
@@ -129,10 +131,10 @@ export default async function BookPage({ params, searchParams }) {
                     내 주변에서 빌릴 수 있는 곳
                 </h2>
                 {/* 기준 위치는 항상 글자로 */}
-                <p className={styles.base}>{describeBase(radiusKm)}</p>
+                <p className={styles.base}>{describeBase(base, radiusKm)}</p>
 
                 <Suspense key={radiusKm} fallback={<HoldingsSkeleton />}>
-                    <Holdings isbn13={isbn13} radiusKm={radiusKm} checkLoan={!isBot} />
+                    <Holdings isbn13={isbn13} base={base} radiusKm={radiusKm} checkLoan={!isBot} />
                 </Suspense>
             </section>
 
@@ -166,12 +168,12 @@ function AddToBorrowListButton() {
     );
 }
 
-async function Holdings({ isbn13, radiusKm, checkLoan }) {
+async function Holdings({ isbn13, base, radiusKm, checkLoan }) {
     let data = null;
     try {
         data = await searchLibrariesByBook(isbn13, {
-            latitude: DEFAULT_BASE.latitude,
-            longitude: DEFAULT_BASE.longitude,
+            latitude: base.latitude,
+            longitude: base.longitude,
             radius: radiusKm * 1000,
         });
     } catch (e) {

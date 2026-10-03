@@ -4,7 +4,8 @@ import { ApiError, getLibrary } from '@/api';
 import BackLink from '@/components/BackLink';
 import DirectionLinks from '@/components/DirectionLinks';
 import { isValidLibCode } from '@/lib/ids';
-import { DEFAULT_BASE, distanceFromBase, formatDistance } from '@/lib/location';
+import { getBase } from '@/lib/getBase';
+import { distanceFrom, formatDistance } from '@/lib/location';
 
 import styles from './page.module.css';
 
@@ -17,7 +18,7 @@ import styles from './page.module.css';
  * TODO: 지도 미리보기 — 지도 작업 때 주소 아래에 추가 (클라이언트 전용, dynamic import).
  *       지도가 생기면 웹(1024px~)은 오른쪽에 지도를 두는 두 단으로.
  * TODO: 이 도서관이 가진 책 / 인기 대출 — 백엔드 API가 생기면 추가.
- * TODO: 기준 위치 — 위치 입력 UI가 생기면 쿠키의 기준 위치로 거리 계산. 지금은 DEFAULT_BASE(서울 시청).
+ * 기준 위치는 쿠키(getBase)에서, 없으면 서울 시청.
  */
 
 const numberFormat = new Intl.NumberFormat('ko-KR');
@@ -71,7 +72,8 @@ export default async function LibraryPage({ params }) {
     const { libCode } = await params;
     const library = await loadLibrary(libCode);
 
-    const distance = distanceFromBase(library.latitude, library.longitude);
+    const base = await getBase();
+    const distance = distanceFrom(base, library.latitude, library.longitude);
     const hours = splitLines(library.operatingTime);
     const closed = splitLines(library.closedDays);
     const tel = clean(library.tel);
@@ -88,7 +90,7 @@ export default async function LibraryPage({ params }) {
                 <p className={styles.address}>{library.address}</p>
                 {distance != null && (
                     // 기준 위치는 항상 글자로 (DESIGN.md)
-                    <p className={styles.distance}>{`${DEFAULT_BASE.label}에서 ${formatDistance(distance)}`}</p>
+                    <p className={styles.distance}>{`${base.label}에서 ${formatDistance(distance)}`}</p>
                 )}
             </header>
 
