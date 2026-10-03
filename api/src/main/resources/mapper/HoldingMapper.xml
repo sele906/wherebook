@@ -9,10 +9,6 @@
         SELECT
             lib_code,
             isbn13,
-            class_no,
-            book_code,
-            separate_shelf_name,
-            shelf_loc_name,
             status,
             fetched_at
         FROM book_call_number
@@ -23,26 +19,53 @@
         INSERT INTO book_call_number (
             lib_code,
             isbn13,
-            class_no,
-            book_code,
-            separate_shelf_name,
-            shelf_loc_name,
             status
         ) VALUES (
             #{libCode},
             #{isbn13},
-            #{classNo},
-            #{bookCode},
-            #{separateShelfName},
-            #{shelfLocName},
             #{status}
         ) ON CONFLICT (lib_code, isbn13) DO UPDATE SET
-            class_no = EXCLUDED.class_no,
-            book_code = EXCLUDED.book_code,
-            separate_shelf_name = EXCLUDED.separate_shelf_name,
-            shelf_loc_name = EXCLUDED.shelf_loc_name,
             status = EXCLUDED.status,
             fetched_at = now()
+    </insert>
+
+    <select id="findCallNumberItems" resultType="BookCallNumberItem">
+        SELECT *
+        FROM book_call_number_item
+        WHERE lib_code = #{libCode} AND isbn13 = #{isbn13}
+        ORDER BY seq
+    </select>
+
+    <delete id="deleteCallNumberItems">
+        DELETE FROM book_call_number_item
+        WHERE lib_code = #{libCode} AND isbn13 = #{isbn13}
+    </delete>
+
+    <insert id="insertCallNumberItems">
+        INSERT INTO book_call_number_item (
+            lib_code,
+            isbn13,
+            seq,
+            class_no,
+            book_code,
+            separate_shelf_name,
+            shelf_loc_name,
+            copy_count,
+            latest_reg_date
+        ) VALUES
+        <foreach collection="list" item="i" separator=",">
+            (
+                #{i.libCode},
+                #{i.isbn13},
+                #{i.seq},
+                #{i.classNo},
+                #{i.bookCode},
+                #{i.separateShelfName},
+                #{i.shelfLocName},
+                #{i.copyCount},
+                #{i.latestRegDate}
+            )
+        </foreach>
     </insert>
 
     <select id="findNearestRegionWithLocationAndRadius" resultType="string">

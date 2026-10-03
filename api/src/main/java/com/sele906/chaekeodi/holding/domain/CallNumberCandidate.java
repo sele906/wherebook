@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,8 +17,12 @@ public class CallNumberCandidate {
     private String shelfLocName;
     private String regDate;
 
-    // 같은 책꽂이 자리인지 판단하는 키
+    // 같은 "실제 위치"인지 판단: 청구기호 + 별치 + 배가위치
     public String groupKey() {
-        return classNo + " | " + bookCode;
+        return String.join("|",
+                Objects.toString(separateShelfName, ""),
+                Objects.toString(shelfLocName, ""),
+                Objects.toString(classNo, ""),
+                Objects.toString(bookCode, ""));
     }
 }

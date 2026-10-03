@@ -10,10 +10,6 @@ import java.util.Date;
 public class BookCallNumber {
     private String libCode;
     private String isbn13;
-    private String classNo;
-    private String bookCode;
-    private String separateShelfName;
-    private String shelfLocName;
     private String status;        // OK / NOT_FOUND / ERROR
     private Date fetchedAt;
 }

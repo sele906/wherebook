@@ -10,17 +10,16 @@ import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class HoldingService {
 
+    private final TransactionTemplate tx;
     private final LibraryMapper libraryMapper;
     private final BookMapper bookMapper;
     private final HoldingMapper holdingMapper;
@@ -65,7 +64,13 @@ public class HoldingService {
 
         //있으면 바로 출력
         if (cached != null && isFresh(cached)) {
-            return toResponse(cached);
+
+            //유효성 검사
+            List<BookCallNumberItem> itemList = "OK".equals(cached.getStatus())
+                    ? holdingMapper.findCallNumberItems(cached.getLibCode(), cached.getIsbn13())
+                    : List.of();
+
+            return toResponse(cached.getStatus(), itemList);
         }
 
         // 2. dtl_kdc 반환
@@ -73,9 +78,8 @@ public class HoldingService {
         String dtlKdc = (book == null) ? null : toDtlKdc(book.getClassNo());
 
         // 3. 외부 호출
-        BookCallNumber result = new BookCallNumber();
-        result.setLibCode(libCode);
-        result.setIsbn13(isbn13);
+        List<BookCallNumberItem> items;
+        String status;
 
         try {
             List<CallNumberCandidate> candidates = client.fetchCallNumber(isbn13, libCode, dtlKdc);
@@ -84,29 +88,45 @@ public class HoldingService {
                 candidates = client.fetchCallNumber(isbn13, libCode, null);
             }
 
-            // 후보 중 대표 선택
-            CallNumberCandidate best = pickBest(candidates);
+            // 청구기호 그룹화하고 정렬
+            items = groupAndSort(candidates, libCode, isbn13);
+            status = items.isEmpty() ? "NOT_FOUND" : "OK";
 
-            if (best == null) {
-                //0건   → status=NOT_FOUND 저장
-                result.setStatus("NOT_FOUND");
-            } else {
-                //성공  → 후보 중 대표 선택, status=OK 저장
-                result.setClassNo(best.getClassNo());
-                result.setBookCode(best.getBookCode());
-                result.setSeparateShelfName(best.getSeparateShelfName());
-                result.setShelfLocName(best.getShelfLocName());
-                result.setStatus("OK"); //status=OK 저장
-            }
         } catch (Exception e) {
             //실패  → status=ERROR 저장
             log.warn("청구기호 조회 실패 isbn={} libCode={}", isbn13, libCode, e);
-            result.setStatus("ERROR");
+
+            // 오래됐어도 기존 OK 캐시가 있으면 ERROR로 덮어쓰지 말고 그걸 반환
+            if (cached != null && "OK".equals(cached.getStatus())) {
+
+                List<BookCallNumberItem> itemList = holdingMapper.findCallNumberItems(cached.getLibCode(), cached.getIsbn13());
+
+                return toResponse("OK", itemList);
+            }
+
+            items = List.of();
+            status = "ERROR";
         }
 
         // 4. 저장 후 반환
-        holdingMapper.upsertCallNumber(result);
-        return toResponse(result);
+        BookCallNumber header = new BookCallNumber();
+        header.setLibCode(libCode);
+        header.setIsbn13(isbn13);
+        header.setStatus(status);
+
+        //트랜잭션 없으면 3가지 쿼리를 한꺼번에 실행했을 때 중간에 에러날경우 되돌리기가 어려움
+        List<BookCallNumberItem> itemsToSave = items;
+
+        tx.executeWithoutResult(s -> {
+            holdingMapper.upsertCallNumber(header); //청구기호 헤더 저장
+            holdingMapper.deleteCallNumberItems(libCode, isbn13); //기존 청구기호 아이템 삭제
+            if (!itemsToSave.isEmpty()) {
+                holdingMapper.insertCallNumberItems(itemsToSave); //새로운 청구기호 아이템 추가
+            }
+        });
+
+        return toResponse(status, items);
+
     }
 
     //class_no에서 앞 2자리 반환
@@ -127,84 +147,95 @@ public class HoldingService {
         };
     }
 
-    //청구기호 반환 형식
-    private CallNumberResponse toResponse(BookCallNumber c) {
+    // 청구기호 응답 객체 생성
+    private CallNumberResponse toResponse(String status, List<BookCallNumberItem> items) {
+        List<CallNumberItem> list = new ArrayList<>();
 
-        // 상태가 OK가 아니면 청구기호와 서가 위치는 null
-        if (!"OK".equals(c.getStatus())) {
-            return new CallNumberResponse(null, null, c.getStatus());
+        //청구기호 형식
+        for (var item : items) {
+
+            List<String> parts = new ArrayList<>();
+
+            //분류번호 유효성검사
+            // "null-정67ㅊ" 방지
+            if (item.getClassNo() != null && !item.getClassNo().isBlank()) {
+                parts.add(item.getClassNo());
+            }
+
+            //도서기호 유효성검사
+            //"813.7-null" 방지
+            if (item.getBookCode() != null && !item.getBookCode().isBlank()) {
+                parts.add(item.getBookCode());
+            }
+
+            String callNumber = String.join("-", parts);
+
+            //배가위치 유효성검사
+            if (item.getSeparateShelfName() != null && !item.getSeparateShelfName().isBlank()) {
+                callNumber = item.getSeparateShelfName() + " " + callNumber;
+            }
+
+            CallNumberItem converted = new CallNumberItem(callNumber, item.getShelfLocName(), item.getCopyCount());
+            list.add(converted);
         }
 
-        // 별치명이 있으면 청구기호 앞에 붙인다
-        String prefix = "";
-
-        if (c.getSeparateShelfName() != null) {
-            prefix = c.getSeparateShelfName() + " ";
-        }
-
-        // 최종 청구기호 만들기
-        String callNumber = prefix + c.getClassNo() + "-" + c.getBookCode();
-
-        // 응답 객체 생성
-        return new CallNumberResponse(
-                callNumber,
-                c.getShelfLocName(),
-                c.getStatus()
-        );
+        return new CallNumberResponse(status, list);
     }
 
-    //대표 청구기호 정하기
-    private CallNumberCandidate pickBest(List<CallNumberCandidate> candidates) {
+    //청구기호 그룹화 및 정렬
+    private List<BookCallNumberItem> groupAndSort(List<CallNumberCandidate> candidates, String libCode, String isbn13) {
 
-        if (candidates == null || candidates.isEmpty()) {
-            return null;
-        }
+        //유효성 검사
+        if (candidates == null || candidates.isEmpty()) return List.of();
 
-        Map<String, List<CallNumberCandidate>> groups = new HashMap<>();
+        // 같은 위치끼리 묶기
+        Map<String, List<CallNumberCandidate>> groups = new LinkedHashMap<>();
 
-        //같은 청구기호 후보끼리 묶기
         for (CallNumberCandidate c : candidates) {
 
             String key = c.groupKey();
 
-            // 아직 이 key의 그룹이 없으면 새 리스트를 만든다
             if (!groups.containsKey(key)) {
                 groups.put(key, new ArrayList<>());
             }
 
-            // 해당 그룹에 후보를 넣는다
             groups.get(key).add(c);
         }
 
-        List<CallNumberCandidate> best = null;
+        // 그룹 → 아이템
+        List<BookCallNumberItem> items = new ArrayList<>();
 
-        //제일 많이 나온 그룹 선택
         for (List<CallNumberCandidate> group : groups.values()) {
 
-            if (best == null) {
-                best = group;
-                continue;
-            }
+            CallNumberCandidate first = group.get(0);
 
-            if (group.size() > best.size()) {
-                best = group;
-                continue;
-            }
+            BookCallNumberItem item = new BookCallNumberItem(
+                    libCode,
+                    isbn13,
+                    0,
+                    first.getClassNo(),
+                    first.getBookCode(),
+                    first.getSeparateShelfName(),
+                    first.getShelfLocName(),
+                    group.size(),
+                    latestRegDate(group)
+            );
 
-            //동률이면 등록일이 최신인 그룹 선택
-            if (group.size() == best.size()) {
-
-                String groupLatestDate = latestRegDate(group);
-                String bestLatestDate = latestRegDate(best);
-
-                if (groupLatestDate.compareTo(bestLatestDate) > 0) {
-                    best = group;
-                }
-            }
+            items.add(item);
         }
 
-        //그 그룹의 첫번째 후보 반환
-        return best.get(0);
+        // 복본 많은 순 → 최신 등록순
+        items.sort((a, b) -> {
+            if (a.getCopyCount() != b.getCopyCount()) {
+                return Integer.compare(b.getCopyCount(), a.getCopyCount());
+            }
+            return b.getLatestRegDate().compareTo(a.getLatestRegDate());
+        });
+
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setSeq(i);
+        }
+        return items;
     }
 
     //그룹에서 최신 날짜 찾기

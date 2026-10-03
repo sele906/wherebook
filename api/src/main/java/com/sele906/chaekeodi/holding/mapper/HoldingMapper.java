@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.holding.mapper;
 
 import com.sele906.chaekeodi.holding.domain.BookCallNumber;
+import com.sele906.chaekeodi.holding.domain.BookCallNumberItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,8 @@ public interface HoldingMapper {
             @Param("longitude") Double longitude,
             @Param("radius") Integer radius
     );
+
+    void deleteCallNumberItems(String libCode, String isbn13);
+    void insertCallNumberItems(List<BookCallNumberItem> items);
+    List<BookCallNumberItem> findCallNumberItems(String libCode, String isbn13);
 }

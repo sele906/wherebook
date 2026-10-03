@@ -26,7 +26,7 @@ export async function loadLoanStatuses(isbn13, libCodes) {
 
 /*
  * 소장 도서관 한 곳의 청구기호. 행을 펼칠 때 그 도서관 하나만 조회한다 (한꺼번에 부르지 않음).
- * 응답: { callNumber, shelfLocation, status: 'OK' | 'NOT_FOUND' | 'ERROR' }
+ * 응답: { status: 'OK' | 'NOT_FOUND' | 'ERROR', items: [{ callNumber, shelfLocation, copyCount }] }
  */
 export async function loadCallNumber(isbn13, libCode) {
     if (typeof isbn13 !== 'string' || !isValidIsbn13(isbn13)) {
@@ -39,7 +39,7 @@ export async function loadCallNumber(isbn13, libCode) {
     try {
         return await getCallNumber(isbn13, libCode);
     } catch (e) {
-        if (e instanceof ApiError) return { callNumber: null, shelfLocation: null, status: 'ERROR' };
+        if (e instanceof ApiError) return { status: 'ERROR', items: [] };
         throw e;
     }
 }

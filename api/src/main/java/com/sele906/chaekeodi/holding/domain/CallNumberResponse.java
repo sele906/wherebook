@@ -1,16 +1,14 @@
 package com.sele906.chaekeodi.holding.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class CallNumberResponse {
-    private String callNumber;      // "813.7-정67ㅊ"
-    private String shelfLocation;   // 배가 위치
     private String status;
+    private List<CallNumberItem> items;   // 0번이 대표, OK가 아니면 빈 리스트
 }

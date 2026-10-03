@@ -83,10 +83,16 @@
  */
 
 /**
+ * @typedef {Object} CallNumberItem
+ * @property {string} callNumber  예: "아동 813.7-정67ㅊ" (별치 기호가 있으면 앞에 붙음)
+ * @property {string|null} shelfLocation  배가 위치(자료실)
+ * @property {number} copyCount  이 청구기호로 소장한 권수
+ */
+
+/**
  * @typedef {Object} CallNumberResponse
- * @property {string|null} callNumber  예: "813.7-정67ㅊ"
- * @property {string|null} shelfLocation  배가 위치
  * @property {string} status  OK / NOT_FOUND / ERROR
+ * @property {CallNumberItem[]} items  복본 많은 순. OK가 아니면 빈 배열
  */
 
 /**

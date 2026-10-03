@@ -80,24 +80,30 @@ function CallNumber({ library, callNumber, onRetry }) {
 
     if (callNumber.state !== 'done') return null;
 
-    const { status, callNumber: value, shelfLocation } = callNumber.result;
+    const { status, items = [] } = callNumber.result;
 
-    if (status === 'OK' && value) {
-        // 자료실이 도서관 이름과 같으면 정보가 없으므로 생략
-        const shelf = shelfLocation && shelfLocation !== library.name ? shelfLocation : null;
+    // 청구기호마다 대출 가능 여부를 알 수 없어서 대표·후보 구분 없이 모두 보여준다 (서버가 복본 많은 순으로 정렬)
+    if (status === 'OK' && items.length > 0) {
         return (
-            <dl className={styles.callNumber}>
-                <div>
-                    <dt>청구기호</dt>
-                    <dd className={styles.callNumberValue}>{value}</dd>
-                </div>
-                {shelf && (
-                    <div>
-                        <dt>자료실</dt>
-                        <dd>{shelf}</dd>
-                    </div>
-                )}
-            </dl>
+            <div className={styles.callNumber}>
+                <p className={styles.callNumberLabel}>
+                    {items.length > 1 ? `청구기호 ${items.length}개` : '청구기호'}
+                </p>
+                <ul className={styles.callNumberList}>
+                    {items.map((item, i) => {
+                        // 자료실이 도서관 이름과 같으면 정보가 없으므로 생략
+                        const shelf = item.shelfLocation && item.shelfLocation !== library.name ? item.shelfLocation : null;
+                        return (
+                            <li key={i} className={styles.callNumberItem}>
+                                <span className={styles.callNumberValue}>{item.callNumber}</span>
+                                <span className={styles.callNumberMeta}>
+                                    {shelf ? `${shelf} · ${item.copyCount}권` : `${item.copyCount}권`}
+                                </span>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         );
     }
 
