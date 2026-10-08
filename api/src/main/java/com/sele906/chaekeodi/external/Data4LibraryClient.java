@@ -22,7 +22,7 @@ public class Data4LibraryClient {
 
     private final RestClient data4LibraryRestClient;
 
-    @Value("${LIB_API_KEY}")
+    @Value("${library.api.auth-key}")
     private String authKey;
 
     //도서관 목록 호출
