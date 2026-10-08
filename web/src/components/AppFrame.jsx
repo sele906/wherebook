@@ -1,3 +1,4 @@
+import LocationProvider from './location/LocationProvider';
 import SiteHeader from './SiteHeader';
 import TabBar from './TabBar';
 import styles from './AppFrame.module.css';
@@ -11,17 +12,21 @@ import styles from './AppFrame.module.css';
  * nav={false}로 주면 모바일에서 탭바 없는 전체 화면이 됨
  * (목업의 책 상세 / 동선 추천 / 설정처럼 뒤로가기 헤더를 쓰는 화면들).
  * 본문 가로 폭(목업 웹 기준 1120px)은 화면마다 달라서 각 page에서 잡음.
+ *
+ * LocationProvider: 기준 위치 고르기 창을 하나만 두고 어느 화면에서든 열 수 있게 함.
  */
 export default function AppFrame({ children, nav = true }) {
     return (
-        <div className={styles.frame}>
-            <SiteHeader />
+        <LocationProvider>
+            <div className={styles.frame}>
+                <SiteHeader />
 
-            <div className={styles.scroll}>
-                <div className={styles.content}>{children}</div>
+                <div className={styles.scroll}>
+                    <div className={styles.content}>{children}</div>
+                </div>
+
+                {nav && <TabBar />}
             </div>
-
-            {nav && <TabBar />}
-        </div>
+        </LocationProvider>
     );
 }

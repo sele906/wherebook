@@ -16,6 +16,12 @@ import {
     LuX,
     LuCheck,
     LuMap,
+    LuHouse,
+    LuBriefcase,
+    LuStar,
+    LuChevronDown,
+    LuPencil,
+    LuLandmark,
 } from 'react-icons/lu';
 
 function wrap(Icon) {
@@ -35,3 +41,9 @@ export const NextIcon = wrap(LuChevronRight);
 export const CloseIcon = wrap(LuX);
 export const CheckIcon = wrap(LuCheck);
 export const MapIcon = wrap(LuMap);
+export const HomeIcon = wrap(LuHouse);
+export const BriefcaseIcon = wrap(LuBriefcase);
+export const StarIcon = wrap(LuStar);
+export const ChevronDownIcon = wrap(LuChevronDown);
+export const EditIcon = wrap(LuPencil);
+export const LandmarkIcon = wrap(LuLandmark);

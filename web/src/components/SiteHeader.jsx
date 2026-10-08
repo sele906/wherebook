@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import BrandLogo from './BrandLogo';
+import LocationChip from './location/LocationChip';
 import NavLink from './NavLink';
 import { BorrowListIcon, PinIcon, GearIcon } from './icons';
 import styles from './SiteHeader.module.css';
@@ -8,6 +9,7 @@ import styles from './SiteHeader.module.css';
 /*
  * 웹(1024px 이상) 상단 헤더. 1024px 미만에서는 CSS로 숨기고 TabBar가 대신 뜬다.
  * 검색은 로고(홈)로 간다 — 목업 웹 헤더 구성 그대로.
+ * 로고 옆에 기준 위치 칩 (목업 WebLocEdit).
  *
  * TODO: 빌릴 책 권수 배지 (0이면 숨김). 빌릴 책 API(/api/borrow-list) 붙일 때 추가.
  */
@@ -18,6 +20,10 @@ export default function SiteHeader() {
                 <BrandLogo size={30} />
                 <span className={styles.wordmark}>책어디</span>
             </Link>
+
+            <div className={styles.location}>
+                <LocationChip />
+            </div>
 
             <nav className={styles.nav} aria-label="주 메뉴">
                 <NavLink href="/libraries" className={styles.navLink}>

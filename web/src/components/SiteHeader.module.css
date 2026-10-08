@@ -24,6 +24,12 @@
     white-space: nowrap;
 }
 
+.location {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+}
+
 .nav {
     margin-left: auto;
     min-width: 0;

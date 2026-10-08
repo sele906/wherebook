@@ -1,6 +1,7 @@
 import { LoadingArea, Skeleton } from '@/components/Skeleton';
 
 import ResultsSkeleton from './ResultsSkeleton';
+import TitleRow from './TitleRow';
 import styles from './page.module.css';
 
 /*
@@ -10,7 +11,7 @@ import styles from './page.module.css';
 export default function LibrariesLoading() {
     return (
         <main className={styles.main}>
-            <h1 className={styles.title}>내 주변</h1>
+            <TitleRow />
             <LoadingArea>
                 <div className={styles.search}>
                     <Skeleton height="var(--control-md)" radius="var(--radius-md)" />

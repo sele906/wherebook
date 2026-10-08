@@ -2,7 +2,8 @@ import Form from 'next/form';
 import Link from 'next/link';
 
 import BrandLogo from '@/components/BrandLogo';
-import { SearchIcon, GearIcon, LocateIcon, PlusIcon } from '@/components/icons';
+import { SearchIcon, GearIcon, PinIcon, PlusIcon } from '@/components/icons';
+import LocationChip, { OpenLocationButton } from '@/components/location/LocationChip';
 
 import styles from './page.module.css';
 
@@ -35,6 +36,7 @@ export default function Home() {
             <header className={styles.mobileHeader}>
                 <BrandLogo size={28} />
                 <span className={styles.wordmark}>책어디</span>
+                <LocationChip className={styles.locationChip} />
                 <Link href="/settings" className={styles.iconLink} aria-label="설정">
                     <GearIcon size={22} />
                 </Link>
@@ -79,12 +81,13 @@ export default function Home() {
                     내 주변 도서관
                 </h2>
                 <p className={styles.nearbyText}>
-                    위치를 켜면 가까운 도서관의 대출 가능 여부를 먼저 보여드려요.
+                    집이나 회사처럼 자주 가는 곳을 기준으로 정하면 가까운 도서관부터 보여드려요.
                 </p>
-                {/* TODO: 위치 권한 요청 → 클라이언트 컴포넌트로 분리 */}
-                <button type="button" className={styles.locateButton}>
-                    <LocateIcon size={18} />내 위치로 찾기
-                </button>
+                {/* GPS 대신 주소 검색으로 고른 위치를 쓴다 (lib/location.js 설명) */}
+                <OpenLocationButton className={styles.locateButton}>
+                    <PinIcon size={18} />
+                    기준 위치 정하기
+                </OpenLocationButton>
             </section>
 
             <section className={styles.recent} aria-labelledby="recent-heading">

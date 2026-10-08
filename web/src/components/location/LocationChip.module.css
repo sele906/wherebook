@@ -1,0 +1,83 @@
+/* 기준 위치 칩. 높이는 --touch(44px), 글자가 길면(영어 등) 이름·동네를 말줄임 */
+.chip {
+    min-width: 0;
+    max-width: 100%;
+    min-height: var(--touch);
+    padding: 0 var(--space-3) 0 var(--space-3);
+
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--text);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+}
+
+.chip:hover {
+    background: var(--border);
+}
+
+.chip:active {
+    background: var(--border-strong);
+}
+
+/* 아직 기준을 고르지 않음(기본값) = 점선 테두리 + "(기본)" 글자 */
+.chip[data-kind='default'] {
+    border-style: dashed;
+    border-color: var(--control-muted);
+    background: transparent;
+}
+
+.chip[data-kind='default']:hover {
+    background: var(--surface);
+}
+
+.icon {
+    flex-shrink: 0;
+    display: flex;
+    color: var(--brand);
+}
+
+.text {
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    white-space: nowrap;
+}
+
+.label,
+.sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.label {
+    flex-shrink: 0;
+    max-width: 10em;
+}
+
+.sub {
+    min-width: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+}
+
+/* 서버 렌더링 때 글자 자리 */
+.placeholder {
+    width: 4.5rem;
+    height: var(--text-md);
+    border-radius: var(--radius-sm);
+    background: var(--border);
+}
+
+.chevron {
+    flex-shrink: 0;
+    color: var(--text-3);
+}

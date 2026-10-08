@@ -69,6 +69,7 @@ body {
 
   --shadow-float: 0 2px 12px rgba(42, 36, 25, 0.12);  /* 지도 위 떠 있는 요소 */
   --shadow-sheet: 0 -4px 20px rgba(42, 36, 25, 0.10);
+  --scrim: rgba(42, 36, 25, 0.45);                    /* 모달·바텀시트 뒤 어둡게 */
 
   /* ---- 간격 (4px 단위만) ---- */
   --space-1: 0.25rem;        /* 4px */
@@ -124,6 +125,7 @@ body {
 
     --shadow-float: 0 2px 12px rgba(0, 0, 0, 0.35);
     --shadow-sheet: 0 -4px 20px rgba(0, 0, 0, 0.35);
+    --scrim: rgba(0, 0, 0, 0.6);
 
     color-scheme: dark;
   }
@@ -153,6 +155,7 @@ body {
 
   --shadow-float: 0 2px 12px rgba(0, 0, 0, 0.35);
   --shadow-sheet: 0 -4px 20px rgba(0, 0, 0, 0.35);
+  --scrim: rgba(0, 0, 0, 0.6);
 
   color-scheme: dark;
 }

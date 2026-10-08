@@ -9,7 +9,25 @@
     padding: 0 var(--gutter) var(--space-8);
 }
 
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* 웹(1024px~)은 SiteHeader에 같은 칩이 있음 */
+.locationChip {
+    margin-left: auto;
+}
+
+@media (min-width: 1024px) {
+    .titleRow .locationChip {
+        display: none;
+    }
+}
+
 .title {
+    flex-shrink: 0;
     min-height: var(--header-h);
     margin: 0;
 
