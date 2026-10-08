@@ -31,8 +31,9 @@ function isValidCoord(latitude, longitude) {
 }
 
 export function encodeBaseCookie({ label, latitude, longitude }) {
-    // 소수 4자리(약 10m)면 거리 표시에 충분
-    const round = (n) => Math.round(n * 10000) / 10000;
+    // 서버로 가는 좌표는 소수 3자리(약 100m)로 뭉갠다 — 장소 검색 좌표는 건물 위치까지 정확해서
+    // 집·회사의 정확한 위치가 요청마다 서버로 가지 않게. 원래 좌표는 localStorage에만 남는다
+    const round = (n) => Math.round(n * 1000) / 1000;
     return encodeURIComponent(JSON.stringify({ label, lat: round(latitude), lng: round(longitude) }));
 }
 

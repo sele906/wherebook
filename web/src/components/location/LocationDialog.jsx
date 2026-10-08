@@ -382,7 +382,9 @@ function PlaceResults({ query, search, onRetry, onPick }) {
                         </span>
                         <span className={styles.optionText}>
                             <span className={styles.optionLabel}>{place.name}</span>
-                            <span className={styles.optionSub}>{place.address}</span>
+                            <span className={styles.optionSub}>
+                                {place.category ? `${place.category} · ${place.address}` : place.address}
+                            </span>
                         </span>
                     </button>
                 </li>
@@ -423,7 +425,7 @@ function SaveView({ titleId, place, full, onBack, onClose }) {
             <PlaceSummary
                 title={place.name}
                 address={place.address}
-                caption="정확한 주소 대신 동 단위로 저장해요."
+                caption="저장한 위치는 이 기기에만 남아요."
             />
 
             {full ? (

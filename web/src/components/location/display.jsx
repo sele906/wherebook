@@ -9,8 +9,3 @@ export function LocationIcon({ kind, label = '', ...props }) {
     if (label.includes('회사')) return <BriefcaseIcon {...props} />;
     return <StarIcon {...props} />;
 }
-
-// "서울 마포구 망원동" → "망원동"
-export function shortAddress(address = '') {
-    return address.trim().split(/\s+/).at(-1) ?? '';
-}

@@ -1,13 +1,13 @@
 'use client';
 
 import { ChevronDownIcon } from '../icons';
-import { LocationIcon, shortAddress } from './display';
+import { LocationIcon } from './display';
 import { useLocationState, useOpenLocationPicker } from './LocationProvider';
 import styles from './LocationChip.module.css';
 
 /*
  * 지금 기준 위치를 보여주고, 누르면 기준 위치 고르기 창을 여는 칩.
- *   저장한 위치: [집 아이콘] 집 · 망원동 ▾
+ *   저장한 위치: [집 아이콘] 집 ▾  (주소는 번지까지 오므로 칩에는 이름만)
  *   이번만 쓰는 위치: [핀] 부평역 ▾
  *   기본값: 점선 테두리 [핀] 서울 시청 (기본) ▾
  * 서버 렌더링 때는 localStorage를 몰라서 글자 자리만 잡아 둔다.
@@ -17,13 +17,7 @@ export default function LocationChip({ className }) {
     const open = useOpenLocationPicker();
     const base = state?.base;
 
-    const sub = !base
-        ? null
-        : base.kind === 'saved'
-          ? `· ${shortAddress(base.address)}`
-          : base.kind === 'default'
-            ? '(기본)'
-            : null;
+    const sub = base?.kind === 'default' ? '(기본)' : null;
 
     return (
         <button
