@@ -1,6 +1,8 @@
 package com.sele906.chaekeodi.place.service;
 
+import com.sele906.chaekeodi.external.JusoClient;
 import com.sele906.chaekeodi.external.KakaoClient;
+import com.sele906.chaekeodi.place.domain.AddressResponse;
 import com.sele906.chaekeodi.place.domain.PlaceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,9 @@ import java.util.List;
 public class PlaceService {
 
     private final KakaoClient kakaoClient;
+    private final JusoClient jusoClient;
 
-    public List<PlaceResponse> searchPlaces(String keyword) {
+    public List<AddressResponse> searchPlaces(String keyword) {
         if (keyword == null || keyword.isBlank()) return List.of();
 
         //db에서 캐시 검색
@@ -21,6 +24,6 @@ public class PlaceService {
         //만약 없으면 api 호출
         //호출 후 db에 저장
 
-        return kakaoClient.fetchPlaces(keyword.trim());
+        return jusoClient.fetchAddress(keyword);
     }
 }

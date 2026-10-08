@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class PlaceSearchRequest {
 
-    @Size(max = 40)
+    @Size(min = 2, max = 40)
     private String keyword;
 }

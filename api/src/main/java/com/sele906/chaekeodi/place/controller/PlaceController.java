@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.place.controller;
 
 import com.sele906.chaekeodi.external.KakaoClient;
+import com.sele906.chaekeodi.place.domain.AddressResponse;
 import com.sele906.chaekeodi.place.domain.PlaceResponse;
 import com.sele906.chaekeodi.place.domain.PlaceSearchRequest;
 import com.sele906.chaekeodi.place.service.PlaceService;
@@ -18,7 +19,7 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping
-    public List<PlaceResponse> searchPlaces(
+    public List<AddressResponse> searchPlaces(
             @ModelAttribute PlaceSearchRequest request
             ) {
         return placeService.searchPlaces(request.getKeyword());
