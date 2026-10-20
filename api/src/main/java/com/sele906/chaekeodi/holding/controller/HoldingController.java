@@ -1,7 +1,5 @@
 package com.sele906.chaekeodi.holding.controller;
 
-import com.sele906.chaekeodi.book.service.BookService;
-import com.sele906.chaekeodi.external.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.CallNumberResponse;
 import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
 import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookResponse;

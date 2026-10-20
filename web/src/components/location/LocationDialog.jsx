@@ -11,7 +11,7 @@ import {
     selectSaved,
     selectTemp,
 } from '@/lib/locationStore';
-import { BASE_LABEL_MAX, DEFAULT_BASE, PLACE_QUERY_MIN } from '@/lib/location';
+import { BASE_LABEL_MAX, DEFAULT_BASE, PLACE_QUERY_MAX } from '@/lib/location';
 
 import { BackIcon, CloseIcon, EditIcon, LandmarkIcon, PinIcon, PlusIcon, SearchIcon } from '../icons';
 import { findPlaces, locatePlace } from './actions';
@@ -26,7 +26,8 @@ import styles from './LocationDialog.module.css';
  *   list — 주소 검색 + 저장한 위치(라디오) + 이번만 쓰는 위치 + 기본값
  *   save — 검색 결과 하나를 이름 붙여 저장 / 이번만 쓰기
  *
- * 주소 검색 결과에는 좌표가 없다. 결과를 누르면 그 주소 하나의 좌표를 받아(locatePlace) 저장 화면으로 넘어간다.
+ * 장소 검색(카카오) 결과에는 좌표가 없다. 결과를 누르면 이름·주소를 보내 도로명주소 API로 다시 찾아(locatePlace)
+ * 이름·주소·좌표를 받고 저장 화면으로 넘어간다. 저장하는 값은 전부 이 응답에서.
  *   edit — 저장한 위치 이름 바꾸기 / 삭제
  *
  * GPS(현재 위치 사용)는 넣지 않았다 — lib/location.js 설명 참고.
@@ -122,10 +123,10 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
         const text = e.target.value;
         setQuery(text);
         clearTimeout(timerRef.current);
-        if (text.trim().length < PLACE_QUERY_MIN) {
-            // 한 글자일 때는 보내지 않음 (진행 중인 응답도 버림)
+        if (!text.trim()) {
+            // 비우면 진행 중인 응답도 버림
             requestRef.current++;
-            setSearch({ status: text.trim() ? 'short' : 'idle', places: [] });
+            setSearch({ status: 'idle', places: [] });
             return;
         }
         timerRef.current = setTimeout(() => runSearch(text), SEARCH_DELAY_MS);
@@ -134,20 +135,20 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
     function onSubmit(e) {
         e.preventDefault();
         clearTimeout(timerRef.current);
-        if (query.trim().length >= PLACE_QUERY_MIN) runSearch(query);
+        if (query.trim()) runSearch(query);
     }
 
-    // 고른 주소의 좌표를 받아서 저장 화면으로. 받는 동안 그 행에 "위치 확인 중"
-    async function pick(item) {
-        setPickingKey(addressKey(item));
+    // 고른 장소의 좌표를 받아서 저장 화면으로. 받는 동안 그 행에 "위치 확인 중"
+    async function pick(item, key) {
+        setPickingKey(key);
         setError('');
         try {
-            const coords = await locatePlace(item);
-            if (coords) {
-                onPick({ name: item.name || item.address, address: item.address, emdNm: item.emdNm, ...coords });
+            const place = await locatePlace({ name: item.name, address: item.address });
+            if (place) {
+                onPick({ ...place, name: place.name || place.address });
                 return;
             }
-            setError('이 주소의 위치를 찾지 못했어요. 다른 주소를 골라 주세요.');
+            setError('이 장소의 위치를 찾지 못했어요. 도로명 주소로 검색해 보세요.');
         } catch {
             setError('위치를 불러오지 못했어요. 다시 골라 주세요.');
         }
@@ -222,7 +223,7 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
 
             <form role="search" onSubmit={onSubmit} className={styles.searchForm}>
                 <label htmlFor={`${titleId}-q`} className="sr-only">
-                    주소 검색
+                    장소 검색
                 </label>
                 <div className={styles.searchBar}>
                     <SearchIcon size={18} />
@@ -232,7 +233,8 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
                         type="search"
                         value={query}
                         onChange={onChange}
-                        placeholder="도로명, 건물 이름으로 찾기"
+                        placeholder="장소 이름, 주소로 찾기"
+                        maxLength={PLACE_QUERY_MAX}
                         enterKeyHint="search"
                         autoComplete="off"
                         className={styles.searchInput}
@@ -362,19 +364,11 @@ function RadioGroup({ options, onChoose }) {
 }
 
 function PlaceResults({ query, search, onRetry, pickingKey, onPick }) {
-    if (search.status === 'short') {
-        return (
-            <p role="status" className={styles.hint}>
-                두 글자 이상 입력해주세요
-            </p>
-        );
-    }
-
     if (search.status === 'error') {
         return (
             <div className={styles.notice}>
                 <p role="alert" className={styles.noticeText}>
-                    주소를 불러오지 못했어요.
+                    장소를 불러오지 못했어요.
                 </p>
                 <button type="button" onClick={onRetry} className={styles.secondary}>
                     다시 시도
@@ -397,22 +391,23 @@ function PlaceResults({ query, search, onRetry, pickingKey, onPick }) {
     if (search.status === 'done' && search.places.length === 0) {
         return (
             <p role="status" className={styles.hint}>
-                {`‘${query}’에 맞는 주소가 없어요. 도로명이나 건물 이름으로 찾아 보세요.`}
+                {`‘${query}’에 맞는 장소가 없어요. 다른 이름이나 도로명 주소로 찾아 보세요.`}
             </p>
         );
     }
 
     return (
         <ul className={styles.results} aria-busy={search.status === 'loading'}>
-            {search.places.map((item) => {
-                const key = addressKey(item);
+            {search.places.map((item, i) => {
+                // 카카오 결과엔 고유 id를 안 받으므로 이름·주소 + 순서
+                const key = `${i}-${item.name}-${item.address}`;
                 const picking = key === pickingKey;
                 return (
                     <li key={key}>
                         {/* 좌표를 받는 동안에는 다른 결과도 잠깐 못 누름 (두 번 넘어가지 않게) */}
                         <button
                             type="button"
-                            onClick={() => onPick(item)}
+                            onClick={() => onPick(item, key)}
                             disabled={pickingKey !== null}
                             aria-busy={picking || undefined}
                             className={styles.result}
@@ -420,18 +415,16 @@ function PlaceResults({ query, search, onRetry, pickingKey, onPick }) {
                             <span className={styles.optionIcon}>
                                 <PinIcon size={18} />
                             </span>
-                            {/* 건물 이름이 없는 주소는 주소를 제목으로, 부제는 동 이름만 */}
+                            {/* "지하철역 · 인천 부평구 광장로 16" */}
                             <span className={styles.optionText}>
-                                <span className={styles.optionLabel}>{item.name || item.address}</span>
-                                {(picking || item.name || item.emdNm) && (
-                                    <span className={styles.optionSub}>
-                                        {picking
-                                            ? '위치를 확인하고 있어요'
-                                            : item.name
-                                              ? withDong(item.address, item.emdNm)
-                                              : item.emdNm}
-                                    </span>
-                                )}
+                                <span className={styles.optionLabel}>{item.name}</span>
+                                <span className={styles.optionSub}>
+                                    {picking
+                                        ? '위치를 확인하고 있어요'
+                                        : item.category
+                                          ? `${item.category} · ${item.address}`
+                                          : item.address}
+                                </span>
                             </span>
                         </button>
                     </li>
@@ -444,10 +437,6 @@ function PlaceResults({ query, search, onRetry, pickingKey, onPick }) {
 // "인천 부평구 체육관로 27 · 삼산동" — 도로명만으로는 어느 동네인지 바로 안 읽혀서
 function withDong(address, emdNm) {
     return emdNm ? `${address} · ${emdNm}` : address;
-}
-
-function addressKey({ admCd, rnMgtSn, udrtYn, buldMnnm, buldSlno }) {
-    return `${admCd}-${rnMgtSn}-${udrtYn}-${buldMnnm}-${buldSlno}`;
 }
 
 /* ---------------- save / edit ---------------- */

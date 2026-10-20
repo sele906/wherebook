@@ -1,4 +1,4 @@
-package com.sele906.chaekeodi.external;
+package com.sele906.chaekeodi.external.juso;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,16 +8,16 @@ import org.springframework.web.client.RestClient;
 import java.time.Duration;
 
 @Configuration
-public class Data4LibraryConfig {
+public class JusoConfig {
 
     @Bean
-    public RestClient data4LibraryRestClient() {
+    public RestClient jusoRestClient() {
         var factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(Duration.ofSeconds(5));
         factory.setReadTimeout(Duration.ofSeconds(15));
 
         return RestClient.builder()
-                .baseUrl("http://data4library.kr/api")
+                .baseUrl("https://business.juso.go.kr")
                 .requestFactory(factory)
                 .build();
     }

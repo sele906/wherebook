@@ -145,7 +145,7 @@ export function selectDefault() {
     notify();
 }
 
-// place = { name, address, emdNm, latitude, longitude } (주소 검색 결과 + 좌표)
+// place = { name, address, latitude, longitude } (GET /api/places/coord 응답)
 export function selectTemp(place) {
     writeJson(ACTIVE_KEY, {
         type: 'temp',

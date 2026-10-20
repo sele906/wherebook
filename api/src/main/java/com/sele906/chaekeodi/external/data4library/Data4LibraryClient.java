@@ -1,4 +1,4 @@
-package com.sele906.chaekeodi.external;
+package com.sele906.chaekeodi.external.data4library;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;

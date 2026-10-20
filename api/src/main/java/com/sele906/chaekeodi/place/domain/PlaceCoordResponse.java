@@ -7,13 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AddressResponse {
+public class PlaceCoordResponse {
     private String name;
     private String address;
-    private String admCd;
-    private String rnMgtSn;
-    private String emdNm;
-    private String udrtYn;
-    private String buldMnnm;
-    private String buldSlno;
+    private double latitude;
+    private double longitude;
 }
