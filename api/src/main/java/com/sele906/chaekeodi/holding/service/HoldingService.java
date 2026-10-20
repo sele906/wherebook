@@ -2,7 +2,7 @@ package com.sele906.chaekeodi.holding.service;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
-import com.sele906.chaekeodi.external.Data4LibraryClient;
+import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.*;
 import com.sele906.chaekeodi.holding.mapper.HoldingMapper;
 import com.sele906.chaekeodi.library.domain.LibrarySearchItem;

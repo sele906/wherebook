@@ -11,10 +11,10 @@ import {
     selectSaved,
     selectTemp,
 } from '@/lib/locationStore';
-import { BASE_LABEL_MAX, DEFAULT_BASE } from '@/lib/location';
+import { BASE_LABEL_MAX, DEFAULT_BASE, PLACE_QUERY_MAX } from '@/lib/location';
 
 import { BackIcon, CloseIcon, EditIcon, LandmarkIcon, PinIcon, PlusIcon, SearchIcon } from '../icons';
-import { findPlaces } from './actions';
+import { findPlaces, locatePlace } from './actions';
 import { LocationIcon } from './display';
 import styles from './LocationDialog.module.css';
 
@@ -23,8 +23,11 @@ import styles from './LocationDialog.module.css';
  * <dialog>.showModal()이라 포커스가 안에 갇히고, Esc로 닫히고, 닫히면 연 버튼으로 돌아간다.
  *
  * 화면 3개를 한 창 안에서 바꿔 끼운다:
- *   list — 장소 검색 + 저장한 위치(라디오) + 이번만 쓰는 위치 + 기본값
+ *   list — 주소 검색 + 저장한 위치(라디오) + 이번만 쓰는 위치 + 기본값
  *   save — 검색 결과 하나를 이름 붙여 저장 / 이번만 쓰기
+ *
+ * 장소 검색(카카오) 결과에는 좌표가 없다. 결과를 누르면 이름·주소를 보내 도로명주소 API로 다시 찾아(locatePlace)
+ * 이름·주소·좌표를 받고 저장 화면으로 넘어간다. 저장하는 값은 전부 이 응답에서.
  *   edit — 저장한 위치 이름 바꾸기 / 삭제
  *
  * GPS(현재 위치 사용)는 넣지 않았다 — lib/location.js 설명 참고.
@@ -97,6 +100,7 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
     const [query, setQuery] = useState('');
     const [search, setSearch] = useState({ status: 'idle', places: [] });
     const [error, setError] = useState('');
+    const [pickingKey, setPickingKey] = useState(null);
     const searchRef = useRef(null);
     const timerRef = useRef(null);
     const requestRef = useRef(0);
@@ -120,6 +124,7 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
         setQuery(text);
         clearTimeout(timerRef.current);
         if (!text.trim()) {
+            // 비우면 진행 중인 응답도 버림
             requestRef.current++;
             setSearch({ status: 'idle', places: [] });
             return;
@@ -131,6 +136,23 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
         e.preventDefault();
         clearTimeout(timerRef.current);
         if (query.trim()) runSearch(query);
+    }
+
+    // 고른 장소의 좌표를 받아서 저장 화면으로. 받는 동안 그 행에 "위치 확인 중"
+    async function pick(item, key) {
+        setPickingKey(key);
+        setError('');
+        try {
+            const place = await locatePlace({ name: item.name, address: item.address });
+            if (place) {
+                onPick({ ...place, name: place.name || place.address });
+                return;
+            }
+            setError('이 장소의 위치를 찾지 못했어요. 도로명 주소로 검색해 보세요.');
+        } catch {
+            setError('위치를 불러오지 못했어요. 다시 골라 주세요.');
+        }
+        setPickingKey(null);
     }
 
     function clearQuery() {
@@ -159,7 +181,7 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
             checked: base.kind === 'saved' && base.id === loc.id,
             icon: <LocationIcon kind="saved" label={loc.label} size={18} />,
             label: loc.label,
-            sub: loc.address,
+            sub: withDong(loc.address, loc.emdNm),
             select: () => selectSaved(loc.id),
             editLabel: `${loc.label} 편집`,
             onEdit: () => onEdit(loc.id),
@@ -211,7 +233,8 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
                         type="search"
                         value={query}
                         onChange={onChange}
-                        placeholder="동, 구, 역 이름으로 찾기"
+                        placeholder="장소 이름, 주소로 찾기"
+                        maxLength={PLACE_QUERY_MAX}
                         enterKeyHint="search"
                         autoComplete="off"
                         className={styles.searchInput}
@@ -243,7 +266,8 @@ function ListView({ titleId, state, onClose, onPick, onEdit }) {
                         query={query.trim()}
                         search={search}
                         onRetry={() => runSearch(query)}
-                        onPick={onPick}
+                        pickingKey={pickingKey}
+                        onPick={pick}
                     />
                 ) : (
                     <>
@@ -339,12 +363,12 @@ function RadioGroup({ options, onChoose }) {
     );
 }
 
-function PlaceResults({ query, search, onRetry, onPick }) {
+function PlaceResults({ query, search, onRetry, pickingKey, onPick }) {
     if (search.status === 'error') {
         return (
             <div className={styles.notice}>
                 <p role="alert" className={styles.noticeText}>
-                    장소를 찾지 못했어요.
+                    장소를 불러오지 못했어요.
                 </p>
                 <button type="button" onClick={onRetry} className={styles.secondary}>
                     다시 시도
@@ -367,30 +391,52 @@ function PlaceResults({ query, search, onRetry, onPick }) {
     if (search.status === 'done' && search.places.length === 0) {
         return (
             <p role="status" className={styles.hint}>
-                {`‘${query}’에 맞는 곳이 없어요. 동, 구, 역 이름으로 찾아 보세요.`}
+                {`‘${query}’에 맞는 장소가 없어요. 다른 이름이나 도로명 주소로 찾아 보세요.`}
             </p>
         );
     }
 
     return (
         <ul className={styles.results} aria-busy={search.status === 'loading'}>
-            {search.places.map((place) => (
-                <li key={`${place.name}:${place.address}`}>
-                    <button type="button" onClick={() => onPick(place)} className={styles.result}>
-                        <span className={styles.optionIcon}>
-                            <PinIcon size={18} />
-                        </span>
-                        <span className={styles.optionText}>
-                            <span className={styles.optionLabel}>{place.name}</span>
-                            <span className={styles.optionSub}>
-                                {place.category ? `${place.category} · ${place.address}` : place.address}
+            {search.places.map((item, i) => {
+                // 카카오 결과엔 고유 id를 안 받으므로 이름·주소 + 순서
+                const key = `${i}-${item.name}-${item.address}`;
+                const picking = key === pickingKey;
+                return (
+                    <li key={key}>
+                        {/* 좌표를 받는 동안에는 다른 결과도 잠깐 못 누름 (두 번 넘어가지 않게) */}
+                        <button
+                            type="button"
+                            onClick={() => onPick(item, key)}
+                            disabled={pickingKey !== null}
+                            aria-busy={picking || undefined}
+                            className={styles.result}
+                        >
+                            <span className={styles.optionIcon}>
+                                <PinIcon size={18} />
                             </span>
-                        </span>
-                    </button>
-                </li>
-            ))}
+                            {/* "지하철역 · 인천 부평구 광장로 16" */}
+                            <span className={styles.optionText}>
+                                <span className={styles.optionLabel}>{item.name}</span>
+                                <span className={styles.optionSub}>
+                                    {picking
+                                        ? '위치를 확인하고 있어요'
+                                        : item.category
+                                          ? `${item.category} · ${item.address}`
+                                          : item.address}
+                                </span>
+                            </span>
+                        </button>
+                    </li>
+                );
+            })}
         </ul>
     );
+}
+
+// "인천 부평구 체육관로 27 · 삼산동" — 도로명만으로는 어느 동네인지 바로 안 읽혀서
+function withDong(address, emdNm) {
+    return emdNm ? `${address} · ${emdNm}` : address;
 }
 
 /* ---------------- save / edit ---------------- */
@@ -424,7 +470,7 @@ function SaveView({ titleId, place, full, onBack, onClose }) {
         <SubView titleId={titleId} title="이 위치 저장하기" onBack={onBack}>
             <PlaceSummary
                 title={place.name}
-                address={place.address}
+                address={withDong(place.address, place.emdNm)}
                 caption="저장한 위치는 이 기기에만 남아요."
             />
 
@@ -506,7 +552,7 @@ function EditView({ titleId, location, onBack }) {
     return (
         <SubView titleId={titleId} title="위치 편집" onBack={onBack}>
             <PlaceSummary
-                title={location.address}
+                title={withDong(location.address, location.emdNm)}
                 caption="위치를 옮기려면 이 위치를 지우고 새로 추가해요."
             />
             <form

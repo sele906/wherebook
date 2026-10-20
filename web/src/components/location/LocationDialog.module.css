@@ -408,6 +408,19 @@
     width: 100%;
 }
 
+/* 좌표를 받는 동안: 고른 행만 그대로, 나머지는 흐리게 */
+.result:disabled {
+    cursor: default;
+}
+
+.result:disabled:not([aria-busy]) {
+    opacity: 0.5;
+}
+
+.result[aria-busy] .optionSub {
+    color: var(--brand);
+}
+
 .resultSkeleton {
     height: var(--control-xl);
     border-radius: var(--radius-lg);

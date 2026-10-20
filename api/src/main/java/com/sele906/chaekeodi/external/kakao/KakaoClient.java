@@ -1,12 +1,9 @@
-package com.sele906.chaekeodi.external;
+package com.sele906.chaekeodi.external.kakao;
 
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
-import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
-import com.sele906.chaekeodi.library.domain.Library;
-import com.sele906.chaekeodi.place.domain.PlaceResponse;
+import com.sele906.chaekeodi.place.domain.PlaceSearchResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -23,7 +20,7 @@ public class KakaoClient {
     private final RestClient kakaoRestClient;
 
     //장소 검색결과 호출
-    public List<PlaceResponse> fetchPlaces(String keyword) {
+    public List<PlaceSearchResponse> fetchPlaces(String keyword) {
 
         JsonNode res;
 
@@ -45,7 +42,7 @@ public class KakaoClient {
             return List.of();
         }
 
-        List<PlaceResponse> places = new ArrayList<>();
+        List<PlaceSearchResponse> places = new ArrayList<>();
 
         for (JsonNode doc : res.path("documents")) {
 
@@ -58,12 +55,10 @@ public class KakaoClient {
             String road = doc.path("road_address_name").asText();
             String address = road.isBlank() ? doc.path("address_name").asText() : road;
 
-            places.add(new PlaceResponse(
+            places.add(new PlaceSearchResponse(
                     doc.path("place_name").asText(),
                     address,
-                    toCategory(doc),
-                    doc.path("y").asDouble(),   // y = 위도
-                    doc.path("x").asDouble()    // x = 경도
+                    toCategory(doc)
             ));
         }
 

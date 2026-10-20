@@ -1,11 +1,10 @@
 package com.sele906.chaekeodi.place.controller;
 
-import com.sele906.chaekeodi.external.KakaoClient;
-import com.sele906.chaekeodi.place.domain.PlaceResponse;
-import com.sele906.chaekeodi.place.domain.PlaceSearchRequest;
+import com.sele906.chaekeodi.external.juso.JusoCoordQuery;
+import com.sele906.chaekeodi.place.domain.*;
 import com.sele906.chaekeodi.place.service.PlaceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +17,12 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping
-    public List<PlaceResponse> searchPlaces(
-            @ModelAttribute PlaceSearchRequest request
-            ) {
+    public List<PlaceSearchResponse> searchPlaces(@Valid @ModelAttribute PlaceSearchRequest request) {
         return placeService.searchPlaces(request.getKeyword());
+    }
+
+    @GetMapping("/coord")
+    public PlaceCoordResponse getCoord(@Valid @ModelAttribute JusoCoordQuery request) {
+        return placeService.getCoord(request.getName(), request.getAddress());
     }
 }

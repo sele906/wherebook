@@ -1,7 +1,7 @@
 package com.sele906.chaekeodi.library.service;
 
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
-import com.sele906.chaekeodi.external.Data4LibraryClient;
+import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.library.domain.*;
 import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;

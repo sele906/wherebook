@@ -18,6 +18,9 @@ export const DEFAULT_BASE = {
 export const BASE_COOKIE = 'wherebook-base';
 export const BASE_LABEL_MAX = 20;
 
+// 장소 검색어·주소 최대 글자 수 — 백엔드 PlaceSearchRequest keyword @Size(max = 200)
+export const PLACE_QUERY_MAX = 200;
+
 // 대략 국내 범위. 밖이면 잘못된 값으로 보고 기본값을 쓴다
 function isValidCoord(latitude, longitude) {
     return (

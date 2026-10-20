@@ -3,7 +3,8 @@ import { BASE_COOKIE, BASE_LABEL_MAX, DEFAULT_BASE, encodeBaseCookie } from './l
 /*
  * 브라우저 전용: 기준 위치의 원본 (localStorage). 익명 사용자 기준.
  *
- *   "wherebook:savedLocations" → [{ id, label, address, latitude, longitude }]  (최대 MAX_SAVED개)
+ *   "wherebook:savedLocations" → [{ id, label, address, emdNm, latitude, longitude }]  (최대 MAX_SAVED개)
+ *       address = "인천 부평구 체육관로 27", emdNm = "삼산동" (예전에 저장한 항목엔 emdNm이 없을 수 있음)
  *   "wherebook:activeLocation" →
  *       { type: "default" }                              서울 시청 (DEFAULT_BASE)
  *     | { type: "saved", id }                            저장한 위치
@@ -144,7 +145,7 @@ export function selectDefault() {
     notify();
 }
 
-// place = { name, address, latitude, longitude } (주소 검색 결과)
+// place = { name, address, latitude, longitude } (GET /api/places/coord 응답)
 export function selectTemp(place) {
     writeJson(ACTIVE_KEY, {
         type: 'temp',
@@ -167,6 +168,7 @@ export function saveLocation(place, label, { activate }) {
             id,
             label: cleanLabel(label, place.name),
             address: place.address,
+            emdNm: place.emdNm ?? '',
             latitude: place.latitude,
             longitude: place.longitude,
         },
