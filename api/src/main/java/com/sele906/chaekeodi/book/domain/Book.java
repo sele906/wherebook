@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,5 +22,5 @@ public class Book {
     private String className;
     private String description;
     private String imageUrl;
-    OffsetDateTime fetchedAt;
+    private OffsetDateTime fetchedAt;
 }
