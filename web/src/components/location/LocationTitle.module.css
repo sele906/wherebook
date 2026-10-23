@@ -1,0 +1,70 @@
+/* 제목 모양 버튼. 높이는 --touch(44px), 글자가 길면(영어 등) 위치 이름을 말줄임 */
+.button {
+    min-width: 0;
+    max-width: calc(100% + var(--space-2));
+    min-height: var(--touch);
+    /* 핀 아이콘 왼쪽 끝을 본문 여백 선에 맞춤 */
+    margin-left: calc(-1 * var(--space-2));
+    padding: 0 var(--space-2);
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-title);
+}
+
+.button:hover {
+    background: var(--surface);
+}
+
+.button:active {
+    background: var(--border);
+}
+
+.button[data-size='md'] {
+    font-size: var(--text-lg);
+}
+
+.button[data-size='lg'] {
+    font-size: var(--text-xl);
+}
+
+@media (min-width: 1024px) {
+    .button[data-size='lg'] {
+        font-size: var(--text-2xl);
+    }
+}
+
+.pin {
+    flex-shrink: 0;
+    color: var(--brand);
+}
+
+.text {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sub {
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: normal;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.chevron {
+    flex-shrink: 0;
+    color: var(--text-2);
+}

@@ -9,36 +9,34 @@
     padding: 0 var(--gutter) var(--space-8);
 }
 
+/* 작은 "내 주변" 아래 큰 위치 제목 버튼 */
 .titleRow {
+    padding-top: var(--space-4);
+
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-/* 웹(1024px~)은 SiteHeader에 같은 칩이 있음 */
-.locationChip {
-    margin-left: auto;
-}
-
-@media (min-width: 1024px) {
-    .titleRow .locationChip {
-        display: none;
-    }
+.titleLocation {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
 }
 
 .title {
-    flex-shrink: 0;
-    min-height: var(--header-h);
     margin: 0;
 
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    color: var(--text-muted);
+}
+
+/* loading.jsx: 위치 제목 자리 (버튼과 같은 높이) */
+.locationSkeleton {
+    min-height: var(--touch);
     display: flex;
     align-items: center;
-
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
-    line-height: var(--leading-tight);
-    letter-spacing: var(--tracking-title);
-    color: var(--text);
 }
 
 .search {
@@ -107,8 +105,15 @@
     display: flex;
     align-items: center;
 
-    font-size: var(--text-sm);
-    color: var(--text-muted);
+    font-size: var(--text-md);
+    color: var(--text-2);
+}
+
+.count {
+    margin-left: var(--space-1);
+    margin-right: var(--space-1);
+    font-weight: var(--weight-bold);
+    color: var(--text);
 }
 
 .list {
@@ -125,7 +130,7 @@
 
 /* 결과 없음 / 오류 */
 .notice {
-    margin-top: var(--space-2);
+    margin-top: var(--space-4);
     padding: var(--space-6) var(--space-4);
 
     border: 1px solid var(--border);
@@ -174,9 +179,5 @@
 @media (min-width: 1024px) {
     .main {
         padding-top: var(--space-6);
-    }
-
-    .title {
-        font-size: var(--text-2xl);
     }
 }
