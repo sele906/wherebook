@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -13,5 +14,5 @@ public class BookCallNumber {
     private String libCode;
     private String isbn13;
     private String status;        // OK / NOT_FOUND / ERROR
-    private Date fetchedAt;
+    private OffsetDateTime fetchedAt;
 }

@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Slf4j
@@ -138,8 +140,15 @@ public class HoldingService {
 
     //TTL
     private boolean isFresh(BookCallNumber c) {
-        long days = (System.currentTimeMillis() - c.getFetchedAt().getTime())
-                / (1000L * 60 * 60 * 24);
+        if (c.getFetchedAt() == null) {
+            return false;
+        }
+
+        long days = Duration.between(
+                c.getFetchedAt(),
+                OffsetDateTime.now()
+        ).toDays();
+
         return switch (c.getStatus()) {
             case "OK" -> true;
             case "NOT_FOUND" -> days < 30;

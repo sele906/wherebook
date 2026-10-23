@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -25,6 +26,6 @@ public class Library {
     private Integer bookCount;
     private String regionCode;
     private String dtlRegionCode;
-    private Date createdAt;
-    private Date updatedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 }
