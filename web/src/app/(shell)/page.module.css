@@ -37,15 +37,10 @@
     white-space: nowrap;
 }
 
-/* 좁으면 칩 안의 글자가 말줄임으로 줄어듦 */
-.locationChip {
-    margin-left: auto;
-}
-
 .iconLink {
     min-width: var(--touch);
     min-height: var(--touch);
-    margin-left: var(--space-1);
+    margin-left: auto;
     /* 아이콘 끝을 본문 여백 선에 맞춤 */
     margin-right: calc(-1 * var(--space-3));
     border-radius: var(--radius-md);
@@ -205,6 +200,62 @@
 
 .locateButton:active {
     background: var(--border-strong);
+}
+
+/* 기준 위치가 있을 때: 위치 제목 + 가까운 도서관 목록. 마지막 행에 위아래 여백이 있어 아래는 좁게 */
+.nearbySet {
+    padding: var(--space-3) var(--space-5) var(--space-2);
+    gap: 0;
+}
+
+.nearbySet .nearbyText {
+    margin-top: var(--space-1);
+}
+
+.nearbyHead {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+
+/* "13곳 모두 보기" — 위치 이름이 길면 위치 쪽이 말줄임으로 줄어듦 */
+.moreLink {
+    min-height: var(--touch);
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
+}
+
+.nearbyList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chevron {
+    flex-shrink: 0;
+    display: flex;
+    color: var(--icon-muted);
+}
+
+/* 오류·결과 없음일 때의 다음 행동 (Text 버튼) */
+.nearbyAction {
+    min-height: var(--touch);
+    align-self: flex-start;
+
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
 }
 
 /* ---- 섹션 공통 (최근 검색어 / 인기 대출) ---- */
@@ -484,6 +535,10 @@
     .nearby {
         margin-top: 0;
         padding: var(--space-5) var(--space-6);
+    }
+
+    .nearbySet {
+        padding: var(--space-3) var(--space-6) var(--space-2);
     }
 
     .popular {

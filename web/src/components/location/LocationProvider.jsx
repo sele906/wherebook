@@ -14,7 +14,7 @@ import LocationDialog from './LocationDialog';
 
 /*
  * 기준 위치 고르기 창(LocationDialog)을 화면에 하나만 두고, 어디서든 열 수 있게 한다.
- * AppFrame이 감싸므로 (shell)·(bare) 모든 화면에서 LocationChip 등이 쓸 수 있다.
+ * AppFrame이 감싸므로 (shell)·(bare) 모든 화면에서 LocationTitle 등이 쓸 수 있다.
  *
  * 기준이 바뀌면(이 탭이든 다른 탭이든) 쿠키를 맞추고 서버 화면을 다시 불러온다 (router.refresh).
  * 모든 쓰기가 이 한 곳을 거치므로 화면마다 따로 새로고침할 필요가 없다.
