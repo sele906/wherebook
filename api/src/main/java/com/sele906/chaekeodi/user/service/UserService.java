@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.user.service;
 
 import com.sele906.chaekeodi.user.mapper.UserMapper;
+import com.sele906.chaekeodi.user.support.GuestIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,7 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public UUID joinGuest(String cookieUserId) {
-
-        UUID userId = parseUuid(cookieUserId);
+    public UUID joinGuest(UUID userId) {
 
         // 기존 유저
         if (userId != null && userMapper.loginGuest(userId) == 1) {
@@ -27,12 +26,5 @@ public class UserService {
         return newId;
     }
 
-    private UUID parseUuid(String value) {
-        if (value == null) return null;
-        try {
-            return UUID.fromString(value);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
+
 }

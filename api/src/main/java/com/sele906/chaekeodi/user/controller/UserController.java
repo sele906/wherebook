@@ -1,6 +1,8 @@
 package com.sele906.chaekeodi.user.controller;
 
 import com.sele906.chaekeodi.user.service.UserService;
+import com.sele906.chaekeodi.user.support.GuestCookies;
+import com.sele906.chaekeodi.user.support.GuestIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -21,26 +23,19 @@ public class UserController {
 
     private final UserService userService;
 
-    @Value("${app.cookie.secure:true}")
-    private boolean cookieSecure;
+    private final GuestCookies guestCookies;
+    private final GuestIds guestIds;
 
     @PostMapping
-    public ResponseEntity<String> joinGuest(
-            @CookieValue(value = "userId", required = false) String cookieUserId
+    public ResponseEntity<Void> joinGuest(
+            @CookieValue(value = GuestCookies.NAME, required = false) String cookieUserId
     ) {
 
-        UUID userId = userService.joinGuest(cookieUserId);
-
-        ResponseCookie cookie = ResponseCookie.from("userId", userId.toString())
-                .httpOnly(true)
-                .secure(cookieSecure)
-                .path("/")
-                .sameSite("Lax")
-                .maxAge(Duration.ofDays(365))
-                .build();
+        UUID parseUserId = guestIds.parseUuid(cookieUserId);
+        UUID userId = userService.joinGuest(parseUserId);
 
         return ResponseEntity.noContent()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, guestCookies.create(userId))
                 .build();
     }
 }
