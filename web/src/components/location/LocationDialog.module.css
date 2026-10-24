@@ -8,7 +8,7 @@
     /* 시트 위치는 아래쪽 고정. 기본 <dialog> 가운데 정렬을 덮음 */
     width: 100%;
     max-width: 100%;
-    height: min(90dvh, 46rem);
+    height: min(75dvh, 46rem);
     max-height: 100dvh;
     margin: auto 0 0;
     padding: 0;
