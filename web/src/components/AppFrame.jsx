@@ -1,3 +1,6 @@
+import { getMyBorrowList } from '@/lib/borrowList';
+
+import BorrowCountProvider from './BorrowCountProvider';
 import LocationProvider from './location/LocationProvider';
 import SiteHeader from './SiteHeader';
 import TabBar from './TabBar';
@@ -14,19 +17,25 @@ import styles from './AppFrame.module.css';
  * 본문 가로 폭(목업 웹 기준 1120px)은 화면마다 달라서 각 page에서 잡음.
  *
  * LocationProvider: 기준 위치 고르기 창을 하나만 두고 어느 화면에서든 열 수 있게 함.
+ * BorrowCountProvider: 하단 탭·웹 헤더의 빌릴 책 권수 배지. 권수는 기다리지 않고 Promise로 넘겨서
+ *   본문 렌더링을 막지 않는다 (배지만 값이 오는 대로 채워짐).
  */
 export default function AppFrame({ children, nav = true }) {
+    const borrowCount = getMyBorrowList().then((items) => (items ? items.length : null));
+
     return (
         <LocationProvider>
-            <div className={styles.frame}>
-                <SiteHeader />
+            <BorrowCountProvider initialCount={borrowCount}>
+                <div className={styles.frame}>
+                    <SiteHeader />
 
-                <div className={styles.scroll}>
-                    <div className={styles.content}>{children}</div>
+                    <div className={styles.scroll}>
+                        <div className={styles.content}>{children}</div>
+                    </div>
+
+                    {nav && <TabBar />}
                 </div>
-
-                {nav && <TabBar />}
-            </div>
+            </BorrowCountProvider>
         </LocationProvider>
     );
 }

@@ -64,6 +64,26 @@
     min-width: var(--touch);
 }
 
+/* 빌릴 책 권수 (라벨 옆 알약) */
+.badge {
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 var(--space-1);
+    flex-shrink: 0;
+
+    border-radius: var(--radius-full);
+    background: var(--brand);
+    color: var(--on-brand);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .navLink:hover,
 .iconLink:hover {
     background: var(--surface);

@@ -259,6 +259,24 @@
     background: var(--brand-hover);
 }
 
+/* 추가됨: 연한 면 + 브랜드 글자 (색 + 체크 아이콘 + 문구로 구분) */
+.primary[aria-pressed='true'] {
+    background: var(--brand-subtle);
+    color: var(--brand);
+}
+
+.primary[aria-pressed='true']:hover {
+    background: var(--border);
+}
+
+/* 추가·빼기 실패 안내 (버튼 바로 아래) */
+.borrowError {
+    margin: var(--space-2) 0 0;
+    color: var(--warning);
+    font-size: var(--text-sm);
+    text-align: center;
+}
+
 .primary:active {
     transform: scale(0.98);
 }

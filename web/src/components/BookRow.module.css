@@ -4,6 +4,7 @@
     border-bottom: 1px solid var(--border);
 
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
 }
@@ -110,5 +111,19 @@
     border-color: transparent;
     background: var(--brand-subtle);
     color: var(--brand);
+}
+
+.add[aria-pressed='true']:hover {
+    background: var(--border);
+}
+
+/* 추가·빼기 실패 안내 — 행 아래 한 줄 전체 */
+.error {
+    flex-basis: 100%;
+    margin: 0;
+
+    font-size: var(--text-sm);
+    color: var(--warning);
+    text-align: right;
 }
 

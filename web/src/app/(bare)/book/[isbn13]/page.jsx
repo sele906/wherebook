@@ -9,12 +9,13 @@ import BackLink from '@/components/BackLink';
 import { LibraryRowSkeleton } from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 import { LoadingArea } from '@/components/Skeleton';
-import { PlusIcon } from '@/components/icons';
 import { getBase } from '@/lib/base';
+import { getMyBorrowList } from '@/lib/borrowList';
 import { isValidIsbn13 } from '@/lib/ids';
 import { baseKey, describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
+import BorrowListButton, { BorrowListProvider } from './BorrowListButton';
 import HoldingRow from './HoldingRow';
 import MoreLibraries from './MoreLibraries';
 import styles from './page.module.css';
@@ -47,6 +48,15 @@ async function loadBook(isbn13) {
         if (e instanceof ApiError && e.status === 404) notFound();
         throw e; // 나머지는 error.jsx
     }
+}
+
+/*
+ * 이 책이 빌릴 책에 이미 있는지. 추가 버튼이 처음부터 맞는 모양("추가됨")으로 그려지게 서버에서 확인한다.
+ * 화면(클라이언트)에는 true/false만 넘긴다. 조회에 실패하면 null → 브라우저에서 다시 확인.
+ */
+async function loadInBorrowList(isbn13) {
+    const items = await getMyBorrowList();
+    return items ? items.some((item) => item.isbn13 === isbn13) : null;
 }
 
 // "채식주의자:한강 연작소설" → 본제목 / 부제 (원문은 그대로 두고 보여주는 크기만 나눔)
@@ -89,7 +99,7 @@ export default async function BookPage({ params, searchParams }) {
     const book = await loadBook(isbn13);
 
     const radiusKm = readRadiusKm(query.r);
-    const base = await getBase();
+    const [base, inBorrowList] = await Promise.all([getBase(), loadInBorrowList(isbn13)]);
 
     const ua = (await headers()).get('user-agent') ?? '';
     const isBot = userAgentFromString(ua).isBot || EXTRA_BOTS.test(ua);
@@ -99,72 +109,64 @@ export default async function BookPage({ params, searchParams }) {
     const meta = [book.publisher, book.publicationYear].filter(Boolean).join(' · ');
 
     return (
-        <main className={styles.main}>
-            <div className={styles.topBar}>
-                <BackLink fallback="/" className={styles.back} />
-            </div>
-
-            <header className={styles.head}>
-                <div className={styles.cover}>
-                    {cover && (
-                        // 외부 표지 호스트가 여러 곳이라 img. 첫 화면 큰 이미지라 바로 불러옴
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={cover} alt={`${book.title} 표지`} fetchPriority="high" />
-                    )}
+        // 추가 버튼 두 개(웹 왼쪽 / 모바일 하단)가 같은 상태를 보도록 Provider로 감쌈. DOM은 만들지 않음
+        <BorrowListProvider isbn13={isbn13} initialAdded={inBorrowList}>
+            <main className={styles.main}>
+                <div className={styles.topBar}>
+                    <BackLink fallback="/" className={styles.back} />
                 </div>
-                <div className={styles.headText}>
-                    <h1 className={styles.title}>
-                        {main}
-                        {sub && <span className={styles.subtitle}>{sub}</span>}
-                    </h1>
-                    {book.authors && <p className={styles.authors}>{book.authors}</p>}
-                    {meta && <p className={styles.meta}>{meta}</p>}
-                </div>
-                {/* 웹(1024px~) 전용 추가 버튼 — 왼쪽 책 정보와 함께 스크롤을 따라옴 */}
-                <div className={styles.headActions}>
-                    <AddToBorrowListButton />
-                </div>
-            </header>
 
-            <section className={styles.holdings} aria-labelledby="holdings-heading">
-                <h2 id="holdings-heading" className={styles.sectionTitle}>
-                    내 주변에서 빌릴 수 있는 곳
-                </h2>
-                {/* 기준 위치는 항상 글자로 */}
-                <p className={styles.base}>{describeBase(base, radiusKm)}</p>
+                <header className={styles.head}>
+                    <div className={styles.cover}>
+                        {cover && (
+                            // 외부 표지 호스트가 여러 곳이라 img. 첫 화면 큰 이미지라 바로 불러옴
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={cover} alt={`${book.title} 표지`} fetchPriority="high" />
+                        )}
+                    </div>
+                    <div className={styles.headText}>
+                        <h1 className={styles.title}>
+                            {main}
+                            {sub && <span className={styles.subtitle}>{sub}</span>}
+                        </h1>
+                        {book.authors && <p className={styles.authors}>{book.authors}</p>}
+                        {meta && <p className={styles.meta}>{meta}</p>}
+                    </div>
+                    {/* 웹(1024px~) 전용 추가 버튼 — 왼쪽 책 정보와 함께 스크롤을 따라옴 */}
+                    <div className={styles.headActions}>
+                        <BorrowListButton />
+                    </div>
+                </header>
 
-                <Suspense key={`${radiusKm}:${baseKey(base)}`} fallback={<HoldingsSkeleton />}>
-                    <Holdings base={base} isbn13={isbn13} radiusKm={radiusKm} checkLoan={!isBot} />
-                </Suspense>
-            </section>
-
-            {book.description && (
-                <section className={styles.about} aria-labelledby="about-heading">
-                    <h2 id="about-heading" className={styles.sectionTitle}>
-                        책 소개
+                <section className={styles.holdings} aria-labelledby="holdings-heading">
+                    <h2 id="holdings-heading" className={styles.sectionTitle}>
+                        내 주변에서 빌릴 수 있는 곳
                     </h2>
-                    <p className={styles.description}>{book.description}</p>
+                    {/* 기준 위치는 항상 글자로 */}
+                    <p className={styles.base}>{describeBase(base, radiusKm)}</p>
+
+                    <Suspense key={`${radiusKm}:${baseKey(base)}`} fallback={<HoldingsSkeleton />}>
+                        <Holdings base={base} isbn13={isbn13} radiusKm={radiusKm} checkLoan={!isBot} />
+                    </Suspense>
                 </section>
-            )}
 
-            {/* 모바일·태블릿 전용 추가 바 — 화면 아래 고정. 웹에서는 위 headActions가 대신함 */}
-            <div className={styles.actions}>
-                <AddToBorrowListButton />
-            </div>
+                {book.description && (
+                    <section className={styles.about} aria-labelledby="about-heading">
+                        <h2 id="about-heading" className={styles.sectionTitle}>
+                            책 소개
+                        </h2>
+                        <p className={styles.description}>{book.description}</p>
+                    </section>
+                )}
 
-            <BookJsonLd book={book} cover={cover} />
-        </main>
-    );
-}
+                {/* 모바일·태블릿 전용 추가 바 — 화면 아래 고정. 웹에서는 위 headActions가 대신함 */}
+                <div className={styles.actions}>
+                    <BorrowListButton />
+                </div>
 
-// 화면에 하나뿐인 Primary 버튼. 모바일 하단 바와 웹 왼쪽 중 한 곳에만 보이도록 CSS로 나눔
-// TODO: 빌릴 책 API(/api/borrow-list) 붙이면 추가 연결 (낙관적 업데이트, 실패 시 되돌림). 지금은 모양만 있는 임시 버튼
-function AddToBorrowListButton() {
-    return (
-        <button type="button" className={styles.primary}>
-            <PlusIcon size={20} strokeWidth={2.4} />
-            빌릴 책에 추가
-        </button>
+                <BookJsonLd book={book} cover={cover} />
+            </main>
+        </BorrowListProvider>
     );
 }
 

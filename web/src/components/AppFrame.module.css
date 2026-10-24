@@ -20,4 +20,10 @@
    스크롤 영역(.scroll)에 바로 걸면 cqw에 세로 스크롤바 폭까지 들어가 가로로 넘치므로 안쪽 감싸개에 건다 */
 .content {
     container-type: inline-size;
+
+    /* 본문이 짧아도 화면 높이만큼은 차지하게. 화면(page)에서 flex: 1을 주면 남은 높이를 채울 수 있다
+       (빌릴 책처럼 하단 버튼을 내용이 적을 때도 탭바 바로 위에 붙이는 화면) */
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }

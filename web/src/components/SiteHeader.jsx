@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { BorrowCountBadge } from './BorrowCountProvider';
 import BrandLogo from './BrandLogo';
 import NavLink from './NavLink';
 import { BorrowListIcon, PinIcon, GearIcon } from './icons';
@@ -9,8 +10,7 @@ import styles from './SiteHeader.module.css';
  * 웹(1024px 이상) 상단 헤더. 1024px 미만에서는 CSS로 숨기고 TabBar가 대신 뜬다.
  * 검색은 로고(홈)로 간다 — 목업 웹 헤더 구성 그대로.
  * 기준 위치는 헤더에 두지 않고 메인 카드·내 주변 화면 제목에서 보여준다 (LocationTitle).
- *
- * TODO: 빌릴 책 권수 배지 (0이면 숨김). 빌릴 책 API(/api/borrow-list) 붙일 때 추가.
+ * 빌릴 책 옆에는 추가한 권수 배지 (0이면 숨김, BorrowCountBadge).
  */
 export default function SiteHeader() {
     return (
@@ -28,6 +28,7 @@ export default function SiteHeader() {
                 <NavLink href="/borrow-list" className={styles.navLink}>
                     <BorrowListIcon size={20} />
                     <span className={styles.navLabel}>빌릴 책</span>
+                    <BorrowCountBadge className={styles.badge} />
                 </NavLink>
                 <NavLink href="/settings" className={styles.iconLink} aria-label="설정">
                     <GearIcon size={22} />

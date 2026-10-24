@@ -7,6 +7,7 @@ import Pager, { readPage } from '@/components/Pager';
 import { PendingForm, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
 import { BackIcon } from '@/components/icons';
+import { getMyBorrowList } from '@/lib/borrowList';
 
 import ResultsSkeleton from './ResultsSkeleton';
 import styles from './page.module.css';
@@ -80,12 +81,15 @@ export default async function SearchPage({ searchParams }) {
 }
 
 async function Results({ q, page }) {
-    let data = null;
-    try {
-        data = await searchBooks({ title: q, pageNo: page, pageSize: PAGE_SIZE });
-    } catch (e) {
-        if (!(e instanceof ApiError)) throw e;
-    }
+    // 빌릴 책 목록도 같이 받아서 이미 담긴 책은 처음부터 "추가됨"으로 (실패하면 null → 전부 "추가" 모양)
+    const [data, borrowList] = await Promise.all([
+        searchBooks({ title: q, pageNo: page, pageSize: PAGE_SIZE }).catch((e) => {
+            if (e instanceof ApiError) return null;
+            throw e;
+        }),
+        getMyBorrowList(),
+    ]);
+    const addedIsbns = new Set((borrowList ?? []).map((item) => item.isbn13));
 
     if (!data) {
         return (
@@ -132,7 +136,7 @@ async function Results({ q, page }) {
 
             <ul className={styles.list}>
                 {books.map((book) => (
-                    <BookRow key={book.isbn13} book={book} />
+                    <BookRow key={book.isbn13} book={book} added={addedIsbns.has(book.isbn13)} />
                 ))}
             </ul>
 

@@ -26,6 +26,34 @@
     color: var(--text-muted);
 }
 
+.icon {
+    position: relative;
+    display: flex;
+}
+
+/* 빌릴 책 권수. 아이콘 오른쪽 위에 겹침, 숫자가 길어지면 옆으로 늘어남 */
+.badge {
+    position: absolute;
+    top: calc(-1 * var(--space-1));
+    left: calc(100% - var(--space-2));
+
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding: 0 var(--space-1);
+
+    border-radius: var(--radius-full);
+    background: var(--brand);
+    color: var(--on-brand);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* 영어("To borrow", "Nearby")나 큰 글자 설정에서 넘치면 말줄임 */
 .label {
     max-width: 100%;
