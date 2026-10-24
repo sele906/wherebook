@@ -172,12 +172,231 @@
     color: var(--brand);
 }
 
+/* ---- 보기 방식 토글 [지도 | 목록] (모바일·태블릿) ---- */
+
+.titleTop {
+    align-self: stretch;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.viewToggle {
+    padding: var(--space-1);
+    flex-shrink: 0;
+
+    background: var(--surface);
+    border-radius: var(--radius-md);
+
+    display: flex;
+    gap: var(--space-1);
+}
+
+.viewToggleItem {
+    min-height: var(--touch);
+    padding: 0 var(--space-4);
+
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-3);
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+}
+
+.viewToggleItem:hover {
+    color: var(--text);
+}
+
+/* 선택 = 바탕 + 그림자 + 굵기 (반경 세그먼트와 같은 모양) */
+.viewToggleItem[aria-pressed='true'] {
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--text);
+    font-weight: var(--weight-semibold);
+}
+
+/* ---- 지도 칸 ----
+   모바일: 목록 보기에선 숨기고, 지도 보기에선 목록 대신 남은 높이를 채움 */
+
+.mapPane {
+    display: none;
+}
+
+/* 모바일 지도 보기 (목업 "내 주변 · 책 검색 후"를 위치 기준으로):
+   위에는 제목 "내 주변 [지도|목록]"과 기준 위치만 남기고(위치 바꾸기 가능), 아래는 지도가 화면 끝까지,
+   지도 아래쪽에 바텀시트 목록.
+   TODO: 지도 디자인 단계에서 기준 위치·반경을 지도 위에 띄우기 (목업) */
+.main[data-view='map'] {
+    padding-bottom: 0;
+}
+
+.main[data-view='map'] .panel > .search,
+.main[data-view='map'] .panel > .radius,
+.main[data-view='map'] .results {
+    display: none;
+}
+
+.main[data-view='map'] .mapPane {
+    /* 바텀시트 높이 */
+    --sheet-h: 40%;
+
+    position: relative;
+    flex: 1;
+    min-height: 24rem;
+    /* 본문 좌우 여백을 넘어 화면 끝까지 */
+    margin: 0 calc(-1 * var(--gutter));
+    overflow: hidden;
+
+    display: flex;
+}
+
+/* ---- 바텀시트 (모바일 지도 보기) ---- */
+
+.sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    height: var(--sheet-h);
+
+    background: var(--bg);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: var(--shadow-sheet);
+
+    display: flex;
+    flex-direction: column;
+
+    transition: height 200ms ease-out;
+}
+
+.sheet[data-expanded='true'] {
+    height: 85%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sheet {
+        transition: none;
+    }
+}
+
+/* 손잡이: 보이는 막대는 작아도 누르는 영역은 44px */
+.sheetHandle {
+    min-height: var(--touch);
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sheetHandleBar {
+    width: 2.5rem;
+    height: var(--space-1);
+    border-radius: var(--radius-full);
+    background: var(--border-strong);
+}
+
+.sheetHead {
+    padding: 0 var(--gutter) var(--space-2);
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.sheetTitle {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+}
+
+.sheetSummary {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.sheetBody {
+    flex: 1;
+    min-height: 0;
+    padding: 0 var(--gutter) var(--space-4);
+    overflow-y: auto;
+}
+
+.sheetAction {
+    padding-top: var(--space-2);
+    display: flex;
+}
+
+/* 화면 높이를 채워야 지도 칸이 남은 높이를 가질 수 있음 (AppFrame .content가 세로 flex) */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 /* ==========================================================
-   1024px 이상 = 웹. 위에 SiteHeader가 있으니 여백만 넓힘
+   1024px 이상 = 웹. 왼쪽 패널(목록) + 오른쪽 지도가 같이 보임, 토글 숨김
    ========================================================== */
 
 @media (min-width: 1024px) {
     .main {
-        padding-top: var(--space-6);
+        width: 100%;
+        margin: 0;
+        padding: 0;
+
+        display: grid;
+        grid-template-columns: var(--panel-w) minmax(0, 1fr);
+        align-items: start;
+    }
+
+    .panel {
+        align-self: stretch;
+        min-width: 0;
+        padding: var(--space-6) var(--space-6) var(--space-8);
+        border-right: 1px solid var(--border);
+    }
+
+    .viewToggle {
+        display: none;
+    }
+
+    /* 토글 상태와 상관없이 둘 다 보임 */
+    .main[data-view] .results {
+        display: block;
+    }
+
+    .main[data-view] .panel > .search,
+    .main[data-view] .panel > .radius {
+        display: flex;
+    }
+
+    /* 패널을 스크롤해도 지도는 화면에 붙어 있음 */
+    .mapPane,
+    .main[data-view] .mapPane {
+        position: sticky;
+        top: 0;
+        height: calc(100dvh - var(--web-header-h));
+        min-height: 0;
+        margin: 0;
+
+        display: flex;
+    }
+
+    /* 웹은 왼쪽 패널에 목록이 있으므로 시트는 숨김 */
+    .sheet {
+        display: none;
     }
 }
