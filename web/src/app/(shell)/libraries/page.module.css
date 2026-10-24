@@ -1,6 +1,7 @@
 /*
- * 내 주변 도서관 목록. 모바일·웹 모두 한 단, 본문은 --list-max 폭으로 가운데.
- * TODO: 지도 화면이 생기면 웹(1024px~)은 왼쪽 패널(--panel-w) + 오른쪽 지도로 바뀜 (DESIGN.md).
+ * 내 주변 도서관.
+ *   모바일·태블릿: 목록 / 지도 보기를 제목 줄 토글로 오감 (본문 --list-max 폭 가운데)
+ *   웹(1024px~): 왼쪽 패널(--panel-w, 목록) + 오른쪽 지도
  */
 
 .main {
@@ -9,20 +10,26 @@
     padding: 0 var(--gutter) var(--space-8);
 }
 
-/* 작은 "내 주변" 아래 큰 위치 제목 버튼 */
+/* 제목 줄 (모든 보기에서 같은 모양): 왼쪽 [작은 화면 이름 / 큰 위치 제목], 오른쪽 [지도|목록] */
 .titleRow {
-    padding-top: var(--space-4);
+    padding: var(--space-3) 0 var(--space-2);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+/* 위치 이름이 길면(영어 등) 이 칸이 줄고 위치 제목이 말줄임 — 토글은 줄지 않음 */
+.titleText {
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.titleLocation {
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-2);
-}
-
+/* 위치 제목 위에 작게 얹는 화면 이름 */
 .title {
     margin: 0;
 
@@ -174,15 +181,6 @@
 
 /* ---- 보기 방식 토글 [지도 | 목록] (모바일·태블릿) ---- */
 
-.titleTop {
-    align-self: stretch;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
-
 .viewToggle {
     padding: var(--space-1);
     flex-shrink: 0;
@@ -228,28 +226,72 @@
 }
 
 /* 모바일 지도 보기 (목업 "내 주변 · 책 검색 후"를 위치 기준으로):
-   위에는 제목 "내 주변 [지도|목록]"과 기준 위치만 남기고(위치 바꾸기 가능), 아래는 지도가 화면 끝까지,
-   지도 아래쪽에 바텀시트 목록.
-   TODO: 지도 디자인 단계에서 기준 위치·반경을 지도 위에 띄우기 (목업) */
+   지도가 main 전체(위·옆 여백 포함, 화면 끝까지)를 배경처럼 채우고,
+   그 위에 [위치 ▾ | 지도·목록] 카드와 반경 바를 띄운다 (패널의 것을 그대로 옮겨 씀). 아래쪽엔 바텀시트 목록.
+   지도가 가려지는 만큼을 줄이려고 "내 주변" 글자는 화면에서만 숨기고(h1은 스크린리더용으로 남김),
+   카드 여백·시트 높이를 목록 보기보다 작게 잡는다 */
 .main[data-view='map'] {
+    position: relative;
+    min-height: 30rem;
     padding-bottom: 0;
 }
 
 .main[data-view='map'] .panel > .search,
-.main[data-view='map'] .panel > .radius,
 .main[data-view='map'] .results {
     display: none;
 }
 
-.main[data-view='map'] .mapPane {
-    /* 바텀시트 높이 */
-    --sheet-h: 40%;
-
+/* 제목 줄·반경을 지도 위에 띄움 */
+.main[data-view='map'] .panel {
     position: relative;
-    flex: 1;
-    min-height: 24rem;
-    /* 본문 좌우 여백을 넘어 화면 끝까지 */
-    margin: 0 calc(-1 * var(--gutter));
+    z-index: 3;
+}
+
+.main[data-view='map'] .titleRow {
+    margin-top: var(--space-3);
+    padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
+
+    background: var(--bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-float);
+}
+
+/* "내 주변": 보이지 않게만 (.sr-only와 같은 방식 — display: none이면 h1이 사라짐) */
+.main[data-view='map'] .title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+.main[data-view='map'] .panel > .radius {
+    margin-top: var(--space-2);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+}
+
+/* 지도 위 반경 바는 바탕이 선택 항목과 같은 색이라, 선택을 브랜드 채움으로 (목업과 같음) */
+.main[data-view='map'] .panel > .radius .radiusItem[aria-current='true'] {
+    background: var(--brand);
+    box-shadow: none;
+    color: var(--on-brand);
+}
+
+.main[data-view='map'] .mapPane {
+    /* 바텀시트 높이 (지도 위 카드·반경 바가 위를 가리므로 목록은 낮게) */
+    --sheet-h: 14%;
+
+    /* main을 꽉 채우되, 본문 폭(100%)과 화면 폭(100cqw, AppFrame) 차이만큼 양옆으로 늘려 화면 끝까지.
+       모바일(본문 = 화면 - 좌우 여백)과 태블릿(본문 --list-max 가운데 정렬) 모두 성립 */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc((100% - 100cqw) / 2);
+    right: calc((100% - 100cqw) / 2);
+    /* z-index를 주지 않는다: 쌓임 맥락을 만들면 펼친 시트가 위 카드·반경 바(.panel, z 3)를 넘을 수 없음 */
     overflow: hidden;
 
     display: flex;
@@ -275,8 +317,10 @@
     transition: height 200ms ease-out;
 }
 
+/* 펼치면 지도 위 카드·반경 바(.panel, z 3)보다 위로 — 손잡이가 그 밑에 가려 다시 접지 못하는 일이 없게 */
 .sheet[data-expanded='true'] {
-    height: 85%;
+    z-index: 4;
+    height: 70%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -286,8 +330,11 @@
 }
 
 /* 손잡이: 보이는 막대는 작아도 누르는 영역은 44px */
+/* 보이는 높이는 얇게(위치 고르기 창 손잡이와 비슷하게), 누르는 영역은 ::before로 아래쪽으로 44px까지 늘림
+   (DESIGN.md: 누를 수 있는 요소는 최소 44px — 보이는 크기가 아니라 누르는 영역 기준) */
 .sheetHandle {
-    min-height: var(--touch);
+    position: relative;
+    min-height: var(--space-5);
     flex-shrink: 0;
 
     border: 0;
@@ -299,8 +346,18 @@
     justify-content: center;
 }
 
+/* 아래쪽(시트 안, 제목 윗부분)으로만 늘림 — 위로 늘리면 시트 밖 요소(펼쳤을 때 반경 바 등)와 겹침 */
+.sheetHandle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--touch);
+}
+
 .sheetHandleBar {
-    width: 2.5rem;
+    width: var(--space-10);
     height: var(--space-1);
     border-radius: var(--radius-full);
     background: var(--border-strong);
@@ -383,11 +440,45 @@
         display: flex;
     }
 
+    /* 모바일 지도 보기의 떠 있는 제목 카드·반경 바·숨긴 "내 주변"을 되돌림 */
+    .main[data-view] .titleRow {
+        margin-top: 0;
+        padding: var(--space-3) 0 var(--space-2);
+        background: none;
+        box-shadow: none;
+    }
+
+    .main[data-view] .title {
+        position: static;
+        width: auto;
+        height: auto;
+        margin: 0;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+    }
+
+    .main[data-view] .panel > .radius {
+        margin-top: var(--space-3);
+        background: var(--surface);
+        box-shadow: none;
+    }
+
+    .main[data-view] .panel > .radius .radiusItem[aria-current='true'] {
+        background: var(--bg);
+        box-shadow: var(--shadow-float);
+        color: var(--brand);
+    }
+
     /* 패널을 스크롤해도 지도는 화면에 붙어 있음 */
     .mapPane,
     .main[data-view] .mapPane {
         position: sticky;
         top: 0;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        z-index: auto;
         height: calc(100dvh - var(--web-header-h));
         min-height: 0;
         margin: 0;
