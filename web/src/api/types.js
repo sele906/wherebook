@@ -102,4 +102,15 @@
  * @property {"OK"|"ERROR"} status
  */
 
+/**
+ * @typedef {Object} BorrowListItem
+ * @property {string} isbn13
+ * @property {string} imageUrl
+ * @property {string} title
+ * @property {string} authors
+ * @property {string} publisher
+ * @property {string} publicationYear
+ * @property {string} addedAt  ISO 날짜 문자열
+ */
+
 export {};

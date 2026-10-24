@@ -1,7 +1,8 @@
 // 백엔드(Spring) 호출의 공통 처리. 컴포넌트에서 fetch를 직접 쓰지 말고 src/api의 함수를 쓴다.
-// TODO: API_URL은 NEXT_PUBLIC_이 아니라 서버에서만 읽힌다. 대출 가능 여부처럼
-//       클라이언트에서 불러야 하는 호출이 생기면 Route Handler 프록시 등으로 바꾼다.
-const API_URL = process.env.API_URL;
+// 서버에선 백엔드 주소로 바로 부르고, 브라우저에선 같은 사이트의 /api로 부른다
+// (next.config.mjs rewrites가 백엔드로 넘김 → 게스트 쿠키가 자동으로 붙는다).
+// API_URL은 NEXT_PUBLIC_이 아니라서 브라우저에선 읽히지 않는다.
+const API_URL = typeof window === "undefined" ? process.env.API_URL : "";
 
 export class ApiError extends Error {
   constructor(status, message) {
@@ -22,7 +23,7 @@ function toQuery(params = {}) {
   return str ? `?${str}` : "";
 }
 
-export async function apiGet(path, params, init) {
+async function request(path, params, init) {
   let response;
   try {
     response = await fetch(`${API_URL}${path}${toQuery(params)}`, init);
@@ -36,5 +37,19 @@ export async function apiGet(path, params, init) {
     throw new ApiError(response.status, body?.message ?? response.statusText);
   }
 
+  // 204 No Content 등 본문이 없으면 null
+  if (response.status === 204) return null;
   return response.json();
+}
+
+export function apiGet(path, params, init) {
+  return request(path, params, init);
+}
+
+export function apiPost(path, params, init) {
+  return request(path, params, { ...init, method: "POST" });
+}
+
+export function apiDelete(path, params, init) {
+  return request(path, params, { ...init, method: "DELETE" });
 }
