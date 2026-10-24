@@ -15,8 +15,8 @@ import styles from './page.module.css';
  * 빌릴 책 목록 (클라이언트). 처음 목록은 서버가 넘겨준 API 응답(initialItems)이고, 프론트에 따로 원본을 두지 않는다.
  * - 빼기(✕ / 선택한 책 빼기): 바로 목록에서 지우고(낙관적 업데이트) 실패한 책만 제자리로 되돌린 뒤 알려준다.
  * - 선택: 처음엔 전부 선택. 동선 짜기에 쓸 책을 고르는 용도.
- * - 동선 짜기: 화면이 아직 없어서 누르면 이유를 안내한다 (비활성 대신 누르면 안내 — DESIGN.md).
- * TODO: 동선 화면(/route)이 생기면 선택한 ISBN으로 이동
+ * - 동선 짜기: 고른 책의 ISBN으로 동선 화면(/borrow-list/route?isbn=)으로 이동.
+ *   고른 책이 없으면 이동하지 않고 이유를 안내한다 (비활성 대신 누르면 안내 — DESIGN.md).
  * TODO: 최대 권수·도서관당 대출 한도(기본 14권) 안내
  * 하단 탭·헤더 배지 권수는 이 목록 길이에 맞춘다 (빼면 바로 줄고, 실패해서 되돌리면 다시 늘어남).
  */
@@ -91,11 +91,16 @@ export default function BorrowList({ initialItems, baseBar }) {
         remove(selectedItems);
     }
 
-    function planRoute() {
-        setCtaMessage({
-            kind: 'hint',
-            text: selectedItems.length === 0 ? '동선을 짤 책을 선택해 주세요.' : '동선 짜기는 아직 준비 중이에요.',
-        });
+    // 동선 화면 주소: 고른 책의 ISBN13을 쉼표로 (책은 항상 ISBN으로 넘긴다)
+    const routeHref = `/borrow-list/route?${new URLSearchParams({
+        isbn: selectedItems.map((item) => item.isbn13).join(','),
+    })}`;
+
+    // 고른 책이 없으면 이동하지 않고 이유를 안내 (비활성 대신 누르면 안내 — DESIGN.md)
+    function planRoute(e) {
+        if (selectedItems.length > 0) return;
+        e.preventDefault();
+        setCtaMessage({ kind: 'hint', text: '동선을 짤 책을 선택해 주세요.' });
     }
 
     return (
@@ -160,10 +165,10 @@ export default function BorrowList({ initialItems, baseBar }) {
                     <p role="status" className={ctaMessage ? styles.message : 'sr-only'}>
                         {ctaMessage?.text}
                     </p>
-                    <button type="button" className={styles.primary} onClick={planRoute}>
+                    <Link href={routeHref} className={styles.primary} onClick={planRoute}>
                         <RouteIcon size={20} strokeWidth={2.2} />
                         {`${countFormat.format(selectedItems.length)}권으로 동선 짜기`}
-                    </button>
+                    </Link>
                 </div>
             )}
         </>

@@ -1,0 +1,98 @@
+/*
+ * 동선 추천. 뒤로 + 제목 → 지도 (화면 끝까지) → 동선 카드(준비 중).
+ * 본문은 --list-max 폭 가운데, 지도만 화면 폭 끝까지.
+ * TODO: 웹(1024px~) 배치 — 동선 카드가 생기면 왼쪽 패널(카드) + 오른쪽 지도 검토 (DESIGN.md)
+ */
+
+.main {
+    width: min(100%, var(--list-max));
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--space-8);
+}
+
+/* ---- 머리: [뒤로] 동선 추천 / 선택한 N권 · 기준 ---- */
+
+.head {
+    min-height: var(--header-h);
+    margin-left: calc(-1 * var(--space-3));
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.back {
+    width: var(--touch);
+    height: var(--touch);
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-2);
+}
+
+.back:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.headText {
+    min-width: 0;
+    padding: var(--space-2) 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-title);
+}
+
+.meta {
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ---- 지도: 높이를 미리 잡고(SDK가 늦게 와도 아래가 밀리지 않게), 화면 폭 끝까지 ---- */
+
+.map {
+    height: 18.75rem;
+    /* 본문 폭(100%)과 화면 폭(100cqw, AppFrame) 차이만큼 양옆으로 늘림 */
+    margin: 0 calc((100% - 100cqw) / 2);
+
+    display: flex;
+}
+
+.notice {
+    max-width: var(--reading-max);
+    margin: var(--space-6) auto 0;
+
+    font-size: var(--text-md);
+    color: var(--text-muted);
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    .main {
+        padding-top: var(--space-6);
+    }
+
+    .map {
+        height: 28rem;
+        margin: var(--space-2) 0 0;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+    }
+}
