@@ -7,7 +7,10 @@ import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +18,7 @@ public class BookService {
 
     private final BookMapper bookMapper;
     private final Data4LibraryClient client;
+    private static final Pattern ISBN13 = Pattern.compile("^97[89]\\d{10}$");
 
     public BookSearchResponse searchBooks(BookSearchRequest req) {
 
@@ -29,12 +33,18 @@ public class BookService {
     }
 
     //db에서 캐시 정보 찾은 후 없으면 api에서 불러올것
-    public Book getBookDetail(String isbn13) {
+    public Book getBookDetail(String isbn13) throws IllegalArgumentException {
+
+        //isbn 검증
+        if (!ISBN13.matcher(isbn13).matches()) {
+            throw new IllegalArgumentException("ISBN13 형식이 아닙니다: " + isbn13);
+        }
+
         Book book = bookMapper.getBookByIsbn13(isbn13);
 
         if (book == null) {
             book = client.fetchBookByIsbn13(isbn13)
-                    .orElseThrow(() -> new ResponseNotFoundException(
+                    .orElseThrow(() -> new ResponseNotFoundException (
                             "도서 API를 찾을 수 없습니다. isbn13: " + isbn13
                     ));
 

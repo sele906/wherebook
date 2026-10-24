@@ -4,9 +4,11 @@ import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchResponse;
 import com.sele906.chaekeodi.book.service.BookService;
+import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
 import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +33,7 @@ public class BookController {
     @GetMapping("/{isbn13}")
     public ResponseEntity<Book> getBookDetail(
             @PathVariable("isbn13") String isbn13
-    ) {
+    ) throws IllegalArgumentException {
         Book response = bookService.getBookDetail(isbn13);
         return ResponseEntity.ok(response);
     }
