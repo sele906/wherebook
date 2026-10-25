@@ -47,10 +47,17 @@
 
     </select>
 
-    <select id="getTitleByIsbn" resultType="string">
-        select title
-        from book
-        where isbn13 = #{isbn13}
+    <select id="getBooksByIsbns" resultType="map">
+        SELECT isbn13, title, authors, publisher, publication_year
+        FROM book
+        WHERE isbn13 IN
+        <foreach collection="isbns"
+                 item="isbn"
+                 open="("
+                 separator=","
+                 close=")">
+            #{isbn}
+        </foreach>
     </select>
 
 </mapper>

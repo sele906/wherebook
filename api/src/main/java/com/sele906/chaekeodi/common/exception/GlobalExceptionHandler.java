@@ -11,6 +11,19 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //외부 api 오류?
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ErrorResponse> externalApiException(ResponseNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(
+                HttpStatus.BAD_GATEWAY.value(),
+                "도서관 정보 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(response);
+    }
+
     // 형식은 맞지만 없음 (책·도서관) → 404
     @ExceptionHandler(ResponseNotFoundException.class)
     public ResponseEntity<ErrorResponse> responseNotFound(ResponseNotFoundException e) {

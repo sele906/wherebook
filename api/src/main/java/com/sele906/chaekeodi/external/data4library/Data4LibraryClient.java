@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.external.data4library;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
+import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.holding.domain.CallNumberCandidate;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import com.sele906.chaekeodi.library.domain.Library;
@@ -242,15 +243,43 @@ public class Data4LibraryClient {
 
     //도서 소장/대출가능 여부
     public LoanStatus fetchLoanStatus(String isbn13, String libCode) {
-        JsonNode result = get("/bookExist", Map.of(
-                "libCode", libCode,
-                "isbn13", isbn13
-        )).path("response").path("result");
 
-        return new LoanStatus(
-                "Y".equals(result.path("hasBook").asText()),
-                "Y".equals(result.path("loanAvailable").asText())
-        );
+        try {
+            JsonNode res = get("/bookExist", Map.of(
+                    "libCode", libCode,
+                    "isbn13", isbn13
+            ));
+
+            // 응답 데이터 검증
+            JsonNode result = res == null ? null : res.path("response").path("result");
+
+            if (result == null || !result.isObject()) {
+                throw new ExternalApiException("대출 상태 조회 응답 형식이 올바르지 않습니다.");
+            }
+
+            String hasBook = result.path("hasBook").asText();
+            String loanAvailable = result.path("loanAvailable").asText();
+
+            // Y 또는 N 이외의 값은 오류 처리
+            if (!isValidYn(hasBook) || !isValidYn(loanAvailable)) {
+                throw new ExternalApiException("대출 상태 조회 결과가 올바르지 않습니다.");
+            }
+
+            return new LoanStatus(
+                    "Y".equals(hasBook),
+                    "Y".equals(loanAvailable)
+            );
+
+        } catch (ExternalApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ExternalApiException("정보나루 대출 상태 조회 실패: " + isbn13, e);
+        }
+    }
+
+    // Y/N 값 검증
+    private boolean isValidYn(String value) {
+        return "Y".equals(value) || "N".equals(value);
     }
 
     //소장 도서관 세부 지역별 호출
@@ -277,10 +306,33 @@ public class Data4LibraryClient {
                             "pageSize", pageSize
                     ));
 
-                    JsonNode response = res.path("response");
+                    JsonNode response = res == null ? null : res.path("response");
+
+                    // 응답 구조 자체가 잘못된 경우
+                    if (response == null || !response.isObject()) {
+                        throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+                    }
+
+                    JsonNode numFoundNode = response.path("numFound");
+
+                    // numFound가 없거나 유효한 숫자가 아닌 경우
+                    if (!numFoundNode.asText().matches("\\d+")) {
+                        throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
+                    }
+
+                    int numFound = numFoundNode.asInt();
+
+                    // 정상적으로 조회했지만 소장 도서관이 없는 경우
+                    if (numFound == 0) {
+                        break;
+                    }
+
                     JsonNode libs = response.path("libs");
 
-                    int numFound = response.path("numFound").asInt();
+                    // 결과가 있다고 했는데 목록이 없는 경우
+                    if (!libs.isArray() || libs.isEmpty()) {
+                        throw new ExternalApiException("소장 도서관 목록 응답이 올바르지 않습니다.");
+                    }
 
                     // 더 이상 결과 없음
                     if (!libs.isArray() || libs.isEmpty()) {
@@ -298,15 +350,6 @@ public class Data4LibraryClient {
                         }
                     }
 
-                    log.debug(
-                            "region={} page={} numFound={} 현재페이지={} 누적={}",
-                            d.getDtlRegion(),
-                            pageNo,
-                            numFound,
-                            libs.size(),
-                            libCodes.size()
-                    );
-
                     // 마지막 페이지
                     if (pageNo * pageSize >= numFound) {
                         break;
@@ -316,10 +359,15 @@ public class Data4LibraryClient {
                 }
 
             } catch (Exception e) {
-                log.warn(
+                log.error(
                         "소장 도서관 조회 실패 isbn={} region={}",
                         isbn,
                         d.getDtlRegion(),
+                        e
+                );
+
+                throw new ExternalApiException(
+                        "정보나루 소장 도서관 조회에 실패했습니다.",
                         e
                 );
             }

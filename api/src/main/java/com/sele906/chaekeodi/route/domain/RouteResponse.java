@@ -9,7 +9,7 @@ public record RouteResponse(
         List<BookSummary> notFoundNearby
 ) {
 
-    public record BookSummary(String isbn13, String title) {}
+    public record BookSummary(String isbn13, String title, String authors, String publisher, String publicationYear) {}
 
     public record Stop(int order, String libCode, String libName, double latitude, double longitude, List<BookSummary> books) {}
 

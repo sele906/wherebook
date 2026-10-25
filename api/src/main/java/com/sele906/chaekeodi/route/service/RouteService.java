@@ -1,13 +1,19 @@
 package com.sele906.chaekeodi.route.service;
 
+import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import com.sele906.chaekeodi.route.domain.*;
 import com.sele906.chaekeodi.route.mapper.RouteMapper;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +21,17 @@ public class RouteService {
 
     private final RouteMapper routeMapper;
     private final Data4LibraryClient client;
+
+    // 동시에 최대 4개의 API 작업 실행
+    private final ExecutorService pool = Executors.newFixedThreadPool(4);
+
+    // ISBN과 도서관 코드를 하나의 키로 묶기
+    private record BookLib(String isbn, String libCode) {}
+
+    @PreDestroy
+    public void shutdownPool() {
+        pool.shutdown();
+    }
 
     public RouteResponse getCalcRoute(RouteRequest request) {
 
@@ -68,28 +85,73 @@ public class RouteService {
         // 반경 내 도서관에서 찾지 못한 ISBN 목록
         List<String> isbnsnotFoundNearbyNearby = new ArrayList<>();
 
-        // 5. 빌릴 책들을 하나씩 조회
-        for (String isbn : borrowList) {
+        // 5. 빌릴 책들 조회
+        // 5-1. ISBN별 소장 도서관 조회 (비동기)
+        Map<String, CompletableFuture<List<String>>> holdingsF = new LinkedHashMap<>();
 
-            boolean availableNearby = false; // 한 곳이라도 대출 가능
-            boolean heldNearby = false;      // 한 곳이라도 소장
+        // 중복 ISBN 제거
+        List<String> uniqueIsbns = borrowList.stream()
+                .distinct()
+                .toList();
 
-            // 소장 도서관 코드 조회
-            List<String> holdingLibraryCodes = client.fetchLibByBookDtlRegion(isbn, regions);
+        for (String isbn : uniqueIsbns) {
+
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> client.fetchLibByBookDtlRegion(isbn, regions), pool);
+
+            holdingsF.put(isbn, future);
+        }
+
+        // 5-2. ISBN + 도서관별 대출 상태 조회 (비동기)
+        Map<BookLib, CompletableFuture<LoanStatus>> loanF = new LinkedHashMap<>();
+
+        for (String isbn : uniqueIsbns) {
+
+            // 소장 도서관 조회 결과 가져오기
+            List<String> holdingLibraryCodes = holdingsF.get(isbn).join();
+
+            List<String> matchedCodes = holdingLibraryCodes.stream()
+                    .filter(candidateLibraryCodes::contains)
+                    .distinct()
+                    .toList();
+
+            // 중복 도서관 코드 제거
+            for (String libCode : new LinkedHashSet<>(holdingLibraryCodes)) {
+
+                // 사용자 검색 반경 내 도서관만 확인
+                if (!candidateLibraryCodes.contains(libCode)) continue;
+
+                BookLib key = new BookLib(isbn, libCode);
+
+                CompletableFuture<LoanStatus> future = CompletableFuture.supplyAsync(() -> client.fetchLoanStatus(isbn, libCode), pool);
+
+                loanF.put(key, future);
+            }
+        }
+
+        // 5-3. API 결과 수집 및 ISBN 분류
+        for (String isbn : uniqueIsbns) {
+
+            boolean availableNearby = false;
+            boolean heldNearby = false;
+
+            // 이미 요청한 소장 도서관 조회 결과
+            List<String> holdingLibraryCodes = await(holdingsF.get(isbn));
 
             for (String libCode : holdingLibraryCodes) {
 
                 if (!candidateLibraryCodes.contains(libCode)) continue;
 
-                //대출 가능 여부 확인
-                LoanStatus s = client.fetchLoanStatus(isbn, libCode);
-                if (!s.isBookExists()) continue;
+                // 이미 요청한 대출 상태 조회 결과
+                BookLib key = new BookLib(isbn, libCode);
+                LoanStatus s = await(loanF.get(key));
+
+                if (s == null || !s.isBookExists()) continue;
+
                 heldNearby = true;
 
                 if (s.isLoanAvailable()) {
 
-                    // 해당 도서관에 이미 저장된 ISBN 목록 가져오기
-                    //도서관 코드가 없으면 새로운 Set을 생성, 있으면 기존 Set에 ISBN을 추가
+                    // 도서관별 대출 가능한 ISBN 저장
                     Set<String> heldIsbns = availableByLibrary.get(libCode);
 
                     if (heldIsbns == null) {
@@ -99,16 +161,16 @@ public class RouteService {
 
                     heldIsbns.add(isbn);
 
-                    // 반경 내에서 책을 찾았다고 표시
                     availableNearby = true;
                 }
             }
 
+            // 모든 도서관을 확인한 뒤 책 분류
             if (!availableNearby) {
                 if (heldNearby) {
-                    isbnsOnLoanNearby.add(isbn);    // 도서 소장하지만 전부 대출 중
+                    isbnsOnLoanNearby.add(isbn);
                 } else {
-                    isbnsnotFoundNearbyNearby.add(isbn);  // 도서 소장 도서관 없음
+                    isbnsnotFoundNearbyNearby.add(isbn);
                 }
             }
         }
@@ -205,12 +267,60 @@ public class RouteService {
     }
 
     private List<RouteResponse.BookSummary> toBookSummaries(Collection<String> isbns) {
-        return isbns.stream()
-                .distinct()
-                .map(isbn -> new RouteResponse.BookSummary(
-                        isbn,
-                        routeMapper.getTitleByIsbn(isbn)
-                ))
+
+        // ISBN 중복 제거
+        List<String> uniqueIsbns = isbns.stream().distinct().toList();
+
+        if (uniqueIsbns.isEmpty()) {
+            return List.of();
+        }
+
+        // ISBN 목록으로 책 정보 한 번에 조회
+        List<Map<String, String>> books = routeMapper.getBooksByIsbns(uniqueIsbns);
+
+        // ISBN -> 도서 정보
+        Map<String, Map<String, String>> bookByIsbn = new HashMap<>();
+
+        for (Map<String, String> book : books) {
+            bookByIsbn.put(
+                    String.valueOf(book.get("isbn13")),
+                    book
+            );
+        }
+
+        // 응답 DTO 생성
+        return uniqueIsbns.stream()
+                .map(isbn -> {
+                    Map<String, String> book = bookByIsbn.get(isbn);
+
+                    if (book == null) {
+                        return new RouteResponse.BookSummary(
+                                isbn, null, null, null, null
+                        );
+                    }
+
+                    return new RouteResponse.BookSummary(
+                            isbn,
+                            (String) book.get("title"),
+                            (String) book.get("authors"),
+                            (String) book.get("publisher"),
+                            (String) book.get("publication_year")
+                    );
+                })
                 .toList();
+    }
+
+    private <T> T await(CompletableFuture<T> future) {
+        try {
+            return future.join();
+
+        } catch (CompletionException e) {
+
+            if (e.getCause() instanceof ExternalApiException apiException) {
+                throw apiException;
+            }
+
+            throw e;
+        }
     }
 }

@@ -17,5 +17,5 @@ public class RouteRequest {
     @NotEmpty @Size(max = 30) List<String> isbns;
     @NotNull private Double latitude;
     @NotNull private Double longitude;
-    @Max(5000) private Integer radius;
+    @Max(5000) private Integer radius = 1000;
 }
