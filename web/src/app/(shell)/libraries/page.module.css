@@ -409,20 +409,28 @@
    ========================================================== */
 
 @media (min-width: 1024px) {
-    .main {
+    /* 헤더 아래 남은 높이에 딱 맞춰 화면(AppFrame .scroll)은 스크롤되지 않게 하고, 패널만 스크롤.
+       그래야 스크롤바가 화면 맨 오른쪽(지도 옆)이 아니라 패널 오른쪽에 붙는다.
+       flex: 1 1 0 + min-height: 0 = AppFrame .content(세로 flex, 화면 높이)의 남은 높이를 내용과 상관없이 채움 */
+    .main,
+    .main[data-view] {
         width: 100%;
+        flex: 1 1 0;
+        min-height: 0;
         margin: 0;
         padding: 0;
+        overflow: hidden;
 
         display: grid;
         grid-template-columns: var(--panel-w) minmax(0, 1fr);
-        align-items: start;
+        grid-template-rows: minmax(0, 1fr);
     }
 
     .panel {
-        align-self: stretch;
         min-width: 0;
+        min-height: 0;
         padding: var(--space-6) var(--space-6) var(--space-8);
+        overflow-y: auto;
         border-right: 1px solid var(--border);
     }
 
@@ -470,16 +478,16 @@
         color: var(--brand);
     }
 
-    /* 패널을 스크롤해도 지도는 화면에 붙어 있음 */
+    /* 지도는 오른쪽 칸을 꽉 채움 (화면이 스크롤되지 않으니 sticky가 필요 없음) */
     .mapPane,
     .main[data-view] .mapPane {
-        position: sticky;
-        top: 0;
+        position: relative;
+        top: auto;
         bottom: auto;
         left: auto;
         right: auto;
         z-index: auto;
-        height: calc(100dvh - var(--web-header-h));
+        height: auto;
         min-height: 0;
         margin: 0;
 
