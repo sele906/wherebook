@@ -1,10 +1,13 @@
 package com.sele906.chaekeodi.library.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class LibrarySearchRequest {
 
     private String keyword;
