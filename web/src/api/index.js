@@ -10,3 +10,4 @@ export {
   getLoanStatuses,
   LOAN_BATCH_SIZE,
 } from "./holdings";
+export { planRoute, ROUTE_ISBN_LIMIT } from "./routePlan";

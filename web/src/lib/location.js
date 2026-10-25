@@ -56,9 +56,15 @@ export function parseBaseCookie(value) {
 export const RADIUS_STEPS_KM = [1, 3, 5, 10];
 export const DEFAULT_RADIUS_KM = 3;
 
-export function readRadiusKm(value) {
+// 동선 추천 반경 — 백엔드 RouteRequest radius @Max(5000), 기본 1km.
+// 반경이 넓으면 도서관이 20~30곳 들어와서 대출 여부 조회가 너무 많아진다
+export const ROUTE_RADIUS_STEPS_KM = [1, 3, 5];
+export const DEFAULT_ROUTE_RADIUS_KM = 1;
+
+// 주소의 r 값 → 고를 수 있는 반경 중 하나. 아니면 기본값
+export function readRadiusKm(value, steps = RADIUS_STEPS_KM, fallback = DEFAULT_RADIUS_KM) {
     const n = Number(Array.isArray(value) ? value[0] : value);
-    return RADIUS_STEPS_KM.includes(n) ? n : DEFAULT_RADIUS_KM;
+    return steps.includes(n) ? n : fallback;
 }
 
 const kmFormat = new Intl.NumberFormat('ko-KR', {

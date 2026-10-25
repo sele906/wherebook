@@ -23,6 +23,9 @@ import {
     LuPencil,
     LuLandmark,
     LuRoute,
+    LuTriangleAlert,
+    LuCircleAlert,
+    LuNavigation,
 } from 'react-icons/lu';
 
 function wrap(Icon) {
@@ -49,3 +52,6 @@ export const ChevronDownIcon = wrap(LuChevronDown);
 export const EditIcon = wrap(LuPencil);
 export const LandmarkIcon = wrap(LuLandmark);
 export const RouteIcon = wrap(LuRoute);
+export const WarningIcon = wrap(LuTriangleAlert);
+export const CircleAlertIcon = wrap(LuCircleAlert);
+export const NavigationIcon = wrap(LuNavigation);

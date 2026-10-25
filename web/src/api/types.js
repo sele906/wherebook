@@ -113,4 +113,49 @@
  * @property {string} addedAt  ISO 날짜 문자열
  */
 
+/**
+ * @typedef {Object} RouteBook
+ * @property {string} isbn13
+ * @property {string|null} title  우리 DB에 없는 책이면 null
+ * @property {string|null} authors
+ * @property {string|null} publisher
+ * @property {string|null} publicationYear
+ */
+
+/**
+ * @typedef {Object} RouteStop
+ * @property {number} order  1부터
+ * @property {string} libCode
+ * @property {string} libName
+ * @property {number} latitude
+ * @property {number} longitude
+ * @property {RouteBook[]} books  이 도서관에서 빌릴 책 (앞 도서관에서 빌리는 책은 빠짐)
+ */
+
+/**
+ * @typedef {Object} AllAvailableBooksRoute  반경 안에서 대출 가능한 책을 모두 빌리는 동선 (최대 3곳)
+ * @property {number} borrowableBookCount
+ * @property {number} totalKm  기준 위치 → 도서관들 직선거리 합
+ * @property {RouteStop[]} stops  방문 순서대로
+ */
+
+/**
+ * @typedef {Object} BestSingleLibrary  한 곳만 간다면 — 대출 가능한 책이 가장 많은 도서관 (같으면 가까운 곳)
+ * @property {string} libCode
+ * @property {string} libName
+ * @property {number} latitude
+ * @property {number} longitude
+ * @property {number} distanceKm  기준 위치에서 직선거리
+ * @property {RouteBook[]} books  여기서 빌릴 수 있는 책
+ * @property {RouteBook[]} unavailableBooks  여기서 못 빌리는 책 (다른 곳에서 대출 가능·대출중·미소장 모두)
+ */
+
+/**
+ * @typedef {Object} RouteResponse
+ * @property {AllAvailableBooksRoute|null} allAvailableBooksRoute  빌릴 수 있는 책이 없으면 null
+ * @property {BestSingleLibrary|null} bestSingleLibrary  빌릴 수 있는 책이 없으면 null
+ * @property {RouteBook[]} onLoanNearby  반경 안에서 소장은 하지만 전부 대출중
+ * @property {RouteBook[]} notFoundNearby  반경 안 도서관에 없음
+ */
+
 export {};
