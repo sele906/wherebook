@@ -2,11 +2,9 @@ import { cache, Suspense } from 'react';
 import Link from 'next/link';
 
 import { ApiError, searchLibraries } from '@/api';
-import LibraryRow from '@/components/LibraryRow';
 import Pager, { readPage } from '@/components/Pager';
 import { PendingForm, PendingLink, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
-import { NextIcon } from '@/components/icons';
 import LibraryMapSkeleton from '@/components/map/LibraryMapSkeleton';
 import { getBase } from '@/lib/base';
 import {
@@ -18,6 +16,7 @@ import {
     readRadiusKm,
 } from '@/lib/location';
 
+import LibraryList from './LibraryList';
 import NearbyView, { MapPane, MapSheet } from './NearbyView';
 import ResultsSkeleton from './ResultsSkeleton';
 import TitleRow from './TitleRow';
@@ -31,7 +30,8 @@ import styles from './page.module.css';
  * 기준 위치는 쿠키(getBase). 화면 제목 "[핀] 위치 이름 ▾"이 기준을 글자로 보여주고, 누르면 바꾼다.
  * 목록 / 지도: 모바일은 제목 옆 토글로 오가고, 웹은 왼쪽 패널(목록) + 오른쪽 지도 (NearbyView).
  *   지도와 목록은 같은 API 응답을 공유 (loadLibraries를 React cache로 한 번만 부름).
- * TODO: 지도 위 요소 — 반경 원, 대출 상태 핀, 목록과 선택 상태 공유, "이 지역에서 다시 검색" (DESIGN.md 지도)
+ *   고른 도서관도 공유: 목록 행에 올리거나 포커스하면 핀이 커지고, 핀을 누르면 행이 강조된다 (LibraryList).
+ * TODO: 지도 위 요소 — 반경 원, 대출 상태 핀, "이 지역에서 다시 검색" (DESIGN.md 지도)
  * TODO: 운영 상태("운영 중 · 22시까지" / "오늘 휴관") — 운영시간·휴관일 데이터 정제 필요.
  *       지금 operatingTime·closedDays는 자유 형식 글이라 계산할 수 없음 (백엔드 작업).
  * TODO: 지역별 도서관 목록 (색인용) — /libraries/region/[regionCode](/[dtlRegionCode]) 를 따로 만들어
@@ -177,27 +177,13 @@ async function MapSection({ base, q, radiusKm, page }) {
         title = `${formatKm(radiusKm)} 안에 도서관이 없어요`;
     } else {
         title = `도서관 ${numberFormat.format(totalCount)}곳`;
-        body = (
-            <ul className={styles.list}>
-                {libraries.map((lib) => (
-                    <LibraryRow
-                        key={lib.libCode}
-                        library={lib}
-                        badge={
-                            <span className={styles.chevron}>
-                                <NextIcon size={20} />
-                            </span>
-                        }
-                    />
-                ))}
-            </ul>
-        );
+        body = <LibraryList libraries={libraries} />;
     }
 
     return (
         <>
             {/* 불러오지 못했으면 기준 위치만 있는 지도 */}
-            <MapPane base={base} libraries={libraries} radiusKm={radiusKm} />
+            <MapPane base={base} libraries={libraries} radiusKm={radiusKm} totalCount={totalCount} />
             {/* TODO: 20곳 넘으면 시트에도 다음 페이지 — 지금은 목록 보기에서 페이지를 넘김 */}
             <MapSheet title={title} summary={describeBase(base, radiusKm)}>
                 {body}
@@ -268,20 +254,7 @@ async function Results({ base, q, radiusKm, page }) {
                 <strong className={styles.count}>{numberFormat.format(totalCount)}</strong>곳
             </p>
 
-            <ul className={styles.list}>
-                {libraries.map((lib) => (
-                    <LibraryRow
-                        key={lib.libCode}
-                        library={lib}
-                        detail={lib.address}
-                        badge={
-                            <span className={styles.chevron}>
-                                <NextIcon size={20} />
-                            </span>
-                        }
-                    />
-                ))}
-            </ul>
+            <LibraryList libraries={libraries} withAddress />
 
             <Pager
                 page={page}
