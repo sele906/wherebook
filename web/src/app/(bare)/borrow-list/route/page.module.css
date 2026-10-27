@@ -700,5 +700,7 @@ button.card:active {
         height: auto;
         min-height: 0;
         margin: 0;
+        /* 웹엔 바텀시트가 없음 — RouteSheet가 모바일에서 잰 값을 덮어씀 */
+        --map-inset-bottom: 0px;
     }
 }

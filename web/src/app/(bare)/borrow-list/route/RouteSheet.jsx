@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styles from './page.module.css';
 
@@ -12,9 +12,23 @@ import styles from './page.module.css';
  */
 export default function RouteSheet({ children }) {
     const [expanded, setExpanded] = useState(false);
+    const ref = useRef(null);
+
+    // 접힌 시트 높이를 지도에 알려서 카카오 로고가 가리지 않게 (LibraryMap --map-inset-bottom).
+    // 시트 높이가 내용(책·도서관 수)에 따라 달라서 CSS만으로는 못 정함. 펼쳤을 때는 접힌 높이를 그대로 둔다
+    useEffect(() => {
+        const sheet = ref.current;
+        const main = sheet?.closest('main');
+        if (!sheet || !main || expanded) return;
+        const observer = new ResizeObserver(() => {
+            main.style.setProperty('--map-inset-bottom', `calc(${sheet.offsetHeight}px + var(--space-1))`);
+        });
+        observer.observe(sheet);
+        return () => observer.disconnect();
+    }, [expanded]);
 
     return (
-        <section className={styles.sheet} data-expanded={expanded} aria-label="동선 결과">
+        <section ref={ref} className={styles.sheet} data-expanded={expanded} aria-label="동선 결과">
             <button
                 type="button"
                 className={styles.sheetHandle}

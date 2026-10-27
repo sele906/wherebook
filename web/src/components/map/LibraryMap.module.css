@@ -15,6 +15,33 @@
     inset: 0;
 }
 
+/* 지도 바탕 이미지에만 필터 (globals.css --map-tile-filter). 핀·로고는 다른 주소라 안 걸린다.
+   카카오 내부 구조에 기댄 선택자 — 바탕 이미지 주소가 .../api/v1/tile/... 인 것을 보고 정함.
+   SDK가 바뀌어 필터가 안 먹으면 개발자 도구에서 바탕 <img> 주소부터 다시 확인 */
+.map img[src*='/tile/'] {
+    filter: var(--map-tile-filter);
+}
+
+/* 왼쪽 아래 카카오 영역 = [축척] [로고 링크]. 둘 다 class 없이 한 상자에 있어서 로고 링크 주소로 찾는다 (카카오 내부 구조).
+   축척: 거리는 반경 칩·목록 거리로 이미 글자로 보여줘서 숨긴다. 구조가 바뀌면 다시 보일 뿐이라 위험은 작음.
+   로고: 약관상 가리거나 바꾸지 않는다. 검은 글자라 다크에선 안 보이고 라이트에선 지도 글씨와 겹쳐서 뒤에 바탕만 깐다
+   (버튼처럼 안 보이게 글자에 맞춘 각진 직사각형, 그림자 없이) */
+.map div:has(> div > a[href*='map.kakao.com']) > div:not(:has(a)) {
+    display: none;
+}
+
+/* 바텀시트가 지도 아래를 덮는 화면은 --map-inset-bottom(접힌 시트 높이)만큼 카카오 영역을 올린다. 값은 쓰는 화면이 정함.
+   카카오가 위치를 인라인 style(bottom: 0)로 넣어서 !important로만 덮을 수 있음.
+   TODO: 지도 위 버튼([기준 위치로 이동] 등)을 만들면 같은 변수로 시트 위에 띄울 것 */
+.map div:has(> div > a[href*='map.kakao.com']) {
+    bottom: var(--map-inset-bottom, 0px) !important;
+}
+
+.map div:has(> a[href*='map.kakao.com']) {
+    padding: 2px 4px;
+    background: var(--map-logo-bg);
+}
+
 .skeleton {
     animation: pulse 1.2s ease-in-out infinite;
 }
