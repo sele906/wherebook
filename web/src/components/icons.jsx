@@ -11,6 +11,7 @@ import {
     LuSettings,
     LuLocateFixed,
     LuPlus,
+    LuMinus,
     LuChevronLeft,
     LuChevronRight,
     LuX,
@@ -41,6 +42,7 @@ export const PinIcon = wrap(LuMapPin);
 export const GearIcon = wrap(LuSettings);
 export const LocateIcon = wrap(LuLocateFixed);
 export const PlusIcon = wrap(LuPlus);
+export const MinusIcon = wrap(LuMinus);
 export const BackIcon = wrap(LuChevronLeft);
 export const NextIcon = wrap(LuChevronRight);
 export const CloseIcon = wrap(LuX);

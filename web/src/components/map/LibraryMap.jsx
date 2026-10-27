@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Circle, CustomOverlayMap, Map, MarkerClusterer, useKakaoLoader } from 'react-kakao-maps-sdk';
 
-import { LibraryIcon } from '@/components/icons';
+import { LibraryIcon, MinusIcon, PinIcon, PlusIcon } from '@/components/icons';
 
 import LibraryMapSkeleton from './LibraryMapSkeleton';
 import styles from './LibraryMap.module.css';
 
 /*
  * 도서관 지도 (카카오맵). 브라우저 전용이라 직접 쓰지 말고 LibraryMapLoader(dynamic, ssr: false)로 불러온다.
- * 목록과 같은 API 응답(libraries)을 그대로 받는다 — 지도 때문에 다시 호출하지 않음.
+ * 쓰는 화면이 준 도서관(libraries)을 그린다 — 지도가 따로 API를 부르지 않음 (내 주변은 핀 API 응답, 동선은 동선 응답).
  * 지도가 실패해도 목록만으로 모든 기능을 쓸 수 있어서, 실패하면 지도 자리에 안내만 보여준다.
  *
  * 핀: 도서관 아이콘 원형 핀 (카카오 지도가 이미 글자로 복잡해서 이름은 평소에 안 보여줌).
@@ -30,7 +30,9 @@ import styles from './LibraryMap.module.css';
  * 겹치는 핀은 묶음(클러스터)으로: 핀과 같은 브랜드 원에 아이콘 대신 개수. 누르면 그 자리로 확대 (카카오 기본).
  * 고른 핀은 묶지 않는다 — 목록에서 고른 핀이 묶음 안에 숨지 않게.
  *
- * TODO: 지도 위 버튼 — [확대·축소(웹)] [기준 위치로 이동]. 모바일은 바텀시트(--map-inset-bottom) 위로 올릴 것
+ * 지도 위 버튼(오른쪽 아래, 모바일은 --map-inset-bottom만큼 시트 위로): [확대 / 축소](웹만 — 모바일은 손가락으로)
+ * [기준 위치로] — 처음처럼 반경 원에 다시 맞춘다. 아이콘은 화면 제목의 기준 위치와 같은 핀 (GPS "내 위치"처럼 안 보이게).
+ *
  * TODO: 지도를 움직이면 "이 지역에서 다시 검색" — 기준 위치(지도 중심)를 바꾸는 흐름이 필요
  */
 
@@ -127,6 +129,8 @@ export default function LibraryMap({
     // 반경·기준 위치·핀이 바뀔 때, 숨겨져 있던 지도(모바일 목록 보기)가 다시 보일 때, 영역 크기가 바뀔 때
     // (화면 회전, 동선 시트 높이를 나중에 잰 경우). 다시 보일 때 relayout을 안 하면 카카오맵이 크기 0으로 알고 빈 화면으로 남는다
     const fitAreaRef = useRef(null);
+    // [기준 위치로] 버튼이 같은 맞추기를 부를 수 있게
+    const fitRef = useRef(null);
     useEffect(() => {
         const fitArea = fitAreaRef.current;
         if (!map || !active || !fitArea) return;
@@ -177,10 +181,14 @@ export default function LibraryMap({
             const fits = sw.x >= loose.left && ne.x <= loose.right && ne.y >= loose.top && sw.y <= loose.bottom;
             if (!fits) map.setLevel(level, { anchor: center });
         };
+        fitRef.current = fit;
         // 처음 관찰할 때도 한 번 불린다
         const observer = new ResizeObserver(fit);
         observer.observe(fitArea);
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            fitRef.current = null;
+        };
     }, [map, active, base.latitude, base.longitude, radiusKm, pinPoints]);
 
     if (loading) return <LibraryMapSkeleton />;
@@ -235,9 +243,39 @@ export default function LibraryMap({
                 {/* 고른 핀은 묶음 밖에, 다른 핀 위로 */}
                 {selectedLib && <LibraryPinOverlay library={selectedLib} selected onSelect={setSelected} />}
             </Map>
+            <MapControls
+                onZoomIn={() => map?.setLevel(map.getLevel() - 1, { animate: !prefersReducedMotion() })}
+                onZoomOut={() => map?.setLevel(map.getLevel() + 1, { animate: !prefersReducedMotion() })}
+                onRecenter={() => fitRef.current?.()}
+            />
             {partial && (
                 <p className={styles.partialNote}>{`가까운 ${countFormat.format(located.length)}곳만 지도에 보여요`}</p>
             )}
+        </div>
+    );
+}
+
+function prefersReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// 지도 위 버튼 (오른쪽 아래). 확대·축소 묶음은 웹에서만 보인다 (CSS)
+function MapControls({ onZoomIn, onZoomOut, onRecenter }) {
+    return (
+        <div className={styles.controls}>
+            <div className={`${styles.controlGroup} ${styles.zoomGroup}`} role="group" aria-label="지도 확대·축소">
+                <button type="button" className={styles.controlButton} aria-label="지도 확대" onClick={onZoomIn}>
+                    <PlusIcon size={20} />
+                </button>
+                <button type="button" className={styles.controlButton} aria-label="지도 축소" onClick={onZoomOut}>
+                    <MinusIcon size={20} />
+                </button>
+            </div>
+            <div className={styles.controlGroup}>
+                <button type="button" className={styles.controlButton} aria-label="기준 위치로 이동" onClick={onRecenter}>
+                    <PinIcon size={20} />
+                </button>
+            </div>
         </div>
     );
 }
