@@ -16,7 +16,7 @@ import styles from './page.module.css';
  *   A안 "N권 다 빌리기" — 반경 안에서 대출 가능한 책을 다 빌리는 방문 순서 (최대 3곳)
  *   B안 "한 곳만 가기"  — 대출 가능한 책이 가장 많은 한 곳. A안이 1곳이면 같은 말이라 숨김
  *   못 빌리는 책 한 줄 — 펼치면 책마다 "대출중" / "근처에 없어요"
- *   Primary "지도 앱으로 길찾기" — 고른 안의 첫 도서관으로
+ *   Primary "지도 앱으로 길찾기" — 기준 위치에서 고른 안의 도서관들을 순서대로
  * 안이 둘이면 카드를 눌러 고르고(PlanCard), 하나뿐이면 선택된 모양의 일반 카드.
  *
  * TODO: 도서관당 대출 한도(기본 14권) 반영 — 백엔드 동선 계산에서 (CLAUDE.md)
@@ -60,9 +60,10 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
     const single = route?.stops.length === 1 ? null : data.bestSingleLibrary;
     const choosable = Boolean(route && single);
 
-    const destinations = {
-        all: route ? toDestination(route.stops[0]) : null,
-        single: single ? toDestination(single) : null,
+    // 길찾기에 넘길 도서관 좌표 (방문 순서대로)
+    const directionStops = {
+        all: route ? route.stops.map(toPoint) : null,
+        single: single ? [toPoint(single)] : null,
     };
 
     return (
@@ -110,13 +111,13 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
                 </MissingBooks>
             )}
 
-            <RouteDirections destinations={destinations} />
+            <RouteDirections origin={toPoint(base)} stops={directionStops} />
         </div>
     );
 }
 
-function toDestination({ libName, latitude, longitude }) {
-    return { name: libName, latitude, longitude };
+function toPoint({ latitude, longitude }) {
+    return { latitude, longitude };
 }
 
 function Card({ value, choosable, children }) {
