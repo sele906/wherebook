@@ -179,6 +179,29 @@
     color: var(--brand);
 }
 
+/* ---- 목록 아래 "더 보기" (패널·바텀시트) ---- */
+
+.more {
+    margin-top: var(--space-4);
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+}
+
+.moreText {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* 폭을 꽉 채워서 "불러오는 중…"으로 글자가 바뀌어도 버튼 크기가 그대로 */
+.moreLink {
+    justify-content: center;
+}
+
 /* ---- 보기 방식 토글 [지도 | 목록] (모바일·태블릿) ---- */
 
 .viewToggle {

@@ -15,7 +15,8 @@ import styles from './page.module.css';
  * 웹에서만. 모바일은 연결하지 않는다 (NearbyView 설명). 터치로 닿은 건 선택으로 치지 않는다 (스크롤·시트 펼치기 중 닿은 행)
  * 행 모양은 LibraryRow 그대로, 오른쪽은 화살표 (행 전체가 도서관 상세 링크). 서버에서도 렌더링돼서 HTML에 목록이 들어 있다.
  */
-export default function LibraryList({ libraries, withAddress = false }) {
+// anchorIndex·anchorId: "더 보기"로 새로 나온 첫 행에 붙일 id (MoreLink의 #앵커). 패널·시트가 서로 다른 id를 쓴다
+export default function LibraryList({ libraries, withAddress = false, anchorIndex, anchorId }) {
     const { selected: sharedSelected, setSelected } = useNearbySelection();
     const isWide = useIsWide();
     const selected = isWide ? sharedSelected : null;
@@ -34,9 +35,10 @@ export default function LibraryList({ libraries, withAddress = false }) {
 
     return (
         <ul ref={listRef} className={styles.list}>
-            {libraries.map((lib) => (
+            {libraries.map((lib, i) => (
                 <LibraryRow
                     key={lib.libCode}
+                    id={i === anchorIndex ? anchorId : undefined}
                     library={lib}
                     detail={withAddress ? lib.address : undefined}
                     badge={

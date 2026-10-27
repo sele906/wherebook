@@ -2,7 +2,7 @@ import { cache, Suspense } from 'react';
 import Link from 'next/link';
 
 import { ApiError, searchLibraries, searchLibraryPins } from '@/api';
-import Pager, { readPage } from '@/components/Pager';
+import { readPage } from '@/components/Pager';
 import { PendingForm, PendingLink, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
 import LibraryMapSkeleton from '@/components/map/LibraryMapSkeleton';
@@ -17,6 +17,7 @@ import {
 } from '@/lib/location';
 
 import LibraryList from './LibraryList';
+import MoreLink from './MoreLink';
 import NearbyView, { MapPane, MapSheet } from './NearbyView';
 import ResultsSkeleton from './ResultsSkeleton';
 import TitleRow from './TitleRow';
@@ -25,6 +26,8 @@ import styles from './page.module.css';
 /*
  * 내 주변 도서관 목록 — /libraries?q=도서관이름&r=3&page=2
  * 기준 위치에서 반경 안의 도서관을 거리순으로. 검색어도 반경 안에서만 찾는다.
+ * page=N은 "1~N페이지까지 보기" — 목록 아래 "더 보기"가 N+1로 가는 링크 (웹·모바일 같음).
+ *   서버가 지금까지 본 도서관을 다 그려서 HTML에 남고 JS 없이도 동작한다 (무한 스크롤 대신).
  * 보는 사람 위치에 따라 내용이 바뀌는 화면이라 noindex (링크는 따라가게 follow).
  *
  * 기준 위치는 쿠키(getBase). 화면 제목 "[핀] 위치 이름 ▾"이 기준을 글자로 보여주고, 누르면 바꾼다.
@@ -41,6 +44,10 @@ import styles from './page.module.css';
  */
 
 const PAGE_SIZE = 20;
+// 백엔드가 한 번에 주는 최대 수. "더 보기"로 늘어난 목록은 이 단위로 나눠 동시에 받는다
+const CHUNK_SIZE = 50;
+// 주소를 바꿔 끝없이 불러오지 않게 (500곳 = 요청 10번)
+const MAX_PAGES = 25;
 const numberFormat = new Intl.NumberFormat('ko-KR');
 
 export const metadata = {
@@ -63,18 +70,28 @@ function librariesHref({ q, radiusKm, page }) {
     return `/libraries${query ? `?${query}` : ''}`;
 }
 
-// 목록(Results)과 지도(MapSection)가 같은 응답을 쓰도록 한 요청 안에서 한 번만 부른다 (React cache).
-// 실패하면 null
-const loadLibraries = cache(async (latitude, longitude, q, radiusKm, page) => {
+// 1~pages페이지 목록 (가까운 순 pages × 20곳). 패널(Results)과 바텀시트(MapSection)가 같이 쓰도록
+// 한 요청 안에서 한 번만 부른다 (React cache). 실패하면 null
+const loadLibraries = cache(async (latitude, longitude, q, radiusKm, pages) => {
+    const wanted = pages * PAGE_SIZE;
+    const size = Math.min(wanted, CHUNK_SIZE);
     try {
-        return await searchLibraries({
-            keyword: q || undefined,
-            latitude,
-            longitude,
-            radius: radiusKm * 1000,
-            page,
-            size: PAGE_SIZE,
-        });
+        const chunks = await Promise.all(
+            Array.from({ length: Math.ceil(wanted / size) }, (_, i) =>
+                searchLibraries({
+                    keyword: q || undefined,
+                    latitude,
+                    longitude,
+                    radius: radiusKm * 1000,
+                    page: i + 1,
+                    size,
+                })
+            )
+        );
+        return {
+            libraries: chunks.flatMap((chunk) => chunk.libraries ?? []).slice(0, wanted),
+            totalCount: chunks[0].totalCount ?? 0,
+        };
     } catch (e) {
         if (e instanceof ApiError) return null;
         throw e;
@@ -100,9 +117,11 @@ export default async function LibrariesPage({ searchParams }) {
     const params = await searchParams;
     const q = readQuery(params.q);
     const radiusKm = readRadiusKm(params.r);
-    const page = readPage(params.page);
+    const page = Math.min(readPage(params.page), MAX_PAGES);
     const base = await getBase();
-    const resultsKey = `${q}:${radiusKm}:${page}:${baseKey(base)}`;
+    // page는 넣지 않는다: "더 보기"로 page만 바뀔 때 목록·시트가 스켈레톤으로 바뀌지 않고 그대로 있다가 늘어나게
+    // (시트를 펼친 상태도 유지). 검색어·반경·기준 위치가 바뀌면 새로 그린다
+    const resultsKey = `${q}:${radiusKm}:${baseKey(base)}`;
 
     return (
         <NearbyView className={styles.main}>
@@ -205,15 +224,14 @@ async function MapSection({ base, q, radiusKm, page }) {
         title = `${formatKm(radiusKm)} 안에 도서관이 없어요`;
     } else {
         title = `도서관 ${numberFormat.format(totalCount)}곳`;
-        // 웹 목록과 같은 페이지 넘기기. 클라이언트 이동이라 지도 보기는 유지된다 (지도는 페이지와 상관없이 반경 안 전부)
+        // 패널과 같은 "더 보기". 클라이언트 이동이라 지도 보기·펼친 시트가 유지된다 (지도는 페이지와 상관없이 반경 안 전부)
         body = (
             <>
-                <LibraryList libraries={libraries} />
-                <Pager
-                    page={page}
-                    totalPages={Math.max(1, Math.ceil(totalCount / PAGE_SIZE))}
-                    hrefFor={(p) => librariesHref({ q, radiusKm, page: p })}
-                    label="도서관 목록 페이지"
+                <LibraryList libraries={libraries} anchorIndex={(page - 1) * PAGE_SIZE} anchorId="sheet-more" />
+                <More
+                    shown={libraries.length}
+                    totalCount={totalCount}
+                    href={`${librariesHref({ q, radiusKm, page: page + 1 })}#sheet-more`}
                 />
             </>
         );
@@ -249,7 +267,6 @@ async function Results({ base, q, radiusKm, page }) {
 
     const libraries = data.libraries ?? [];
     const totalCount = data.totalCount ?? 0;
-    const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
     const widen =
         radiusKm < 10 ? (
             <Link href={librariesHref({ q, radiusKm: 10 })} className={styles.secondary}>
@@ -270,20 +287,6 @@ async function Results({ base, q, radiusKm, page }) {
         );
     }
 
-    // 있는 페이지보다 큰 page로 들어온 경우
-    if (libraries.length === 0) {
-        return (
-            <Notice
-                title="이 페이지에는 도서관이 없어요"
-                action={
-                    <Link href={librariesHref({ q, radiusKm })} className={styles.secondary}>
-                        첫 페이지로 가기
-                    </Link>
-                }
-            />
-        );
-    }
-
     return (
         <>
             {/* 기준 위치는 제목에 있으니 반경과 개수만. 숫자 자리가 있는 한 문장 */}
@@ -292,15 +295,32 @@ async function Results({ base, q, radiusKm, page }) {
                 <strong className={styles.count}>{numberFormat.format(totalCount)}</strong>곳
             </p>
 
-            <LibraryList libraries={libraries} withAddress />
+            <LibraryList
+                libraries={libraries}
+                withAddress
+                anchorIndex={(page - 1) * PAGE_SIZE}
+                anchorId="libraries-more"
+            />
 
-            <Pager
-                page={page}
-                totalPages={totalPages}
-                hrefFor={(p) => librariesHref({ q, radiusKm, page: p })}
-                label="도서관 목록 페이지"
+            <More
+                shown={libraries.length}
+                totalCount={totalCount}
+                href={`${librariesHref({ q, radiusKm, page: page + 1 })}#libraries-more`}
             />
         </>
+    );
+}
+
+// "N곳 중 M곳을 보고 있어요" + 더 보기. 다 봤으면(또는 더 불러올 수 없으면) 그리지 않는다
+function More({ shown, totalCount, href }) {
+    if (shown >= totalCount || shown >= MAX_PAGES * PAGE_SIZE) return null;
+    return (
+        <div className={styles.more}>
+            <p className={styles.moreText}>
+                {`${numberFormat.format(totalCount)}곳 중 ${numberFormat.format(shown)}곳을 보고 있어요`}
+            </p>
+            <MoreLink href={href} className={`${styles.secondary} ${styles.moreLink}`} />
+        </div>
     );
 }
 
