@@ -77,6 +77,45 @@
     background: var(--map-logo-bg);
 }
 
+/* "이 지역에서 다시 검색" — 안내(.partialNote)와 같은 위쪽 가운데 자리. 지도 위에 뜬 요소라 --bg + --shadow-float,
+   행동이라 글자는 --brand. 누르는 영역 44px, 고정 폭 없이 글자만큼 (영어로 길어져도 양옆 여백 안에서) */
+.searchHere {
+    position: absolute;
+    top: calc(var(--map-inset-top, 0px) + var(--space-3));
+    left: var(--space-4);
+    right: var(--space-4);
+    z-index: 1;
+    width: fit-content;
+    max-width: calc(100% - 2 * var(--space-4));
+    min-height: var(--touch);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+    border: 0;
+
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--brand);
+    font: inherit;
+    font-size: var(--text-md);
+    font-weight: 600;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+@media (hover: hover) {
+    .searchHere:hover {
+        background: var(--surface);
+    }
+}
+
+.searchHere:active {
+    background: var(--brand-subtle);
+}
+
 /* ---- 지도 위 버튼 (오른쪽 아래) ----
    지도 위에 뜬 요소: --bg 바탕 + --shadow-float (DESIGN.md 지도). 버튼은 44px, 묶음 안은 구분선.
    모바일은 바텀시트(--map-inset-bottom) 위로. 확대·축소는 웹에서만 (모바일은 손가락으로) */

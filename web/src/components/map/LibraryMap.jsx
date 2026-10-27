@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Circle, CustomOverlayMap, Map, MarkerClusterer, useKakaoLoader } from 'react-kakao-maps-sdk';
 
-import { LibraryIcon, MinusIcon, PinIcon, PlusIcon } from '@/components/icons';
+import { LibraryIcon, MinusIcon, PinIcon, PlusIcon, SearchIcon } from '@/components/icons';
 
 import LibraryMapSkeleton from './LibraryMapSkeleton';
 import styles from './LibraryMap.module.css';
@@ -33,7 +33,9 @@ import styles from './LibraryMap.module.css';
  * 지도 위 버튼(오른쪽 아래, 모바일은 --map-inset-bottom만큼 시트 위로): [확대 / 축소](웹만 — 모바일은 손가락으로)
  * [기준 위치로] — 처음처럼 반경 원에 다시 맞춘다. 아이콘은 화면 제목의 기준 위치와 같은 핀 (GPS "내 위치"처럼 안 보이게).
  *
- * TODO: 지도를 움직이면 "이 지역에서 다시 검색" — 기준 위치(지도 중심)를 바꾸는 흐름이 필요
+ * "이 지역에서 다시 검색": 쓰는 화면이 onSearchHere를 줄 때만 (내 주변). 사용자가 지도를 끌면 위쪽 가운데에 뜨고
+ * (자동으로 다시 검색하지 않음 — DESIGN.md), 누르면 지도 중심 좌표를 넘긴다. [기준 위치로]를 누르면 숨긴다.
+ * 동선 화면은 주지 않는다 — 기준 위치를 바꾸면 동선을 다시 계산해서 외부 API를 많이 부른다.
  */
 
 // 반경별 처음 확대 단계 (숫자가 작을수록 확대). 그린 뒤 바로 원에 맞춰 다시 정하므로 첫 화면용 짐작값
@@ -95,6 +97,7 @@ export default function LibraryMap({
     active = true,
     selected: selectedProp,
     onSelect,
+    onSearchHere,
 }) {
     const [loading, error] = useKakaoLoader({
         appkey: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
@@ -106,6 +109,10 @@ export default function LibraryMap({
     const selected = selectedProp !== undefined ? selectedProp : ownSelected;
     const setSelected = onSelect ?? setOwnSelected;
     const brand = useBrandColor();
+    // 사용자가 지도를 끌어서 기준 위치에서 벗어났는지 ("이 지역에서 다시 검색" 버튼)
+    const [moved, setMoved] = useState(false);
+    // 기준 위치를 바꾸지 못함 (저장이 막힌 브라우저 등) → 버튼이 다시 시도로
+    const [searchFailed, setSearchFailed] = useState(false);
 
     // 좌표가 없는 도서관은 핀을 그릴 수 없어서 뺀다 (목록에는 그대로 있음)
     const located = libraries.filter((lib) => lib.latitude != null && lib.longitude != null);
@@ -211,6 +218,8 @@ export default function LibraryMap({
                 className={styles.map}
                 onCreate={setMap}
                 onClick={() => setSelected(null)}
+                // 손으로 끌었을 때만 (원에 맞추기·목록 선택처럼 코드로 옮길 때는 안 뜸)
+                onDragEnd={() => setMoved(true)}
             >
                 {brand && (
                     <Circle
@@ -246,10 +255,34 @@ export default function LibraryMap({
             <MapControls
                 onZoomIn={() => map?.setLevel(map.getLevel() - 1, { animate: !prefersReducedMotion() })}
                 onZoomOut={() => map?.setLevel(map.getLevel() + 1, { animate: !prefersReducedMotion() })}
-                onRecenter={() => fitRef.current?.()}
+                onRecenter={() => {
+                    setMoved(false);
+                    fitRef.current?.();
+                }}
             />
-            {partial && (
-                <p className={styles.partialNote}>{`가까운 ${countFormat.format(located.length)}곳만 지도에 보여요`}</p>
+            {/* 위쪽 가운데 한 자리: 끌었으면 다시 검색 버튼, 아니면 (일부만 보일 때) 안내 */}
+            {onSearchHere && moved ? (
+                <button
+                    type="button"
+                    className={styles.searchHere}
+                    onClick={() => {
+                        const point = map.getCenter();
+                        try {
+                            onSearchHere({ latitude: point.getLat(), longitude: point.getLng() });
+                            setMoved(false);
+                            setSearchFailed(false);
+                        } catch {
+                            setSearchFailed(true);
+                        }
+                    }}
+                >
+                    <SearchIcon size={18} />
+                    {searchFailed ? '위치를 바꾸지 못했어요 · 다시 시도' : '이 지역에서 다시 검색'}
+                </button>
+            ) : (
+                partial && (
+                    <p className={styles.partialNote}>{`가까운 ${countFormat.format(located.length)}곳만 지도에 보여요`}</p>
+                )
             )}
         </div>
     );

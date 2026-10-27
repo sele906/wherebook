@@ -3,6 +3,7 @@
 import { createContext, use, useState, useSyncExternalStore } from 'react';
 
 import LibraryMapLoader from '@/components/map/LibraryMapLoader';
+import { selectTemp } from '@/lib/locationStore';
 
 import styles from './page.module.css';
 
@@ -114,6 +115,17 @@ export function MapSheet({ title, summary, children }) {
     );
 }
 
+// "이 지역에서 다시 검색"으로 고른 지도 중심의 이름 (DESIGN.md의 기준 위치 종류 이름 그대로, 모바일 제목에 들어가게 짧게).
+// 좌표 → 동네 이름(역지오코딩)은 저장해도 되는 API가 없어서 일반 이름
+// (카카오는 결과 저장 불가, 브이월드는 승낙 필요, 도로명주소 API는 좌표를 못 받음)
+const MAP_CENTER_LABEL = '지도 중심';
+
+// 지도 중심을 이번만 쓰는 기준 위치로. LocationProvider가 쿠키를 맞추고 화면을 다시 불러온다.
+// 저장이 막히면 던진다 → 지도 버튼이 "다시 시도"로
+function searchHere({ latitude, longitude }) {
+    selectTemp({ name: MAP_CENTER_LABEL, latitude, longitude });
+}
+
 // 지도 칸 안의 실제 지도. 보이는 동안만 띄워서, 모바일에서 목록만 보는 사람은 지도 SDK를 받지 않는다
 export function MapPane({ base, libraries, radiusKm, totalCount }) {
     const { view, selected, setSelected } = use(NearbyViewContext);
@@ -136,6 +148,7 @@ export function MapPane({ base, libraries, radiusKm, totalCount }) {
             // 모바일은 넘기지 않아서 지도 안에서만 고른다
             selected={isWide ? selected : undefined}
             onSelect={isWide ? setSelected : undefined}
+            onSearchHere={searchHere}
         />
     );
 }
