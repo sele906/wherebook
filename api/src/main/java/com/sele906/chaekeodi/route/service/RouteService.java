@@ -109,11 +109,6 @@ public class RouteService {
             // 소장 도서관 조회 결과 가져오기
             List<String> holdingLibraryCodes = holdingsF.get(isbn).join();
 
-            List<String> matchedCodes = holdingLibraryCodes.stream()
-                    .filter(candidateLibraryCodes::contains)
-                    .distinct()
-                    .toList();
-
             // 중복 도서관 코드 제거
             for (String libCode : new LinkedHashSet<>(holdingLibraryCodes)) {
 
