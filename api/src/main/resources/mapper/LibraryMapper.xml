@@ -139,6 +139,40 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="searchLibrariesInMap" resultType="LibraryMapSearchItem">
+        SELECT
+        lib_code,
+        name,
+        address,
+        latitude,
+        longitude,
+        dtl_region_code,
+        <choose>
+            <when test="latitude != null and longitude != null">
+                ST_Distance(
+                location,
+                ST_SetSRID(
+                ST_MakePoint(#{longitude}, #{latitude}),
+                4326
+                )::geography
+                ) AS distance
+            </when>
+            <otherwise>
+                NULL AS distance
+            </otherwise>
+        </choose>
+
+        FROM library
+
+        <include refid="searchWhere"/>
+
+        ORDER BY
+        distance,
+        name
+
+        LIMIT 500
+    </select>
+
     <select id="countLibraries" resultType="int">
         SELECT COUNT(*)
         FROM library

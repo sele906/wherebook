@@ -33,6 +33,15 @@ public class LibraryController {
         return ResponseEntity.ok(response);
     }
 
+    //지도 내 도서관 검색
+    @GetMapping("/pins")
+    public ResponseEntity<LibraryMapSearchResponse> searchLibrariesInMap(
+            @ModelAttribute LibrarySearchRequest request
+    ) {
+        LibraryMapSearchResponse response = libraryService.searchLibrariesInMap(request);
+        return ResponseEntity.ok(response);
+    }
+
     //도서관 상세정보
     @GetMapping("/{libCode}")
     public ResponseEntity<Library> getLibrary(

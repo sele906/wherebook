@@ -41,6 +41,11 @@ public class LibraryService {
         return new LibrarySearchResponse(list, req.getPage(), req.getSize(), total);
     }
 
+    public LibraryMapSearchResponse searchLibrariesInMap(LibrarySearchRequest req) {
+        List<LibraryMapSearchItem> list = libraryMapper.searchLibrariesInMap(req);
+        return new LibraryMapSearchResponse(list, list.size());
+    }
+
     public Library getLibrary(String libCode) {
         Library library = libraryMapper.getLibraryByLibCode(libCode);
 

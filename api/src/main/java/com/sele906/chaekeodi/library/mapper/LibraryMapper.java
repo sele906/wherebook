@@ -11,6 +11,7 @@ import java.util.List;
 public interface LibraryMapper {
     int upsertLibrary(Library library);
     List<LibrarySearchItem> searchLibraries(LibrarySearchRequest request);
+    List<LibraryMapSearchItem> searchLibrariesInMap(LibrarySearchRequest request);
     int countLibraries(LibrarySearchRequest request);
     Library getLibraryByLibCode(String libCode);
     List<LibrarySearchItem> searchLibByDistance(LibrarySearchByBookRequest request);
