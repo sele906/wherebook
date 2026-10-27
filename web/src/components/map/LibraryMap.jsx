@@ -24,8 +24,8 @@ import styles from './LibraryMap.module.css';
  * 반경 원: 고른 반경(radiusKm). 카카오 원은 색을 JS 값(#xxxxxx)으로 받아서 --brand를 읽어 넘기고, 테마가 바뀌면 다시 읽는다.
  * 원이 다 보이게 확대 단계를 맞춘다 (화면 크기마다 다름). 지도를 덮는 요소(모바일 위 카드·바텀시트)만큼은 빼고 —
  * 그 높이는 쓰는 화면이 --map-inset-top / --map-inset-bottom으로 알려주고, 여기선 .fitArea로 px를 잰다.
- * 반경 안 도서관이 받은 목록보다 많으면(totalCount, 내 주변 10km 등) 원 대신 지금 핀들에 맞추고
- * "목록에 있는 N곳만 지도에 보여요"를 띄운다 — 큰 원 가운데 핀만 몰려 보이지 않게.
+ * 반경 안 도서관이 받은 핀보다 많으면(totalCount — 핀 API가 500곳에서 자르거나, 핀 API가 실패해 목록 한 페이지로 그릴 때)
+ * 원 대신 지금 핀들에 맞추고 "가까운 N곳만 지도에 보여요"를 띄운다 — 큰 원 가운데 핀만 몰려 보이지 않게.
  *
  * 겹치는 핀은 묶음(클러스터)으로: 핀과 같은 브랜드 원에 아이콘 대신 개수. 누르면 그 자리로 확대 (카카오 기본).
  * 고른 핀은 묶지 않는다 — 목록에서 고른 핀이 묶음 안에 숨지 않게.
@@ -236,7 +236,7 @@ export default function LibraryMap({
                 {selectedLib && <LibraryPinOverlay library={selectedLib} selected onSelect={setSelected} />}
             </Map>
             {partial && (
-                <p className={styles.partialNote}>{`목록에 있는 ${countFormat.format(located.length)}곳만 지도에 보여요`}</p>
+                <p className={styles.partialNote}>{`가까운 ${countFormat.format(located.length)}곳만 지도에 보여요`}</p>
             )}
         </div>
     );

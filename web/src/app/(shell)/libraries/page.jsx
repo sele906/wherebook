@@ -1,7 +1,7 @@
 import { cache, Suspense } from 'react';
 import Link from 'next/link';
 
-import { ApiError, searchLibraries } from '@/api';
+import { ApiError, searchLibraries, searchLibraryPins } from '@/api';
 import Pager, { readPage } from '@/components/Pager';
 import { PendingForm, PendingLink, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
 import SearchField from '@/components/SearchField';
@@ -29,7 +29,8 @@ import styles from './page.module.css';
  *
  * 기준 위치는 쿠키(getBase). 화면 제목 "[핀] 위치 이름 ▾"이 기준을 글자로 보여주고, 누르면 바꾼다.
  * 목록 / 지도: 모바일은 제목 옆 토글로 오가고, 웹은 왼쪽 패널(목록) + 오른쪽 지도 (NearbyView).
- *   지도와 목록은 같은 API 응답을 공유 (loadLibraries를 React cache로 한 번만 부름).
+ *   목록은 페이지별(loadLibraries, 20곳), 지도는 반경 안 전부(loadPins, 핀 API). 둘 다 페이지를 그릴 때 한 번만 부르고
+ *   (React cache) 목록 ↔ 지도를 오갈 때 다시 부르지 않는다.
  *   고른 도서관도 공유: 목록 행에 올리거나 포커스하면 핀이 커지고, 핀을 누르면 행이 강조된다 (LibraryList).
  * TODO: 지도 위 요소 — 반경 원, 대출 상태 핀, "이 지역에서 다시 검색" (DESIGN.md 지도)
  * TODO: 운영 상태("운영 중 · 22시까지" / "오늘 휴관") — 운영시간·휴관일 데이터 정제 필요.
@@ -73,6 +74,21 @@ const loadLibraries = cache(async (latitude, longitude, q, radiusKm, page) => {
             radius: radiusKm * 1000,
             page,
             size: PAGE_SIZE,
+        });
+    } catch (e) {
+        if (e instanceof ApiError) return null;
+        throw e;
+    }
+});
+
+// 지도 핀: 같은 조건에서 페이지 없이 반경 안 전부 (가까운 순 최대 500곳). 목록 페이지와 상관없음. 실패하면 null
+const loadPins = cache(async (latitude, longitude, q, radiusKm) => {
+    try {
+        return await searchLibraryPins({
+            keyword: q || undefined,
+            latitude,
+            longitude,
+            radius: radiusKm * 1000,
         });
     } catch (e) {
         if (e instanceof ApiError) return null;
@@ -156,11 +172,23 @@ function RadiusLinks({ q, radiusKm, className }) {
     );
 }
 
-// 지도 + 모바일 바텀시트. 목록(Results)과 같은 응답 (loadLibraries cache)
+// 지도 + 모바일 바텀시트. 시트 목록은 Results와 같은 응답(loadLibraries cache), 지도는 핀 API(loadPins)
 async function MapSection({ base, q, radiusKm, page }) {
-    const data = await loadLibraries(base.latitude, base.longitude, q, radiusKm, page);
+    const [data, pinData] = await Promise.all([
+        loadLibraries(base.latitude, base.longitude, q, radiusKm, page),
+        loadPins(base.latitude, base.longitude, q, radiusKm),
+    ]);
     const libraries = data?.libraries ?? [];
     const totalCount = data?.totalCount ?? 0;
+    // 지도: 핀 API(반경 안 전부). 실패하면 목록의 이 페이지 도서관으로.
+    // 지도는 클라이언트로 넘어가서 HTML에 실리므로 핀에 필요한 값만
+    const pins = (pinData?.libraries ?? libraries).map(({ libCode, name, latitude, longitude }) => ({
+        libCode,
+        name,
+        latitude,
+        longitude,
+    }));
+    const pinTotal = pinData ? pinData.totalCount : totalCount;
 
     let title;
     let body = null;
@@ -177,7 +205,7 @@ async function MapSection({ base, q, radiusKm, page }) {
         title = `${formatKm(radiusKm)} 안에 도서관이 없어요`;
     } else {
         title = `도서관 ${numberFormat.format(totalCount)}곳`;
-        // 웹 목록과 같은 페이지 넘기기. 클라이언트 이동이라 지도 보기는 유지되고, 지도도 그 페이지 핀으로 바뀐다
+        // 웹 목록과 같은 페이지 넘기기. 클라이언트 이동이라 지도 보기는 유지된다 (지도는 페이지와 상관없이 반경 안 전부)
         body = (
             <>
                 <LibraryList libraries={libraries} />
@@ -194,7 +222,7 @@ async function MapSection({ base, q, radiusKm, page }) {
     return (
         <>
             {/* 불러오지 못했으면 기준 위치만 있는 지도 */}
-            <MapPane base={base} libraries={libraries} radiusKm={radiusKm} totalCount={totalCount} />
+            <MapPane base={base} libraries={pins} radiusKm={radiusKm} totalCount={pinTotal} />
             <MapSheet title={title} summary={describeBase(base, radiusKm)}>
                 {body}
             </MapSheet>
