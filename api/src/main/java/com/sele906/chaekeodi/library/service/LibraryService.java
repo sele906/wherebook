@@ -43,7 +43,8 @@ public class LibraryService {
 
     public LibraryMapSearchResponse searchLibrariesInMap(LibrarySearchRequest req) {
         List<LibraryMapSearchItem> list = libraryMapper.searchLibrariesInMap(req);
-        return new LibraryMapSearchResponse(list, list.size());
+        int total = libraryMapper.countLibraries(req);
+        return new LibraryMapSearchResponse(list, total);
     }
 
     public Library getLibrary(String libCode) {
