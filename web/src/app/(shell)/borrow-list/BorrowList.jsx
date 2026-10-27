@@ -7,6 +7,7 @@ import { removeFromBorrowList } from '@/api';
 import { useBorrowCount } from '@/components/BorrowCountProvider';
 import { CloseIcon, RouteIcon, SearchIcon } from '@/components/icons';
 import { borrowListErrorMessage } from '@/lib/borrowListMessages';
+import { DEFAULT_ROUTE_RADIUS_KM } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
 import styles from './page.module.css';
@@ -91,9 +92,10 @@ export default function BorrowList({ initialItems, baseBar }) {
         remove(selectedItems);
     }
 
-    // 동선 화면 주소: 고른 책의 ISBN13을 쉼표로 (책은 항상 ISBN으로 넘긴다)
+    // 동선 화면 주소: 고른 책의 ISBN13을 쉼표로 (책은 항상 ISBN으로 넘긴다), 반경은 기본값도 적는다
     const routeHref = `/borrow-list/route?${new URLSearchParams({
         isbn: selectedItems.map((item) => item.isbn13).join(','),
+        r: String(DEFAULT_ROUTE_RADIUS_KM),
     })}`;
 
     // 고른 책이 없으면 이동하지 않고 이유를 안내 (비활성 대신 누르면 안내 — DESIGN.md)

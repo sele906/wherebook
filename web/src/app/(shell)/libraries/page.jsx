@@ -55,7 +55,8 @@ function readQuery(value) {
 function librariesHref({ q, radiusKm, page }) {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
-    if (radiusKm && radiusKm !== DEFAULT_RADIUS_KM) params.set('r', String(radiusKm));
+    // 반경은 기본값(3km)이어도 항상 주소에 적는다
+    params.set('r', String(radiusKm || DEFAULT_RADIUS_KM));
     if (page > 1) params.set('page', String(page));
     const query = params.toString();
     return `/libraries${query ? `?${query}` : ''}`;
@@ -107,7 +108,7 @@ export default async function LibrariesPage({ searchParams }) {
                             submitOnClear
                         />
                         {/* 검색해도 고른 반경은 유지 */}
-                        {radiusKm !== DEFAULT_RADIUS_KM && <input type="hidden" name="r" value={radiusKm} />}
+                        <input type="hidden" name="r" value={radiusKm} />
                     </PendingForm>
 
                     <RadiusLinks q={q} radiusKm={radiusKm} className={styles.radius} />

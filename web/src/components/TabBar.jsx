@@ -1,3 +1,5 @@
+import { DEFAULT_RADIUS_KM } from '@/lib/location';
+
 import { BorrowCountBadge } from './BorrowCountProvider';
 import NavLink from './NavLink';
 import { SearchIcon, BorrowListIcon, PinIcon } from './icons';
@@ -14,7 +16,7 @@ import styles from './TabBar.module.css';
 const TABS = [
     { href: '/', label: '검색', Icon: SearchIcon, match: ['/', '/search'] },
     { href: '/borrow-list', label: '빌릴 책', Icon: BorrowListIcon, match: ['/borrow-list'], badge: true },
-    { href: '/libraries', label: '내 주변', Icon: PinIcon, match: ['/libraries'] },
+    { href: `/libraries?r=${DEFAULT_RADIUS_KM}`, label: '내 주변', Icon: PinIcon, match: ['/libraries'] },
 ];
 
 export default function TabBar() {

@@ -241,7 +241,7 @@ async function NearbyLibraries({ base }) {
             <NearbyHead
                 base={base}
                 more={
-                    <Link href="/libraries" className={styles.moreLink}>
+                    <Link href={`/libraries?r=${DEFAULT_RADIUS_KM}`} className={styles.moreLink}>
                         {`${numberFormat.format(totalCount)}곳 모두 보기`}
                     </Link>
                 }

@@ -24,7 +24,7 @@ import { PlanSelectionProvider } from './PlanSelection';
 import styles from './page.module.css';
 
 /*
- * 동선 추천 — /borrow-list/route?isbn=978...,978...&r=3
+ * 동선 추천 — /borrow-list/route?isbn=978...,978...&r=1
  * 빌릴 책에서 고른 책(isbn)을 어느 도서관에서, 어떤 순서로 빌릴지 보여주는 곳 (목업 "동선 추천").
  * 깊은 화면이라 (bare) 그룹: 탭 없이 뒤로가기.
  *
@@ -47,8 +47,8 @@ function readIsbns(value) {
 }
 
 function routeHref({ isbns, radiusKm }) {
-    const params = new URLSearchParams({ isbn: isbns.join(',') });
-    if (radiusKm !== DEFAULT_ROUTE_RADIUS_KM) params.set('r', String(radiusKm));
+    // 반경은 기본값(1km)이어도 항상 주소에 적는다
+    const params = new URLSearchParams({ isbn: isbns.join(','), r: String(radiusKm) });
     return `/borrow-list/route?${params}`;
 }
 

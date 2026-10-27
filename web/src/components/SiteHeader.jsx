@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { DEFAULT_RADIUS_KM } from '@/lib/location';
+
 import { BorrowCountBadge } from './BorrowCountProvider';
 import BrandLogo from './BrandLogo';
 import NavLink from './NavLink';
@@ -21,7 +23,8 @@ export default function SiteHeader() {
             </Link>
 
             <nav className={styles.nav} aria-label="주 메뉴">
-                <NavLink href="/libraries" className={styles.navLink}>
+                {/* href에 반경이 붙어서, 활성 판단은 경로(match)로 */}
+                <NavLink href={`/libraries?r=${DEFAULT_RADIUS_KM}`} match={['/libraries']} className={styles.navLink}>
                     <PinIcon size={20} />
                     <span className={styles.navLabel}>내 주변</span>
                 </NavLink>
