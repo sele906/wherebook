@@ -177,14 +177,24 @@ async function MapSection({ base, q, radiusKm, page }) {
         title = `${formatKm(radiusKm)} 안에 도서관이 없어요`;
     } else {
         title = `도서관 ${numberFormat.format(totalCount)}곳`;
-        body = <LibraryList libraries={libraries} />;
+        // 웹 목록과 같은 페이지 넘기기. 클라이언트 이동이라 지도 보기는 유지되고, 지도도 그 페이지 핀으로 바뀐다
+        body = (
+            <>
+                <LibraryList libraries={libraries} />
+                <Pager
+                    page={page}
+                    totalPages={Math.max(1, Math.ceil(totalCount / PAGE_SIZE))}
+                    hrefFor={(p) => librariesHref({ q, radiusKm, page: p })}
+                    label="도서관 목록 페이지"
+                />
+            </>
+        );
     }
 
     return (
         <>
             {/* 불러오지 못했으면 기준 위치만 있는 지도 */}
             <MapPane base={base} libraries={libraries} radiusKm={radiusKm} totalCount={totalCount} />
-            {/* TODO: 20곳 넘으면 시트에도 다음 페이지 — 지금은 목록 보기에서 페이지를 넘김 */}
             <MapSheet title={title} summary={describeBase(base, radiusKm)}>
                 {body}
             </MapSheet>
