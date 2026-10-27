@@ -100,6 +100,9 @@ body {
   --content-max: 1120px;     /* 웹 본문 최대 폭 */
   --list-max: 48rem;         /* 목록 화면(검색 결과 등) 본문 최대 폭 */
   --panel-w: 420px;          /* 웹 지도 왼쪽 패널 */
+  --pin-size: 32px;          /* 지도 도서관 핀 (누르는 영역은 --touch) */
+  --pin-size-selected: 40px; /* 고른 핀 */
+  --base-dot-size: 16px;     /* 지도 기준 위치 점 */
 
   color-scheme: light;
 }

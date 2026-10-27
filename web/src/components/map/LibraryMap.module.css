@@ -10,9 +10,44 @@
     background: var(--surface);
 }
 
+/* z-index 0으로 쌓임 맥락을 만들어 카카오맵 안쪽 z-index가 지도 위 안내(.partialNote)를 넘지 않게 */
 .map {
     position: absolute;
     inset: 0;
+    z-index: 0;
+}
+
+/* "목록에 있는 N곳만 지도에 보여요" — 지도 위에 뜬 글자. 덮는 요소(모바일 위 카드) 바로 아래 가운데.
+   누르는 것이 아니라 지도 끌기를 막지 않게 pointer-events: none. 영어로 길어지면 줄바꿈 */
+.partialNote {
+    position: absolute;
+    top: calc(var(--map-inset-top, 0px) + var(--space-3));
+    /* left: 50% + translate로 가운데를 잡으면 쓸 수 있는 폭이 절반이 되어 일찍 줄이 바뀐다 → 양옆 여백 + 글자 폭만큼 */
+    left: var(--space-4);
+    right: var(--space-4);
+    z-index: 1;
+    width: fit-content;
+    margin: 0 auto;
+    padding: var(--space-1) var(--space-3);
+
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--text-2);
+    font-size: var(--text-sm);
+    text-align: center;
+    pointer-events: none;
+}
+
+/* 반경 원을 맞춰 넣을 영역 (보이지 않음, 크기만 잰다 — LibraryMap). 지도를 덮는 요소와 여백을 뺀 안쪽 */
+.fitArea {
+    position: absolute;
+    top: calc(var(--map-inset-top, 0px) + var(--space-4));
+    bottom: calc(var(--map-inset-bottom, 0px) + var(--space-4));
+    left: var(--space-4);
+    right: var(--space-4);
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* 지도 바탕 이미지에만 필터 (globals.css --map-tile-filter). 핀·로고는 다른 주소라 안 걸린다.
@@ -40,6 +75,117 @@
 .map div:has(> a[href*='map.kakao.com']) {
     padding: 2px 4px;
     background: var(--map-logo-bg);
+}
+
+/* ---- 기준 위치 점 ----
+   도서관 핀(아이콘 원)과 헷갈리지 않게 작은 고리: 가운데 --bg, 두꺼운 --brand 테두리 */
+.baseDot {
+    display: block;
+    width: var(--base-dot-size);
+    height: var(--base-dot-size);
+    border: 4px solid var(--brand);
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+}
+
+/* ---- 도서관 핀 ----
+   상자 = 누르는 영역(44px). 보이는 원은 그 안 가운데 --pin-size(고르면 --pin-size-selected).
+   바깥 테두리(--bg)로 지도 바탕과 떨어뜨리고, 떠 있는 요소 그림자. 색은 --brand 채움 + --on-brand 아이콘 */
+.pin {
+    position: relative;
+    width: var(--touch);
+    height: var(--touch);
+}
+
+.pinButton {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: none;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pinMark {
+    width: var(--pin-size);
+    height: var(--pin-size);
+    border-radius: var(--radius-full);
+    background: var(--brand);
+    box-shadow: 0 0 0 2px var(--bg), var(--shadow-float);
+    color: var(--on-brand);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: width 150ms ease-out, height 150ms ease-out, background-color 150ms ease-out;
+}
+
+@media (hover: hover) {
+    .pinButton:hover .pinMark {
+        background: var(--brand-hover);
+    }
+}
+
+.pinButton:active .pinMark {
+    transform: scale(0.94);
+}
+
+.pin[data-selected] .pinMark {
+    width: var(--pin-size-selected);
+    height: var(--pin-size-selected);
+}
+
+/* 고른 핀 이름 → 도서관 상세. 이름이 길면 말줄임 (영어·긴 도서관 이름 대비, 고정 폭 없음) */
+.pinName {
+    position: absolute;
+    top: calc(100% + var(--space-1));
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    max-width: 14rem;
+    padding: var(--space-1) var(--space-3);
+
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* 말줄임은 안쪽 글자에만 — 이름표에 overflow: hidden을 걸면 아래 ::before(누르는 영역)가 잘린다 */
+.pinNameText {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 보이는 이름표는 얇아도 누르는 영역은 44px (DESIGN.md) */
+.pinName::before {
+    content: '';
+    position: absolute;
+    inset: calc((var(--touch) - 100%) / -2) 0;
+}
+
+@media (hover: hover) {
+    .pinName:hover {
+        color: var(--brand);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pinMark {
+        transition: none;
+    }
 }
 
 .skeleton {

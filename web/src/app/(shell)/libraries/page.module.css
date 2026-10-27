@@ -285,6 +285,8 @@
     --sheet-h: 14%;
     /* 카카오 로고가 접힌 시트에 가리지 않게 (LibraryMap). 둘 다 지도 칸 높이 기준 %라 기기 높이와 상관없이 시트 바로 위 */
     --map-inset-bottom: calc(var(--sheet-h) + var(--space-1));
+    /* 지도 위에 뜬 위치 카드 + 반경 바가 덮는 높이 (390·375px 폭에서 잰 132px). 반경 원을 그 아래에 맞춘다 (LibraryMap) */
+    --map-inset-top: 8.25rem;
 
     /* main을 꽉 채우되, 본문 폭(100%)과 화면 폭(100cqw, AppFrame) 차이만큼 양옆으로 늘려 화면 끝까지.
        모바일(본문 = 화면 - 좌우 여백)과 태블릿(본문 --list-max 가운데 정렬) 모두 성립 */
@@ -493,6 +495,7 @@
         min-height: 0;
         margin: 0;
         --map-inset-bottom: 0px;
+        --map-inset-top: 0px;
 
         display: flex;
     }

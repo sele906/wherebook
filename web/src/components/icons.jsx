@@ -22,6 +22,7 @@ import {
     LuChevronDown,
     LuPencil,
     LuLandmark,
+    LuLibrary,
     LuRoute,
     LuTriangleAlert,
     LuCircleAlert,
@@ -51,6 +52,7 @@ export const StarIcon = wrap(LuStar);
 export const ChevronDownIcon = wrap(LuChevronDown);
 export const EditIcon = wrap(LuPencil);
 export const LandmarkIcon = wrap(LuLandmark);
+export const LibraryIcon = wrap(LuLibrary);
 export const RouteIcon = wrap(LuRoute);
 export const WarningIcon = wrap(LuTriangleAlert);
 export const CircleAlertIcon = wrap(LuCircleAlert);
