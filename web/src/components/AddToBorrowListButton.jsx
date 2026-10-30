@@ -14,9 +14,17 @@ import styles from './BookRow.module.css';
  * 처음 상태(initialAdded)는 서버가 빌릴 책 목록으로 확인해서 넘긴다. 모르면(조회 실패) "추가" 모양 —
  * 추가는 여러 번 보내도 결과가 같아서 이미 담긴 책을 눌러도 "추가됨"이 될 뿐이다.
  * 누르면 버튼과 배지 권수를 바로 바꾸고(낙관적 업데이트) 실패하면 둘 다 되돌린 뒤 행 아래에 알려준다.
+ * compact: 글자 없이 아이콘만 (메인 인기 대출 표지 위). 모양은 className·errorClassName으로 넘긴다.
  * TODO: 최대 권수 제한 — 백엔드에 생기면 그 오류를 받아서 안내
  */
-export default function AddToBorrowListButton({ isbn13, title, initialAdded = false }) {
+export default function AddToBorrowListButton({
+    isbn13,
+    title,
+    initialAdded = false,
+    compact = false,
+    className = styles.add,
+    errorClassName = styles.error,
+}) {
     const [added, setAdded] = useState(initialAdded);
     const [pending, setPending] = useState(false);
     const [error, setError] = useState(null);
@@ -46,18 +54,28 @@ export default function AddToBorrowListButton({ isbn13, title, initialAdded = fa
         <>
             <button
                 type="button"
-                className={styles.add}
+                className={className}
                 aria-pressed={added}
                 aria-busy={pending || undefined}
                 aria-label={`${title} 빌릴 책에 추가`}
                 onClick={toggle}
             >
-                {added ? <CheckIcon size={16} strokeWidth={2.6} /> : <PlusIcon size={16} strokeWidth={2.4} />}
-                <span aria-hidden="true">{added ? '추가됨' : '추가'}</span>
+                {compact ? (
+                    added ? (
+                        <CheckIcon size={20} strokeWidth={2.6} />
+                    ) : (
+                        <PlusIcon size={20} strokeWidth={2.2} />
+                    )
+                ) : (
+                    <>
+                        {added ? <CheckIcon size={16} strokeWidth={2.6} /> : <PlusIcon size={16} strokeWidth={2.4} />}
+                        <span aria-hidden="true">{added ? '추가됨' : '추가'}</span>
+                    </>
+                )}
             </button>
 
             {/* 실패 안내는 행 아래 한 줄로 (li가 줄바꿈 허용) */}
-            <p role="status" className={error ? styles.error : 'sr-only'}>
+            <p role="status" className={error ? errorClassName : 'sr-only'}>
                 {error}
             </p>
         </>

@@ -1,5 +1,5 @@
 export { ApiError } from "./client";
-export { searchBooks, getBook } from "./books";
+export { searchBooks, getPopularBooks, getBook } from "./books";
 export { searchLibraries, searchLibraryPins, getLibrary } from "./libraries";
 export { searchPlaces, getPlaceCoord } from "./places";
 export { GUEST_COOKIE, getBorrowList, addToBorrowList, removeFromBorrowList } from "./borrowList";

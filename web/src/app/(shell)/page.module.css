@@ -379,15 +379,53 @@
     gap: var(--space-1);
 }
 
-.cover {
+.coverWrap {
     position: relative;
+    margin-bottom: var(--space-1);
+}
+
+/* 표지 자리 5:7 고정 — 이미지가 늦게 와도 카드가 밀리지 않음. 표지가 없으면 --surface 색 박스 */
+.cover {
     width: 100%;
     aspect-ratio: 5 / 7;
-    margin-bottom: var(--space-1);
+    overflow: hidden;
 
-    /* TODO: book.imageUrl 붙으면 배경 대신 이미지로 */
     background: var(--surface);
     border-radius: var(--radius-md);
+
+    display: block;
+}
+
+.cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bookLink {
+    min-width: 0;
+    border-radius: var(--radius-sm);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+
+    color: var(--text);
+}
+
+.bookLink:hover .bookTitle {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+/* 오류·결과 없음 */
+.popularMessage {
+    margin-top: var(--space-2);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
 }
 
 .addButton {
@@ -414,6 +452,24 @@
 
 .addButton:active {
     transform: scale(0.94);
+}
+
+/* 추가됨 = 연한 브랜드 바탕 + 체크 아이콘 (aria-pressed로 상태도 함께) */
+.addButton[aria-pressed='true'] {
+    background: var(--brand-subtle);
+}
+
+.addButton[aria-pressed='true']:hover {
+    background: var(--border);
+}
+
+/* 추가·빼기 실패 안내 — 표지 아래 */
+.addError {
+    margin: var(--space-1) 0 0;
+
+    font-size: var(--text-sm);
+    line-height: var(--leading-tight);
+    color: var(--warning);
 }
 
 /* 책 제목은 두 줄까지, 저자는 한 줄 (원문 그대로라 길이를 알 수 없음) */

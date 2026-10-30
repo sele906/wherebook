@@ -2,46 +2,39 @@ import { Suspense } from 'react';
 import Form from 'next/form';
 import Link from 'next/link';
 
-import { ApiError, searchLibraries } from '@/api';
+import { ApiError, getPopularBooks, searchLibraries } from '@/api';
+import AddToBorrowListButton from '@/components/AddToBorrowListButton';
 import BrandLogo from '@/components/BrandLogo';
 import LibraryRow, { LibraryRowSkeleton } from '@/components/LibraryRow';
-import { LoadingArea } from '@/components/Skeleton';
-import { SearchIcon, GearIcon, NextIcon, PinIcon, PlusIcon } from '@/components/icons';
+import { LoadingArea, Skeleton } from '@/components/Skeleton';
+import { SearchIcon, GearIcon, NextIcon, PinIcon } from '@/components/icons';
 import LocationTitle from '@/components/location/LocationTitle';
 import OpenLocationButton from '@/components/location/OpenLocationButton';
 import { getBase } from '@/lib/base';
+import { getMyBorrowList } from '@/lib/borrowList';
 import { DEFAULT_RADIUS_KM, baseKey, formatKm } from '@/lib/location';
+import { toHttps } from '@/lib/url';
 
 import styles from './page.module.css';
 
 /*
  * 목업 Main 화면.
- * 실제로 붙는 건 검색 폼(/search?q=)과 내 주변 도서관 카드.
+ * 실제로 붙는 건 검색 폼(/search?q=), 내 주변 도서관 카드, 이번 주 인기 대출.
  * 내 주변 도서관: 기준 위치(쿠키)가 있으면 "[핀] 위치 근처 ▾" 제목 + 가까운 도서관 3곳,
  * 기본값이면 "기준 위치 정하기" 빈 상태. 쿠키를 읽으므로 이 화면은 요청마다 렌더링된다.
+ * 인기 대출: /api/books/popular 앞 6권. 늦게 와도 되므로 Suspense로 나중에 채운다.
  *
  * TODO: 가까운 도서관의 운영 상태("운영 중" / "오늘 휴관") — operatingTime·closedDays가 자유 형식 글이라
  *       지금은 계산할 수 없음 (백엔드 정제 필요, /libraries 와 같은 TODO). 그때까지는 거리만.
  * TODO: 최근 검색어 — localStorage에 저장하고 읽어오기 (클라이언트 컴포넌트로 분리 필요)
- * TODO: 인기 대출 — 정보나루 인기대출 엔드포인트가 백엔드에 생기면 교체.
- *       지금은 목업에 있던 샘플 그대로임.
- * TODO: 표지 이미지 — book.imageUrl 붙기 전까지 --surface 색 박스로 둠
  * TODO: 인기 대출 "더보기" — 인기 대출 목록 화면이 생기면 섹션 제목 옆에 링크 추가
  */
 
 const NEARBY_COUNT = 3;
+const POPULAR_COUNT = 6;
 const numberFormat = new Intl.NumberFormat('ko-KR');
 
 const RECENT_KEYWORDS = ['불편한 편의점', '세이노의 가르침', '한강'];
-
-const POPULAR_BOOKS = [
-    { title: '소년이 온다', authors: '한강' },
-    { title: '불편한 편의점', authors: '김호연' },
-    { title: '채식주의자', authors: '한강' },
-    { title: '작별하지 않는다', authors: '한강' },
-    { title: '세이노의 가르침', authors: '세이노' },
-    { title: '흰', authors: '한강' },
-];
 
 export default async function Home() {
     const base = await getBase();
@@ -146,26 +139,96 @@ export default async function Home() {
                         이번 주 인기 대출
                     </h2>
                 </div>
-                <ul className={styles.bookRow}>
-                    {POPULAR_BOOKS.map((book) => (
-                        <li key={book.title} className={styles.bookCard}>
-                            <div className={styles.cover}>
-                                {/* TODO: 빌릴 책에 추가 → 빌릴 책 API(/api/borrow-list) 붙일 때 연결 */}
-                                <button
-                                    type="button"
-                                    className={styles.addButton}
-                                    aria-label={`${book.title} 빌릴 책에 추가`}
-                                >
-                                    <PlusIcon size={20} strokeWidth={2.2} />
-                                </button>
-                            </div>
-                            <span className={styles.bookTitle}>{book.title}</span>
-                            <span className={styles.bookAuthors}>{book.authors}</span>
-                        </li>
-                    ))}
-                </ul>
+                <Suspense fallback={<PopularSkeleton />}>
+                    <PopularBooks />
+                </Suspense>
             </section>
         </main>
+    );
+}
+
+function PopularSkeleton() {
+    return (
+        // 로딩 알림(label)은 한 화면에 한 곳만 — 내 주변 도서관 쪽이 맡음
+        <LoadingArea>
+            <ul className={styles.bookRow}>
+                {Array.from({ length: POPULAR_COUNT }, (_, i) => (
+                    <li key={i} className={styles.bookCard}>
+                        <span className={styles.cover} />
+                        <Skeleton width="80%" />
+                        <Skeleton width="50%" height="var(--text-sm)" />
+                    </li>
+                ))}
+            </ul>
+        </LoadingArea>
+    );
+}
+
+async function PopularBooks() {
+    // 빌릴 책 목록도 같이 받아서 이미 담긴 책은 처음부터 "추가됨"으로 (실패하면 null → 전부 "추가" 모양)
+    const [data, borrowList] = await Promise.all([
+        getPopularBooks({ pageSize: POPULAR_COUNT }).catch((e) => {
+            if (e instanceof ApiError) return null;
+            throw e;
+        }),
+        getMyBorrowList(),
+    ]);
+    const addedIsbns = new Set((borrowList ?? []).map((item) => item.isbn13));
+
+    if (!data) {
+        return (
+            <div className={styles.popularMessage}>
+                <p className={styles.nearbyText}>인기 대출 도서를 불러오지 못했어요.</p>
+                <Link href="/" prefetch={false} className={styles.nearbyAction}>
+                    다시 시도
+                </Link>
+            </div>
+        );
+    }
+
+    const books = (data.books ?? []).slice(0, POPULAR_COUNT);
+
+    if (books.length === 0) {
+        return (
+            <div className={styles.popularMessage}>
+                <p className={styles.nearbyText}>이번 주 인기 대출 기록이 아직 없어요.</p>
+            </div>
+        );
+    }
+
+    return (
+        <ul className={styles.bookRow}>
+            {books.map((book) => {
+                const cover = toHttps(book.imageUrl);
+                const href = `/book/${book.isbn13}`;
+                return (
+                    <li key={book.isbn13} className={styles.bookCard}>
+                        {/* 표지와 제목이 같은 책 상세로 감. 추가 버튼은 링크 밖에 두려고 표지 링크를 따로 둠 (Tab·스크린리더엔 제목 링크 하나만) */}
+                        <div className={styles.coverWrap}>
+                            <Link href={href} className={styles.cover} tabIndex={-1} aria-hidden="true">
+                                {cover && (
+                                    // 표지는 여러 외부 호스트라 next/image 대신 img로 지연 로딩만 함. 자리는 .cover가 5:7로 잡음
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={cover} alt="" loading="lazy" decoding="async" />
+                                )}
+                            </Link>
+                            <AddToBorrowListButton
+                                isbn13={book.isbn13}
+                                title={book.title}
+                                initialAdded={addedIsbns.has(book.isbn13)}
+                                compact
+                                className={styles.addButton}
+                                errorClassName={styles.addError}
+                            />
+                        </div>
+                        <Link href={href} className={styles.bookLink}>
+                            <span className={styles.bookTitle}>{book.title}</span>
+                            {book.authors && <span className={styles.bookAuthors}>{book.authors}</span>}
+                        </Link>
+                    </li>
+                );
+            })}
+        </ul>
     );
 }
 
