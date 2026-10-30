@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.book.controller;
 
 import com.sele906.chaekeodi.book.domain.Book;
+import com.sele906.chaekeodi.book.domain.BookLoanPopularRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchResponse;
 import com.sele906.chaekeodi.book.service.BookService;
@@ -18,6 +19,16 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookService bookService;
+
+    //인기 대출도서 조회
+    @GetMapping("/popular")
+    public ResponseEntity<BookSearchResponse> loanPopularBooks(
+            @ModelAttribute BookLoanPopularRequest request
+    ) {
+
+        BookSearchResponse response = bookService.loanPopularBooks(request);
+        return ResponseEntity.ok(response);
+    }
 
     //도서 검색
     @GetMapping

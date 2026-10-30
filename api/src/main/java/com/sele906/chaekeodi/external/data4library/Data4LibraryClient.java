@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.HtmlUtils;
 import tools.jackson.databind.JsonNode;
@@ -26,6 +27,37 @@ public class Data4LibraryClient {
 
     @Value("${library.api.auth-key}")
     private String authKey;
+
+    //인기 대출도서 조회
+    public BookPage fetchPopularBooks(String startDt, String endDt, int pageNo, int pageSize) {
+        JsonNode body = get("/loanItemSrch", Map.of(
+                "startDt", startDt,
+                "endDt", endDt,
+                "pageNo", pageNo,
+                "pageSize", pageSize))
+                .path("response");
+
+        List<BookSearchItem> books = new ArrayList<>();
+
+        for (JsonNode item : body.path("docs")) {
+            JsonNode d = item.path("doc");
+
+            String isbn13 = text(d, "isbn13");
+            if (isbn13 == null) continue;   // ISBN 없으면 상세로 못 넘어감
+            Integer loan = intValue(d, "loan_count");
+
+            books.add(new BookSearchItem(
+                    isbn13,
+                    text(d, "bookname"),
+                    text(d, "authors"),
+                    text(d, "publisher"),
+                    text(d, "publication_year"),
+                    text(d, "bookImageURL"),
+                    loan == null ? 0 : loan
+            ));
+        }
+        return new BookPage(books, body.path("numFound").asInt());
+    }
 
     //도서관 목록 호출
     public LibraryPage fetchLibraries(int pageNo, int pageSize) {

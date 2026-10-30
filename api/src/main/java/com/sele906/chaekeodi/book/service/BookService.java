@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.book.service;
 
 import com.sele906.chaekeodi.book.domain.Book;
+import com.sele906.chaekeodi.book.domain.BookLoanPopularRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchRequest;
 import com.sele906.chaekeodi.book.domain.BookSearchResponse;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 @Service
@@ -19,6 +21,19 @@ public class BookService {
     private final BookMapper bookMapper;
     private final Data4LibraryClient client;
     private static final Pattern ISBN13 = Pattern.compile("^97[89]\\d{10}$");
+
+    public BookSearchResponse loanPopularBooks(BookLoanPopularRequest req) {
+
+        //최근 7일간 인기대출 기록
+        LocalDate today = LocalDate.now();
+        LocalDate weekAgo = today.minusDays(7);
+
+        req.setStartDt(weekAgo.toString());
+        req.setEndDt(today.toString());
+
+        var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
+        return new BookSearchResponse(result.books(), req.getPageNo(), req.getPageSize(), result.numFound());
+    }
 
     public BookSearchResponse searchBooks(BookSearchRequest req) {
 
@@ -53,5 +68,4 @@ public class BookService {
 
         return book;
     }
-
 }
