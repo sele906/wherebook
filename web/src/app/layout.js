@@ -11,6 +11,8 @@
  */
 import { Noto_Sans_KR } from 'next/font/google';
 
+import { THEME_STORAGE_KEY } from '@/lib/theme';
+
 import './globals.css';
 
 const notoSansKr = Noto_Sans_KR({
@@ -43,9 +45,8 @@ export const viewport = {
 /*
  * 저장된 테마를 그리기 전에 <html data-theme>에 넣어서 첫 화면이 깜빡이지 않게 한다.
  * 값이 없거나 'system'이면 속성을 안 넣고 시스템 설정(prefers-color-scheme)을 따른다.
- * 설정 화면에서 테마를 바꿀 때도 같은 키(THEME_STORAGE_KEY)에 저장할 것.
+ * 설정 화면에서 바꾸는 쪽은 lib/theme.js (같은 키).
  */
-const THEME_STORAGE_KEY = 'theme';
 const themeScript = `try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function RootLayout({ children }) {

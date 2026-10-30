@@ -1,0 +1,177 @@
+/* 설정. 모바일·웹 모두 한 단, 웹은 목록 화면 폭으로 가운데 */
+
+.main {
+    width: min(100%, var(--list-max));
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--space-8);
+}
+
+/* ---- 머리: [뒤로] 설정 ---- */
+
+.head {
+    min-height: var(--header-h);
+    margin-left: calc(-1 * var(--space-3));
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.back {
+    width: var(--touch);
+    height: var(--touch);
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-2);
+}
+
+.back:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-title);
+}
+
+/* 항목 묶음 이름 (목업: 작은 회색 글자) */
+.sectionTitle {
+    margin: var(--space-6) 0 var(--space-2);
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    color: var(--text-muted);
+}
+
+/* ---- 화면 모드 세그먼트 (내 주변 반경 세그먼트와 같은 모양) ---- */
+
+.segment {
+    padding: var(--space-1);
+
+    background: var(--surface);
+    border-radius: var(--radius-md);
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-1);
+}
+
+.segmentItem {
+    min-width: 0;
+    min-height: var(--touch);
+    padding: 0 var(--space-2);
+
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    color: var(--text-3);
+
+    /* 영어(System / Light / Dark)로 길어져도 칸 안에서 말줄임 */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.segmentItem:hover {
+    color: var(--text);
+}
+
+.segmentItem:active {
+    background: var(--border);
+}
+
+/* 선택 = 바탕 + 브랜드 색 + 굵기 (색만으로 구분하지 않음) */
+.segmentItem[aria-pressed='true'],
+.segmentItem[aria-pressed='true']:hover {
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+    color: var(--brand);
+    font-weight: var(--weight-semibold);
+}
+
+/* ---- 기준 위치 행: 누르면 고르기 창 ---- */
+
+.row {
+    width: calc(100% + 2 * var(--space-3));
+    min-height: var(--control-lg);
+    margin: 0 calc(-1 * var(--space-3));
+    padding: var(--space-2) var(--space-3);
+
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text);
+    text-align: left;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.row:hover {
+    background: var(--surface);
+}
+
+.row:active {
+    background: var(--border);
+}
+
+.rowIcon {
+    flex-shrink: 0;
+    color: var(--brand);
+}
+
+.rowText {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+/* 위치 이름은 사용자가 정한 글자라 길 수 있음 → 한 줄 말줄임 */
+.rowTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-tight);
+}
+
+.rowSub {
+    font-weight: var(--weight-regular);
+    color: var(--text-muted);
+}
+
+.rowMeta {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+}
+
+.chevron {
+    flex-shrink: 0;
+    color: var(--icon-muted);
+}
+
+@media (min-width: 1024px) {
+    .main {
+        padding-top: var(--space-6);
+    }
+}
