@@ -228,6 +228,40 @@ input[type="radio"] {
   outline-offset: 2px;
 }
 
+/* ---- 스크롤바: 얇게, 바탕과 비슷한 색으로 (트랙은 투명) ----
+   Chrome·Edge·Firefox는 표준 속성을 쓰고 아래 ::-webkit-scrollbar는 무시한다.
+   Safari는 scrollbar-color를 아직 몰라서 ::-webkit-scrollbar로 같은 모양을 낸다.
+   scrollbar-color는 상속되지만 scrollbar-width는 안 돼서 모든 요소에 준다. */
+html {
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: var(--space-2);
+  height: var(--space-2);
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 투명 테두리로 막대를 가늘게 보이게 하고 끝은 둥글게 */
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--icon-muted);
+}
+
 /* 화면에는 안 보이고 스크린리더만 읽는 라벨 */
 .sr-only {
   position: absolute;
