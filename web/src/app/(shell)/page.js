@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import Form from 'next/form';
 import Link from 'next/link';
 
 import { ApiError, getPopularBooks, searchLibraries } from '@/api';
@@ -7,6 +6,7 @@ import AddToBorrowListButton from '@/components/AddToBorrowListButton';
 import BrandLogo from '@/components/BrandLogo';
 import LibraryRow, { LibraryRowSkeleton } from '@/components/LibraryRow';
 import { LoadingArea, Skeleton } from '@/components/Skeleton';
+import RecentSearchForm from '@/components/RecentSearchForm';
 import { SearchIcon, GearIcon, NextIcon, PinIcon } from '@/components/icons';
 import LocationTitle from '@/components/location/LocationTitle';
 import OpenLocationButton from '@/components/location/OpenLocationButton';
@@ -15,26 +15,24 @@ import { getMyBorrowList } from '@/lib/borrowList';
 import { DEFAULT_RADIUS_KM, baseKey, formatKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
+import RecentSearches from './RecentSearches';
 import styles from './page.module.css';
 
 /*
  * 목업 Main 화면.
- * 실제로 붙는 건 검색 폼(/search?q=), 내 주변 도서관 카드, 이번 주 인기 대출.
+ * 실제로 붙는 건 검색 폼(/search?q=), 최근 검색어(localStorage), 내 주변 도서관 카드, 이번 주 인기 대출.
  * 내 주변 도서관: 기준 위치(쿠키)가 있으면 "[핀] 위치 근처 ▾" 제목 + 가까운 도서관 3곳,
  * 기본값이면 "기준 위치 정하기" 빈 상태. 쿠키를 읽으므로 이 화면은 요청마다 렌더링된다.
  * 인기 대출: /api/books/popular 앞 6권. 늦게 와도 되므로 Suspense로 나중에 채운다.
  *
  * TODO: 가까운 도서관의 운영 상태("운영 중" / "오늘 휴관") — operatingTime·closedDays가 자유 형식 글이라
  *       지금은 계산할 수 없음 (백엔드 정제 필요, /libraries 와 같은 TODO). 그때까지는 거리만.
- * TODO: 최근 검색어 — localStorage에 저장하고 읽어오기 (클라이언트 컴포넌트로 분리 필요)
  * TODO: 인기 대출 "더보기" — 인기 대출 목록 화면이 생기면 섹션 제목 옆에 링크 추가
  */
 
 const NEARBY_COUNT = 3;
 const POPULAR_COUNT = 6;
 const numberFormat = new Intl.NumberFormat('ko-KR');
-
-const RECENT_KEYWORDS = ['불편한 편의점', '세이노의 가르침', '한강'];
 
 export default async function Home() {
     const base = await getBase();
@@ -57,8 +55,8 @@ export default async function Home() {
                     어느 도서관에 있을까?
                 </h1>
 
-                {/* next/form: 제출하면 새로고침 없이 이동 (JS 없으면 일반 GET 폼) */}
-                <Form action="/search" role="search" className={styles.searchForm}>
+                {/* next/form: 제출하면 최근 검색어에 저장하고 새로고침 없이 이동 (JS 없으면 일반 GET 폼) */}
+                <RecentSearchForm action="/search" role="search" className={styles.searchForm}>
                     <label htmlFor="home-q" className="sr-only">
                         책 검색
                     </label>
@@ -81,7 +79,7 @@ export default async function Home() {
                             </span>
                         </button>
                     </div>
-                </Form>
+                </RecentSearchForm>
             </section>
 
             {base.isDefault ? (
@@ -111,27 +109,8 @@ export default async function Home() {
                 </section>
             )}
 
-            <section className={styles.recent} aria-labelledby="recent-heading">
-                <div className={styles.sectionHead}>
-                    <h2 id="recent-heading" className={styles.sectionTitle}>
-                        최근 검색어
-                    </h2>
-                    <button type="button" className={styles.textButton}>
-                        전체 삭제
-                    </button>
-                </div>
-                <div className={styles.chips}>
-                    {RECENT_KEYWORDS.map((keyword) => (
-                        <Link
-                            key={keyword}
-                            href={`/search?q=${encodeURIComponent(keyword)}`}
-                            className={styles.chip}
-                        >
-                            <span className={styles.chipLabel}>{keyword}</span>
-                        </Link>
-                    ))}
-                </div>
-            </section>
+            {/* 검색어가 없으면 섹션째 안 그림 (브라우저 저장소라 하이드레이션 뒤에 나타남) */}
+            <RecentSearches inputId="home-q" />
 
             <section className={styles.popular} aria-labelledby="popular-heading">
                 <div className={styles.sectionHead}>

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { ApiError, searchBooks } from '@/api';
 import BookRow from '@/components/BookRow';
 import Pager, { readPage } from '@/components/Pager';
-import { PendingForm, PendingNavProvider, PendingSwap } from '@/components/PendingNav';
+import { PendingNavProvider, PendingSwap } from '@/components/PendingNav';
+import RecentSearchForm from '@/components/RecentSearchForm';
 import SearchField from '@/components/SearchField';
 import { BackIcon } from '@/components/icons';
 import { getMyBorrowList } from '@/lib/borrowList';
@@ -53,13 +54,14 @@ export default async function SearchPage({ searchParams }) {
         <main className={styles.main}>
             {/* 검색·페이지 이동을 누르는 즉시 결과 자리를 스켈레톤으로 (PendingNav 설명 참고) */}
             <PendingNavProvider>
-                <PendingForm action="/search" role="search" className={styles.bar}>
+                {/* 제출하면 최근 검색어에 저장 */}
+                <RecentSearchForm pending action="/search" role="search" className={styles.bar}>
                     <Link href="/" className={styles.back} aria-label="검색 처음 화면으로">
                         <BackIcon size={24} />
                     </Link>
                     {/* key: 검색어가 바뀌면 입력창 초기값을 다시 받음 */}
                     <SearchField key={q} id="search-q" name="q" label="책 검색" defaultValue={q} placeholder="책 제목" />
-                </PendingForm>
+                </RecentSearchForm>
 
                 <h1 className="sr-only">{q ? `‘${q}’ 검색 결과` : '책 검색'}</h1>
 

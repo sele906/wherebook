@@ -46,11 +46,12 @@ export function PendingLink({ href, onClick, ...rest }) {
     return <Link href={href} onClick={handleClick} {...rest} />;
 }
 
-export function PendingForm({ action, children, ...rest }) {
+export function PendingForm({ action, onSubmit, children, ...rest }) {
     const { navigate } = use(PendingContext);
 
     function handleSubmit(e) {
-        if (!navigate) return;
+        onSubmit?.(e);
+        if (e.defaultPrevented || !navigate) return;
         e.preventDefault();
         // 빈 값은 주소에서 뺀다 (/libraries?q= → /libraries)
         const params = new URLSearchParams();
