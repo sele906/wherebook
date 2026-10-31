@@ -517,6 +517,22 @@ button.card:active {
 
 /* ---- Primary "지도 앱으로 길찾기": 시트·패널 아래에 붙어 있음 ---- */
 
+/* 직선거리·전날 기준 안내 — 메타 정보 크기, 문장마다 한 줄 */
+.caveats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+}
+
+.caveats p {
+    max-width: var(--reading-max);
+    margin: 0;
+}
+
 .directions {
     position: sticky;
     bottom: 0;

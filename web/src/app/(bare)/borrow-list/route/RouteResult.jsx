@@ -16,6 +16,7 @@ import styles from './page.module.css';
  *   A안 "N권 다 빌리기" — 반경 안에서 대출 가능한 책을 다 빌리는 방문 순서 (최대 3곳)
  *   B안 "한 곳만 가기"  — 대출 가능한 책이 가장 많은 한 곳. A안이 1곳이면 같은 말이라 숨김
  *   못 빌리는 책 한 줄 — 펼치면 책마다 "대출중" / "근처에 없어요"
+ *   안내 두 줄 — 거리는 직선거리, 대출 가능 여부는 전날 기준 (정보나루 데이터가 하루 단위)
  *   Primary "지도 앱으로 길찾기" — 기준 위치에서 고른 안의 도서관들을 순서대로
  * 안이 둘이면 카드를 눌러 고르고(PlanCard), 하나뿐이면 선택된 모양의 일반 카드.
  *
@@ -110,6 +111,12 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
                     </ul>
                 </MissingBooks>
             )}
+
+            {/* 계산의 한계를 미리 알림. 거리는 동선이 있을 때만 (대출 여부는 결과가 없어도 그 기준이라 항상) */}
+            <div className={styles.caveats}>
+                {(route || single) && <p>거리는 직선거리라 실제 이동 거리와 다를 수 있어요.</p>}
+                <p>대출 가능 여부는 전날 기준이에요.</p>
+            </div>
 
             <RouteDirections origin={toPoint(base)} stops={directionStops} />
         </div>
