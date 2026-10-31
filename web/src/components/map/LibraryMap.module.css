@@ -247,6 +247,33 @@
     height: var(--pin-size-selected);
 }
 
+/* 동선 핀의 방문 순서 번호 (결과 카드 .stopNo와 같은 굵기) */
+.pinOrder {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+}
+
+.pin[data-selected] .pinOrder {
+    font-size: var(--text-base);
+}
+
+/* 동선 구간 가운데의 직선거리 라벨 — 지도 위 떠 있는 요소 (DESIGN.md 지도) */
+.legLabel {
+    display: block;
+    padding: var(--space-1) var(--space-2);
+
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    box-shadow: var(--shadow-float);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    color: var(--text-2);
+    white-space: nowrap;
+}
+
 /* 고른 핀 이름 → 도서관 상세. 이름이 길면 말줄임 (영어·긴 도서관 이름 대비, 고정 폭 없음) */
 .pinName {
     position: absolute;

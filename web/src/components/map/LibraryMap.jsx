@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Circle, CustomOverlayMap, Map, MarkerClusterer, useKakaoLoader } from 'react-kakao-maps-sdk';
+import { Circle, CustomOverlayMap, Map, MarkerClusterer, Polyline, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import { LibraryIcon, MinusIcon, PinIcon, PlusIcon, SearchIcon } from '@/components/icons';
+import { distanceFromBase, formatDistance } from '@/lib/location';
 
 import LibraryMapSkeleton from './LibraryMapSkeleton';
 import styles from './LibraryMap.module.css';
@@ -36,6 +37,11 @@ import styles from './LibraryMap.module.css';
  * "이 지역에서 다시 검색": 쓰는 화면이 onSearchHere를 줄 때만 (내 주변). 사용자가 지도를 끌면 위쪽 가운데에 뜨고
  * (자동으로 다시 검색하지 않음 — DESIGN.md), 누르면 지도 중심 좌표를 넘긴다. [기준 위치로]를 누르면 숨긴다.
  * 동선 화면은 주지 않는다 — 기준 위치를 바꾸면 동선을 다시 계산해서 외부 API를 많이 부른다.
+ *
+ * route 모드 (동선 화면): libraries가 방문 순서. 기준 위치 → 1 → 2 → 3을 점선으로 잇고, 선마다 가운데에 직선거리.
+ * 점선 = 실제 길이 아니라 직선이라는 뜻 (안내 문구는 결과 패널에). 구간이 화면에서 너무 짧으면 라벨은 숨김
+ * (핀에 깔림 — 확대하면 나타남, 합계는 결과 카드에). 핀은 묶지 않고(최대 3곳),
+ * order가 있으면 아이콘 대신 순서 번호 — 결과 카드의 번호 동그라미와 같다.
  */
 
 // 반경별 처음 확대 단계 (숫자가 작을수록 확대). 그린 뒤 바로 원에 맞춰 다시 정하므로 첫 화면용 짐작값
@@ -98,6 +104,7 @@ export default function LibraryMap({
     selected: selectedProp,
     onSelect,
     onSearchHere,
+    route = false,
 }) {
     const [loading, error] = useKakaoLoader({
         appkey: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
@@ -113,6 +120,8 @@ export default function LibraryMap({
     const [moved, setMoved] = useState(false);
     // 기준 위치를 바꾸지 못함 (저장이 막힌 브라우저 등) → 버튼이 다시 시도로
     const [searchFailed, setSearchFailed] = useState(false);
+    // 지금 확대 단계 — 동선 거리 라벨을 보일지 정할 때만 씀 (routeLegs)
+    const [zoomLevel, setZoomLevel] = useState(null);
 
     // 좌표가 없는 도서관은 핀을 그릴 수 없어서 뺀다 (목록에는 그대로 있음)
     const located = libraries.filter((lib) => lib.latitude != null && lib.longitude != null);
@@ -208,6 +217,8 @@ export default function LibraryMap({
     }
 
     const center = { lat: base.latitude, lng: base.longitude };
+    const legs = route ? routeLegs(base, located, map, zoomLevel) : [];
+    const pins = located.filter((lib) => lib.libCode !== selected);
 
     return (
         <div className={styles.frame}>
@@ -220,6 +231,8 @@ export default function LibraryMap({
                 onClick={() => setSelected(null)}
                 // 손으로 끌었을 때만 (원에 맞추기·목록 선택처럼 코드로 옮길 때는 안 뜸)
                 onDragEnd={() => setMoved(true)}
+                // 원에 맞추기·확대 버튼·손가락 확대 모두 여기로 (처음 그릴 때도 맞추기가 부름)
+                onZoomChanged={route ? (target) => setZoomLevel(target.getLevel()) : undefined}
             >
                 {brand && (
                     <Circle
@@ -235,20 +248,40 @@ export default function LibraryMap({
                 <CustomOverlayMap position={center} zIndex={0}>
                     <span className={styles.baseDot} aria-hidden="true" />
                 </CustomOverlayMap>
-                {/* gridSize: 핀(32px)이 실제로 겹칠 만큼 가까울 때만 묶이게 기본값(60)보다 좁게 */}
-                <MarkerClusterer
-                    averageCenter
-                    gridSize={48}
-                    styles={CLUSTER_STYLES}
-                    calculator={[10]}
-                    texts={clusterText}
-                >
-                    {located
-                        .filter((lib) => lib.libCode !== selected)
-                        .map((lib) => (
+                {/* 동선: 기준 위치부터 방문 순서대로 점선 + 선마다 직선거리 (핀 아래층) */}
+                {brand && legs.length > 0 && (
+                    <Polyline
+                        path={[center, ...legs.map((leg) => leg.to)]}
+                        strokeWeight={3}
+                        strokeColor={brand}
+                        strokeOpacity={0.9}
+                        strokeStyle="shortdash"
+                    />
+                )}
+                {legs.filter((leg) => leg.labeled).map((leg) => (
+                    <CustomOverlayMap key={leg.key} position={leg.mid} zIndex={0}>
+                        <span className={styles.legLabel} aria-hidden="true">
+                            {leg.text}
+                        </span>
+                    </CustomOverlayMap>
+                ))}
+                {route ? (
+                    // 동선은 최대 3곳이라 묶지 않음 (번호가 묶음 안에 숨지 않게)
+                    pins.map((lib) => <LibraryPinOverlay key={lib.libCode} library={lib} onSelect={setSelected} />)
+                ) : (
+                    // gridSize: 핀(32px)이 실제로 겹칠 만큼 가까울 때만 묶이게 기본값(60)보다 좁게
+                    <MarkerClusterer
+                        averageCenter
+                        gridSize={48}
+                        styles={CLUSTER_STYLES}
+                        calculator={[10]}
+                        texts={clusterText}
+                    >
+                        {pins.map((lib) => (
                             <LibraryPinOverlay key={lib.libCode} library={lib} onSelect={setSelected} />
                         ))}
-                </MarkerClusterer>
+                    </MarkerClusterer>
+                )}
                 {/* 고른 핀은 묶음 밖에, 다른 핀 위로 */}
                 {selectedLib && <LibraryPinOverlay library={selectedLib} selected onSelect={setSelected} />}
             </Map>
@@ -286,6 +319,36 @@ export default function LibraryMap({
             )}
         </div>
     );
+}
+
+// 거리 라벨을 보여줄 최소 구간 길이(px) — 양 끝 핀 반쪽씩 + 라벨 폭. 이보다 짧으면 라벨이 핀에 깔려서 숨긴다
+const MIN_LEG_LABEL_PX = 88;
+
+// 동선의 각 구간 (기준 위치 → 1, 1 → 2, …): 끝점, 가운데(라벨 자리), 직선거리 글자, 라벨을 보일지.
+// 화면 길이는 지금 확대 단계(level)에서 잰다 — level이 바뀌면 다시 계산 (확대하면 숨었던 라벨이 나타남)
+function routeLegs(base, stops, map, level) {
+    const projection = map && level != null ? map.getProjection() : null;
+    const toPx = (lat, lng) => projection.containerPointFromCoords(new window.kakao.maps.LatLng(lat, lng));
+
+    let from = { latitude: base.latitude, longitude: base.longitude };
+    return stops.map((stop) => {
+        const meters = distanceFromBase(from, stop.latitude, stop.longitude);
+        let labeled = false;
+        if (projection) {
+            const a = toPx(from.latitude, from.longitude);
+            const b = toPx(stop.latitude, stop.longitude);
+            labeled = Math.hypot(a.x - b.x, a.y - b.y) >= MIN_LEG_LABEL_PX;
+        }
+        const leg = {
+            key: stop.libCode,
+            to: { lat: stop.latitude, lng: stop.longitude },
+            mid: { lat: (from.latitude + stop.latitude) / 2, lng: (from.longitude + stop.longitude) / 2 },
+            text: formatDistance(meters),
+            labeled,
+        };
+        from = stop;
+        return leg;
+    });
 }
 
 function prefersReducedMotion() {
@@ -334,12 +397,16 @@ function LibraryPin({ library, selected, onSelect }) {
                 type="button"
                 className={styles.pinButton}
                 tabIndex={-1}
-                aria-label={library.name}
+                aria-label={library.order != null ? `${library.order}번째 ${library.name}` : library.name}
                 aria-pressed={selected}
                 onClick={onSelect}
             >
                 <span className={styles.pinMark}>
-                    <LibraryIcon size={selected ? 22 : 18} strokeWidth={2.2} />
+                    {library.order != null ? (
+                        <span className={styles.pinOrder}>{library.order}</span>
+                    ) : (
+                        <LibraryIcon size={selected ? 22 : 18} strokeWidth={2.2} />
+                    )}
                 </span>
             </button>
             {selected && (
