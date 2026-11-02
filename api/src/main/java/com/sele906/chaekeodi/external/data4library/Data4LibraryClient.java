@@ -30,16 +30,30 @@ public class Data4LibraryClient {
 
     //인기 대출도서 조회
     public BookPage fetchPopularBooks(String startDt, String endDt, int pageNo, int pageSize) {
-        JsonNode body = get("/loanItemSrch", Map.of(
+        JsonNode res = get("/loanItemSrch", Map.of(
                 "startDt", startDt,
                 "endDt", endDt,
                 "pageNo", pageNo,
                 "pageSize", pageSize))
                 .path("response");
 
+        // 응답 구조 자체가 잘못된 경우
+        if (res == null || !res.isObject()) {
+            throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+        }
+
+        //에러 시
+        JsonNode errCode = res.path("errCode");
+        JsonNode error = res.path("error");
+
+        if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+            throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+        }
+
+        //정상호출
         List<BookSearchItem> books = new ArrayList<>();
 
-        for (JsonNode item : body.path("docs")) {
+        for (JsonNode item : res.path("docs")) {
             JsonNode d = item.path("doc");
 
             String isbn13 = text(d, "isbn13");
@@ -56,7 +70,7 @@ public class Data4LibraryClient {
                     loan == null ? 0 : loan
             ));
         }
-        return new BookPage(books, body.path("numFound").asInt());
+        return new BookPage(books, res.path("numFound").asInt());
     }
 
     //도서관 목록 호출
@@ -64,28 +78,57 @@ public class Data4LibraryClient {
 
         JsonNode res = get("/libSrch", Map.of(
                 "pageNo", pageNo,
-                "pageSize", pageSize));
-        JsonNode body = res.path("response");
+                "pageSize", pageSize))
+                .path("response");
+
+        // 응답 구조 자체가 잘못된 경우
+        if (res == null || !res.isObject()) {
+            throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+        }
+
+        //에러 시
+        JsonNode errCode = res.path("errCode");
+        JsonNode error = res.path("error");
+
+        if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+            throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+        }
+
+        //정상호출
         List<Library> libraries = new ArrayList<>();
 
-        for (JsonNode item : body.path("libs")) {
+        for (JsonNode item : res.path("libs")) {
             libraries.add(toLibrary(item.path("lib")));
         }
 
-        return new LibraryPage(libraries, body.path("numFound").asInt());
+        return new LibraryPage(libraries, res.path("numFound").asInt());
     }
 
     public record LibraryPage(List<Library> libraries, int numFound) {}
 
     //도서 목록 호출
     public BookPage fetchBooks(String title, int pageNo, int pageSize) {
-        JsonNode body = get("/srchBooks", Map.of(
+        JsonNode res = get("/srchBooks", Map.of(
                 "title", title, "pageNo", pageNo, "pageSize", pageSize))
                 .path("response");
 
+        // 응답 구조 자체가 잘못된 경우
+        if (res == null || !res.isObject()) {
+            throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+        }
+
+        //에러 시
+        JsonNode errCode = res.path("errCode");
+        JsonNode error = res.path("error");
+
+        if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+            throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+        }
+
+        //정상호출
         List<BookSearchItem> books = new ArrayList<>();
 
-        for (JsonNode item : body.path("docs")) {
+        for (JsonNode item : res.path("docs")) {
             JsonNode d = item.path("doc");
 
             String isbn13 = text(d, "isbn13");
@@ -102,7 +145,7 @@ public class Data4LibraryClient {
                     loan == null ? 0 : loan
             ));
         }
-        return new BookPage(books, body.path("numFound").asInt());
+        return new BookPage(books, res.path("numFound").asInt());
     }
 
     public record BookPage(List<BookSearchItem> books, int numFound) {}
@@ -111,8 +154,24 @@ public class Data4LibraryClient {
     public Optional<Book> fetchBookByIsbn13(String isbn13) {
 
         JsonNode res = get("/srchDtlList", Map.of(
-                "isbn13", isbn13));
-        JsonNode detail = res.path("response").path("detail");
+                "isbn13", isbn13))
+                .path("response");
+
+        // 응답 구조 자체가 잘못된 경우
+        if (res == null || !res.isObject()) {
+            throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+        }
+
+        //에러 시
+        JsonNode errCode = res.path("errCode");
+        JsonNode error = res.path("error");
+
+        if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+            throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+        }
+
+        //정상호출
+        JsonNode detail = res.path("detail");
 
         if (!detail.isArray() || detail.isEmpty()) {
             return Optional.empty();   // 없는 ISBN
@@ -159,12 +218,30 @@ public class Data4LibraryClient {
                             "region", region,
                             "pageNo", pageNo,
                             "pageSize", pageSize
-                    ));
+                    ))
+                    .path("response");
 
-                    JsonNode response = res.path("response");
-                    JsonNode libs = response.path("libs");
+                    // 응답 구조 자체가 잘못된 경우
+                    if (res == null || !res.isObject()) {
+                        throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+                    }
 
-                    int numFound = response.path("numFound").asInt();
+                    //에러 시
+                    JsonNode errCode = res.path("errCode");
+                    JsonNode error = res.path("error");
+
+                    if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+                        throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+                    } else {
+                        if (!res.has("numFound")) {
+                            throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
+                        }
+                    }
+
+                    //정상호출
+                    JsonNode libs = res.path("libs");
+
+                    int numFound = res.path("numFound").asInt();
 
                     // 더 이상 결과 없음
                     if (!libs.isArray() || libs.isEmpty()) {
@@ -239,7 +316,28 @@ public class Data4LibraryClient {
             params.put("dtl_kdc", dtlKdc);
         }
 
-        JsonNode docs = get("/itemSrch", params).path("response").path("docs");
+        JsonNode res = get("/itemSrch", params)
+                .path("response");
+
+        // 응답 구조 자체가 잘못된 경우
+        if (res == null || !res.isObject()) {
+            throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
+        }
+
+        //에러 시
+        JsonNode errCode = res.path("errCode");
+        JsonNode error = res.path("error");
+
+        if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+            throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+        } else {
+            if (!res.has("numFound")) {
+                throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
+            }
+        }
+
+        //정상호출
+        JsonNode docs = res.path("docs");
 
         //여러 청구기호 후보 리스트로 전환
         for (JsonNode d : docs) {
@@ -280,14 +378,24 @@ public class Data4LibraryClient {
             JsonNode res = get("/bookExist", Map.of(
                     "libCode", libCode,
                     "isbn13", isbn13
-            ));
+            ))
+            .path("response");
 
-            // 응답 데이터 검증
-            JsonNode result = res == null ? null : res.path("response").path("result");
-
-            if (result == null || !result.isObject()) {
-                throw new ExternalApiException("대출 상태 조회 응답 형식이 올바르지 않습니다.");
+            // 응답 구조 자체가 잘못된 경우
+            if (res == null || !res.isObject()) {
+                throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
             }
+
+            //에러 시
+            JsonNode errCode = res.path("errCode");
+            JsonNode error = res.path("error");
+
+            if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+                throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+            }
+
+            //정상호출
+            JsonNode result = res.path("result");
 
             String hasBook = result.path("hasBook").asText();
             String loanAvailable = result.path("loanAvailable").asText();
@@ -336,22 +444,24 @@ public class Data4LibraryClient {
                             "dtl_region", d.getDtlRegion(),
                             "pageNo", pageNo,
                             "pageSize", pageSize
-                    ));
-
-                    JsonNode response = res == null ? null : res.path("response");
+                    ))
+                    .path("response");
 
                     // 응답 구조 자체가 잘못된 경우
-                    if (response == null || !response.isObject()) {
+                    if (res == null || !res.isObject()) {
                         throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
                     }
 
-                    JsonNode numFoundNode = response.path("numFound");
+                    //에러 시
+                    JsonNode errCode = res.path("errCode");
+                    JsonNode error = res.path("error");
 
-                    // numFound가 없거나 유효한 숫자가 아닌 경우
-                    if (!numFoundNode.asText().matches("\\d+")) {
-                        throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
+                    if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+                        throw new ExternalApiException(errCode.asText() + ": " + error.asText());
                     }
 
+                    //정상조회
+                    JsonNode numFoundNode = res.path("numFound");
                     int numFound = numFoundNode.asInt();
 
                     // 정상적으로 조회했지만 소장 도서관이 없는 경우
@@ -359,7 +469,7 @@ public class Data4LibraryClient {
                         break;
                     }
 
-                    JsonNode libs = response.path("libs");
+                    JsonNode libs = res.path("libs");
 
                     // 결과가 있다고 했는데 목록이 없는 경우
                     if (!libs.isArray() || libs.isEmpty()) {
