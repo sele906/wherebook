@@ -101,6 +101,13 @@ jobs:
           # 실패 시 이전 버전 복원
           echo "Health check failed!"
 
+          echo "=== HTTP 응답 확인 ==="
+          curl -i --max-time 10 \
+            http://127.0.0.1:8080/api/health || true
+
+          echo "=== Spring Boot 로그 ==="
+          journalctl -u wherebook -n 80 --no-pager || true
+
           if [ -f wherebook.jar.bak ]; then
             cp wherebook.jar.bak wherebook.jar
             sudo -n systemctl restart wherebook
