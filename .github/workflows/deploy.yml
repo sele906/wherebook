@@ -1,0 +1,110 @@
+
+name: Deploy to Lightsail
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wherebook-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build Spring Boot
+        working-directory: ./api
+        run: |
+          chmod +x gradlew
+          ./gradlew clean bootJar
+
+          JAR=$(find build/libs -maxdepth 1 -name '*.jar' \
+            ! -name '*-plain.jar' | head -n 1)
+
+          test -n "$JAR"
+          cp "$JAR" "$GITHUB_WORKSPACE/wherebook.jar"
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          SSH_HOST_KEY: ${{ secrets.LIGHTSAIL_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Deploy to Lightsail
+        env:
+          HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          USERNAME: ${{ secrets.LIGHTSAIL_USER }}
+        run: |
+          # 새 JAR 파일 업로드
+          scp -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
+            "$GITHUB_WORKSPACE/wherebook.jar" \
+            "$USERNAME@$HOST:/home/ubuntu/wherebook.jar.new"
+
+          # 서버에서 배포
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
+            "$USERNAME@$HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+
+          cd /home/ubuntu
+          test -s wherebook.jar.new
+
+          # 기존 JAR 백업
+          if [ -f wherebook.jar ]; then
+            cp wherebook.jar wherebook.jar.bak
+          fi
+
+          # 새 JAR 파일로 교체
+          mv wherebook.jar.new wherebook.jar
+
+          # Spring Boot 재시작
+          sudo -n systemctl restart wherebook
+
+          # 정상 실행 확인
+          for i in $(seq 1 20); do
+            if curl -fsS --max-time 3 \
+              http://127.0.0.1:8080/api/connection \
+              >/dev/null 2>&1; then
+              echo "Deployment successful!"
+              exit 0
+            fi
+            sleep 3
+          done
+
+          # 실패 시 이전 버전 복원
+          echo "Health check failed!"
+
+          if [ -f wherebook.jar.bak ]; then
+            cp wherebook.jar.bak wherebook.jar
+            sudo -n systemctl restart wherebook
+          fi
+
+          exit 1
+          REMOTE
