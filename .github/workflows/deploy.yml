@@ -45,6 +45,14 @@ jobs:
           test -n "$JAR"
           cp "$JAR" "$GITHUB_WORKSPACE/wherebook.jar"
 
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: ${{ secrets.LIGHTSAIL_TAILSCALE_IP }}
+
       - name: Configure SSH
         env:
           SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
@@ -58,7 +66,7 @@ jobs:
 
       - name: Deploy to Lightsail
         env:
-          HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          HOST: ${{ secrets.LIGHTSAIL_TAILSCALE_IP }}
           USERNAME: ${{ secrets.LIGHTSAIL_USER }}
         run: |
           # 새 JAR 파일 업로드
