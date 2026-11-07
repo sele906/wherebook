@@ -17,6 +17,5 @@ public interface BookMapper {
     Book getBookByIsbn13(@Param("isbn13") String isbn13);
     void upsertBook(Book book);
     List<BookPopularItem> getPopularBooks(BookPopularItem bookPopularItem);
-    int countPopularBooks(BookPopularItem bookPopularItem);
     void upsertPopularBook(List<BookPopularItem> books);
 }

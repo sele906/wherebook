@@ -24,14 +24,6 @@
         ORDER BY ranking
     </select>
 
-    <select id="countPopularBooks" resultType="int">
-        SELECT
-            count(*)
-        FROM popular_book
-        WHERE start_dt = #{startDt}
-        AND end_dt = #{endDt}
-    </select>
-
     <insert id="upsertPopularBook">
         INSERT INTO popular_book (
             ranking,
@@ -69,13 +61,6 @@
             image_url = EXCLUDED.image_url,
             fetched_at = now()
     </insert>
-
-    <delete id="deletePopularBookCache">
-        <![CDATA[
-            DELETE FROM popular_book
-            WHERE end_dt < now() - INTERVAL '3 days'
-        ]]>
-    </delete>
 
     <select id="getBookByIsbn13" resultType="Book">
         SELECT
