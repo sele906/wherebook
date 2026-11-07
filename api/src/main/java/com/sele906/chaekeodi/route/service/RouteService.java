@@ -96,6 +96,8 @@ public class RouteService {
 
         for (String isbn : uniqueIsbns) {
 
+            //소장도서는 자주 바뀌지 않으므로 캐시 필요함
+            //db 있으면 불러오고 없으면 api 호출
             CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> client.fetchLibByBookDtlRegion(isbn, regions), pool);
 
             holdingsF.put(isbn, future);
@@ -117,6 +119,8 @@ public class RouteService {
 
                 BookLib key = new BookLib(isbn, libCode);
 
+                //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
+                //db 있으면 불러오고 없으면 api 호출
                 CompletableFuture<LoanStatus> future = CompletableFuture.supplyAsync(() -> client.fetchLoanStatus(isbn, libCode), pool);
 
                 loanF.put(key, future);

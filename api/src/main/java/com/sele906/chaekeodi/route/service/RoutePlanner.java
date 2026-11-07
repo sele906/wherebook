@@ -7,9 +7,6 @@ import com.sele906.chaekeodi.route.domain.RoutePlan;
 
 import java.util.*;
 
-import static com.sele906.chaekeodi.common.util.Combinatorics.combinations;
-import static com.sele906.chaekeodi.common.util.Combinatorics.permutations;
-
 public final class RoutePlanner {
 
     private static final int MAX_STOPS = 3;

@@ -45,6 +45,8 @@ public class HoldingService {
         }
 
         // 소장 도서관 후보군 확보
+        //소장도서는 자주 바뀌지 않으므로 캐시 필요함
+        //db 있으면 불러오고 없으면 api 호출
         List<String> libCodes = client.fetchLibByBook(isbn13, regions);
 
         if (libCodes.isEmpty()) {
@@ -273,7 +275,11 @@ public class HoldingService {
     //도서 소장/대출가능 여부
     public LoanStatusResponse getLoanStatus(String isbn13, String libCode) {
         try {
+
+            //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
+            //db 있으면 불러오고 없으면 api 호출
             var status = client.fetchLoanStatus(isbn13, libCode);
+
             return new LoanStatusResponse(status.isBookExists(), status.isLoanAvailable(), "OK");
         } catch (Exception e) {
             log.warn("대출 여부 조회 실패 isbn={} libCode={}", isbn13, libCode, e);
