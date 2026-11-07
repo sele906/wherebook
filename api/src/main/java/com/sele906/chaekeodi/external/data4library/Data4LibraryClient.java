@@ -415,6 +415,8 @@ public class Data4LibraryClient {
             }
 
             return new LoanStatus(
+                    isbn13,
+                    libCode,
                     "Y".equals(hasBook),
                     "Y".equals(loanAvailable)
             );

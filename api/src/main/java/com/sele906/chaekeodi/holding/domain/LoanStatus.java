@@ -1,15 +1,15 @@
 package com.sele906.chaekeodi.holding.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class LoanStatus {
+    private String isbn13;
+    private String libCode;
     private boolean bookExists;
     private boolean loanAvailable;
 }

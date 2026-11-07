@@ -278,7 +278,17 @@ public class HoldingService {
 
             //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
             //db 있으면 불러오고 없으면 api 호출
-            var status = client.fetchLoanStatus(isbn13, libCode);
+            LoanStatus status = holdingMapper.getStatus(isbn13, libCode);
+
+            if (status == null) {
+                status = client.fetchLoanStatus(isbn13, libCode);
+                if (status != null) {
+                    holdingMapper.upsertStatus(status);
+                } else {
+                    log.warn("대출 여부 응답 없음 isbn={} libCode={}", isbn13, libCode);
+                    return new LoanStatusResponse(false, false, "ERROR");
+                }
+            }
 
             return new LoanStatusResponse(status.isBookExists(), status.isLoanAvailable(), "OK");
         } catch (Exception e) {

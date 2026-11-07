@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.holding.mapper;
 
 import com.sele906.chaekeodi.holding.domain.BookCallNumber;
 import com.sele906.chaekeodi.holding.domain.BookCallNumberItem;
+import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,7 @@ public interface HoldingMapper {
     void deleteCallNumberItems(String libCode, String isbn13);
     void insertCallNumberItems(List<BookCallNumberItem> items);
     List<BookCallNumberItem> findCallNumberItems(String libCode, String isbn13);
+
+    LoanStatus getStatus(@Param("isbn13") String isbn13, @Param("libCode") String libCode);
+    void upsertStatus(LoanStatus status);
 }
