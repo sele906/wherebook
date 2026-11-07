@@ -20,6 +20,27 @@
  */
 
 /**
+ * @typedef {Object} BookPopularItem
+ * @property {number} ranking
+ * @property {string} isbn13
+ * @property {string} title
+ * @property {string} authors
+ * @property {string} publisher
+ * @property {string} publicationYear
+ * @property {string} imageUrl
+ * @property {string} startDt   집계 시작일 (ISO, 서울 00:00)
+ * @property {string} endDt     집계 끝일 (ISO, 서울 00:00)
+ * @property {string} fetchedAt 정보나루에서 받아 온 시각
+ */
+
+/**
+ * @typedef {Object} BookPopularResponse
+ * @property {BookPopularItem[]} books
+ * @property {number} page
+ * @property {number} size
+ */
+
+/**
  * @typedef {Object} Book
  * @property {string} isbn13
  * @property {string} title
