@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLoanPopularRequest {
+public class BookPopularRequest {
     private OffsetDateTime startDt;
     private OffsetDateTime endDt;
     private int pageNo = 1;
@@ -19,4 +19,5 @@ public class BookLoanPopularRequest {
 
     public int getPageNo()   { return Math.max(pageNo, 1); }
     public int getPageSize() { return Math.min(Math.max(pageSize, 1), 50); }
+    public int getOffset() { return (getPageNo() - 1) * getPageSize(); }
 }

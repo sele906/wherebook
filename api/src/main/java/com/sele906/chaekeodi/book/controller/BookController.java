@@ -2,11 +2,7 @@ package com.sele906.chaekeodi.book.controller;
 
 import com.sele906.chaekeodi.book.domain.*;
 import com.sele906.chaekeodi.book.service.BookService;
-import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
-import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
-import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +16,7 @@ public class BookController {
     //인기 대출도서 조회
     @GetMapping("/popular")
     public ResponseEntity<BookPopularResponse> loanPopularBooks(
-            @ModelAttribute BookLoanPopularRequest request
+            @ModelAttribute BookPopularRequest request
     ) {
         BookPopularResponse response = bookService.loanPopularBooks(request);
         return ResponseEntity.ok(response);

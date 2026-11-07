@@ -5,7 +5,6 @@ import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,7 +21,7 @@ public class BookService {
     private final Data4LibraryClient client;
     private static final Pattern ISBN13 = Pattern.compile("^97[89]\\d{10}$");
 
-    public BookPopularResponse loanPopularBooks(BookLoanPopularRequest req) {
+    public BookPopularResponse loanPopularBooks(BookPopularRequest req) {
 
         ZoneId zone = ZoneId.of("Asia/Seoul");
 
@@ -40,8 +39,7 @@ public class BookService {
 
         //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
         //db 있으면 불러오고 없으면 api 호출
-
-        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularItem(startDt, endDt, req.getPageNo(), req.getPageSize()));
+        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularRequest(startDt, endDt, req.getPageNo(), req.getPageSize()));
 
         if (books == null || books.isEmpty()) {
             var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
