@@ -1,9 +1,6 @@
 package com.sele906.chaekeodi.book.controller;
 
-import com.sele906.chaekeodi.book.domain.Book;
-import com.sele906.chaekeodi.book.domain.BookLoanPopularRequest;
-import com.sele906.chaekeodi.book.domain.BookSearchRequest;
-import com.sele906.chaekeodi.book.domain.BookSearchResponse;
+import com.sele906.chaekeodi.book.domain.*;
 import com.sele906.chaekeodi.book.service.BookService;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.holding.domain.LibrarySearchByBookRequest;
@@ -22,11 +19,10 @@ public class BookController {
 
     //인기 대출도서 조회
     @GetMapping("/popular")
-    public ResponseEntity<BookSearchResponse> loanPopularBooks(
+    public ResponseEntity<BookPopularResponse> loanPopularBooks(
             @ModelAttribute BookLoanPopularRequest request
     ) {
-
-        BookSearchResponse response = bookService.loanPopularBooks(request);
+        BookPopularResponse response = bookService.loanPopularBooks(request);
         return ResponseEntity.ok(response);
     }
 
@@ -35,7 +31,6 @@ public class BookController {
     public ResponseEntity<BookSearchResponse> searchBooks(
             @ModelAttribute BookSearchRequest request
             ) {
-
         BookSearchResponse response = bookService.searchBooks(request);
         return ResponseEntity.ok(response);
     }

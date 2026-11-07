@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.external.data4library;
 
 import com.sele906.chaekeodi.book.domain.Book;
+import com.sele906.chaekeodi.book.domain.BookPopularItem;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.holding.domain.CallNumberCandidate;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.HtmlUtils;
 import tools.jackson.databind.JsonNode;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Slf4j
@@ -28,11 +30,20 @@ public class Data4LibraryClient {
     @Value("${library.api.auth-key}")
     private String authKey;
 
+    public record LibraryPage(List<Library> libraries, int numFound) {}
+    public record BookPage(List<BookSearchItem> books, int numFound) {}
+    public record BookPopularPage(List<BookPopularItem> books, int numFound) {}
+
     //인기 대출도서 조회
-    public BookPage fetchPopularBooks(String startDt, String endDt, int pageNo, int pageSize) {
+    public BookPopularPage fetchPopularBooks(OffsetDateTime startDt, OffsetDateTime endDt, int pageNo, int pageSize) {
+        OffsetDateTime now = OffsetDateTime.now();
+
+        String startDtStr = startDt.toLocalDate().toString();
+        String endDtStr = endDt.toLocalDate().toString();
+
         JsonNode res = get("/loanItemSrch", Map.of(
-                "startDt", startDt,
-                "endDt", endDt,
+                "startDt", startDtStr,
+                "endDt", endDtStr,
                 "pageNo", pageNo,
                 "pageSize", pageSize))
                 .path("response");
@@ -51,26 +62,28 @@ public class Data4LibraryClient {
         }
 
         //정상호출
-        List<BookSearchItem> books = new ArrayList<>();
+        List<BookPopularItem> books = new ArrayList<>();
 
         for (JsonNode item : res.path("docs")) {
             JsonNode d = item.path("doc");
 
             String isbn13 = text(d, "isbn13");
             if (isbn13 == null) continue;   // ISBN 없으면 상세로 못 넘어감
-            Integer loan = intValue(d, "loan_count");
 
-            books.add(new BookSearchItem(
+            books.add(new BookPopularItem(
+                    num(d, "ranking"),
                     isbn13,
                     text(d, "bookname"),
                     text(d, "authors"),
                     text(d, "publisher"),
                     text(d, "publication_year"),
                     text(d, "bookImageURL"),
-                    loan == null ? 0 : loan
+                    startDt,
+                    endDt,
+                    now
             ));
         }
-        return new BookPage(books, res.path("numFound").asInt());
+        return new BookPopularPage(books, res.path("numFound").asInt());
     }
 
     //도서관 목록 호출
@@ -103,8 +116,6 @@ public class Data4LibraryClient {
 
         return new LibraryPage(libraries, res.path("numFound").asInt());
     }
-
-    public record LibraryPage(List<Library> libraries, int numFound) {}
 
     //도서 목록 호출
     public BookPage fetchBooks(String title, int pageNo, int pageSize) {
@@ -147,8 +158,6 @@ public class Data4LibraryClient {
         }
         return new BookPage(books, res.path("numFound").asInt());
     }
-
-    public record BookPage(List<BookSearchItem> books, int numFound) {}
 
     //도서 상세정보 호출
     public Optional<Book> fetchBookByIsbn13(String isbn13) {
@@ -204,7 +213,7 @@ public class Data4LibraryClient {
         int pageSize = 100;
 
         // 느림!! 보완 필요!!
-        //자체 쿼리로 해결할수 있을거 같은데??
+        // 자체 쿼리로 해결할수 있을거 같은데?? 아니면 db 인덱스??
         // 지역 하나씩 조회
         for (String region : regions) {
 
@@ -547,6 +556,18 @@ public class Data4LibraryClient {
         l.setOperatingTime(text(lib, "operatingTime"));   // ← 수정
         l.setBookCount(intValue(lib, "BookCount"));
         return l;
+    }
+
+    private int num(JsonNode node, String field) {
+        JsonNode value = node.get(field);
+
+        if (value == null || value.isNull()) {
+            return 0;
+        }
+
+        int num = Integer.parseInt(value.asText().trim());
+
+        return num == 0 ? 0 : num;
     }
 
     private String text(JsonNode node, String field) {

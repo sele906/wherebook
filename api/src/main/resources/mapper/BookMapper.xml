@@ -5,6 +5,78 @@
 
 <mapper namespace="com.sele906.chaekeodi.book.mapper.BookMapper">
 
+    <select id="getPopularBooks" resultType="BookPopularItem">
+        SELECT
+            ranking,
+            isbn13,
+            title,
+            authors,
+            publisher,
+            publication_year,
+            image_url,
+            start_dt,
+            end_dt,
+            fetched_at
+        FROM popular_book
+        WHERE start_dt = #{startDt}
+            AND end_dt = #{endDt}
+            AND ranking BETWEEN #{offset} + 1 AND #{offset} + #{size}
+        ORDER BY ranking
+    </select>
+
+    <select id="countPopularBooks" resultType="int">
+        SELECT
+            count(*)
+        FROM popular_book
+        WHERE start_dt = #{startDt}
+        AND end_dt = #{endDt}
+    </select>
+
+    <insert id="upsertPopularBook">
+        INSERT INTO popular_book (
+            ranking,
+            isbn13,
+            title,
+            authors,
+            publisher,
+            publication_year,
+            image_url,
+            start_dt,
+            end_dt
+        )
+        VALUES
+
+        <foreach collection="list" item="i" separator=",">
+        (
+            #{i.ranking},
+            #{i.isbn13},
+            #{i.title},
+            #{i.authors},
+            #{i.publisher},
+            #{i.publicationYear},
+            #{i.imageUrl},
+            #{i.startDt},
+            #{i.endDt}
+        )
+        </foreach>
+
+        ON CONFLICT (isbn13, start_dt, end_dt) DO UPDATE SET
+            ranking = EXCLUDED.ranking,
+            title = EXCLUDED.title,
+            authors = EXCLUDED.authors,
+            publisher = EXCLUDED.publisher,
+            publication_year = EXCLUDED.publication_year,
+            image_url = EXCLUDED.image_url,
+            fetched_at = now()
+    </insert>
+
+    <delete id="deletePopularBookCache">
+        <![CDATA[
+            DELETE FROM popular_book
+            WHERE end_dt < now() - INTERVAL '3 days'
+        ]]>
+    </delete>
+
     <select id="getBookByIsbn13" resultType="Book">
         SELECT
             isbn13,

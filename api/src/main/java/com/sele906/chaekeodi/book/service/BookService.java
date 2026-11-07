@@ -1,9 +1,6 @@
 package com.sele906.chaekeodi.book.service;
 
-import com.sele906.chaekeodi.book.domain.Book;
-import com.sele906.chaekeodi.book.domain.BookLoanPopularRequest;
-import com.sele906.chaekeodi.book.domain.BookSearchRequest;
-import com.sele906.chaekeodi.book.domain.BookSearchResponse;
+import com.sele906.chaekeodi.book.domain.*;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
@@ -12,6 +9,9 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -22,17 +22,37 @@ public class BookService {
     private final Data4LibraryClient client;
     private static final Pattern ISBN13 = Pattern.compile("^97[89]\\d{10}$");
 
-    public BookSearchResponse loanPopularBooks(BookLoanPopularRequest req) {
+    public BookPopularResponse loanPopularBooks(BookLoanPopularRequest req) {
 
-        //최근 7일간 인기대출 기록
-        LocalDate today = LocalDate.now();
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+
+        // 오늘 날짜
+        LocalDate today = LocalDate.now(zone);
         LocalDate weekAgo = today.minusDays(7);
 
-        req.setStartDt(weekAgo.toString());
-        req.setEndDt(today.toString());
+        //최근 7일간 인기대출 기록
+        // 날짜를 00:00:00으로 고정한 OffsetDateTime
+        OffsetDateTime startDt = weekAgo.atStartOfDay(zone).toOffsetDateTime();
+        OffsetDateTime endDt = today.atStartOfDay(zone).toOffsetDateTime();
 
-        var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
-        return new BookSearchResponse(result.books(), req.getPageNo(), req.getPageSize(), result.numFound());
+        req.setStartDt(startDt);
+        req.setEndDt(endDt);
+
+        //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
+        //db 있으면 불러오고 없으면 api 호출
+
+        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularItem(startDt, endDt, req.getPageNo(), req.getPageSize()));
+
+        if (books == null || books.isEmpty()) {
+            var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
+            books = result.books();
+
+            if (!books.isEmpty()) {
+                bookMapper.upsertPopularBook(books); //db에 캐시
+            }
+        }
+
+        return new BookPopularResponse(books, req.getPageNo(), req.getPageSize());
     }
 
     public BookSearchResponse searchBooks(BookSearchRequest req) {
