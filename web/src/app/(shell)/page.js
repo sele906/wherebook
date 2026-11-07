@@ -183,8 +183,9 @@ async function PopularBooks() {
                 return (
                     <li key={book.isbn13} className={styles.bookCard}>
                         {/* 표지와 제목이 같은 책 상세로 감. 추가 버튼은 링크 밖에 두려고 표지 링크를 따로 둠 (Tab·스크린리더엔 제목 링크 하나만) */}
+                        {/* 미리 불러오기는 끔 — 보이기만 한 책 때문에 책 상세 API·정보나루를 부르지 않게 */}
                         <div className={styles.coverWrap}>
-                            <Link href={href} className={styles.cover} tabIndex={-1} aria-hidden="true">
+                            <Link href={href} prefetch={false} className={styles.cover} tabIndex={-1} aria-hidden="true">
                                 {cover && (
                                     // 표지는 여러 외부 호스트라 next/image 대신 img로 지연 로딩만 함. 자리는 .cover가 5:7로 잡음
                                     // eslint-disable-next-line @next/next/no-img-element
@@ -200,7 +201,7 @@ async function PopularBooks() {
                                 errorClassName={styles.addError}
                             />
                         </div>
-                        <Link href={href} className={styles.bookLink}>
+                        <Link href={href} prefetch={false} className={styles.bookLink}>
                             <span className={styles.bookTitle}>{book.title}</span>
                             {book.authors && <span className={styles.bookAuthors}>{book.authors}</span>}
                         </Link>

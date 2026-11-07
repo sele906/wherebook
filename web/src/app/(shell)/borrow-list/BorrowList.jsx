@@ -187,7 +187,8 @@ function BorrowListRow({ item, checked, onToggle, onRemove }) {
                 <input type="checkbox" checked={checked} onChange={onToggle} aria-label={`${item.title} 선택`} />
             </label>
 
-            <Link href={`/book/${item.isbn13}`} className={styles.link}>
+            {/* 미리 불러오기는 끔 — 보이기만 한 책 때문에 책 상세 API·정보나루를 부르지 않게 */}
+            <Link href={`/book/${item.isbn13}`} prefetch={false} className={styles.link}>
                 <span className={styles.cover}>
                     {cover && (
                         // 표지는 여러 외부 호스트라 img로 지연 로딩만. 자리는 .cover가 5:7로 잡음

@@ -10,6 +10,7 @@ import styles from './BookRow.module.css';
  * 책 목록 한 행. 왼쪽 표지·제목·메타 전체가 책 상세 링크 하나, 오른쪽 "추가"는 링크 밖.
  * 책 제목·저자·출판사는 데이터 원문 그대로 (번역·가공 안 함).
  * added: 이미 빌릴 책에 있는지 (서버가 확인한 값. 모르면 false)
+ * 미리 불러오기(prefetch)는 끔 — 화면에 보이기만 한 책 때문에 책 상세 API·정보나루를 부르지 않게.
  */
 
 export default function BookRow({ book, added = false }) {
@@ -18,7 +19,7 @@ export default function BookRow({ book, added = false }) {
 
     return (
         <li className={styles.row}>
-            <Link href={`/book/${book.isbn13}`} className={styles.link}>
+            <Link href={`/book/${book.isbn13}`} prefetch={false} className={styles.link}>
                 <span className={styles.cover}>
                     {cover && (
                         // 표지는 여러 외부 호스트라 next/image 대신 img로 지연 로딩만 함. 자리는 .cover가 5:7로 잡음

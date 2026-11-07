@@ -189,7 +189,8 @@ function SinglePlan({ single, onLoan, notFound }) {
 function MissingRow({ book, onLoan = false }) {
     return (
         <li>
-            <Link href={`/book/${book.isbn13}`} className={styles.missingRow}>
+            {/* 미리 불러오기는 끔 — 보이기만 한 책 때문에 책 상세 API·정보나루를 부르지 않게 */}
+            <Link href={`/book/${book.isbn13}`} prefetch={false} className={styles.missingRow}>
                 <BookLine book={book} />
                 {onLoan ? (
                     <span className={styles.onLoanBadge}>대출중</span>
