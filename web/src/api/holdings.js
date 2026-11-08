@@ -1,18 +1,19 @@
 import { ApiError, apiGet } from "./client";
 
 // 책을 소장한 도서관 — GET /api/books/{isbn13}/libraries
-// radius 단위 m(기본 10000, 100~50000), libCodes는 쉼표로 구분한 도서관 코드
+// 위치(latitude·longitude, 반경 안 지역) 또는 지역 코드(regionCode·dtlRegionCode 둘 다) 중 하나는 꼭 보낸다.
+// 둘 다 있으면 위치가 우선. radius 단위 m(기본 10000, 100~50000)
 /** @returns {Promise<import("./types").LibrarySearchByBookResponse>} */
 export function searchLibrariesByBook(
   isbn13,
-  { region, latitude, longitude, radius, libCodes } = {}
+  { regionCode, dtlRegionCode, latitude, longitude, radius } = {}
 ) {
   return apiGet(`/api/books/${encodeURIComponent(isbn13)}/libraries`, {
-    region,
+    regionCode,
+    dtlRegionCode,
     latitude,
     longitude,
     radius,
-    libCodes: Array.isArray(libCodes) ? libCodes.join(",") : libCodes,
   });
 }
 
