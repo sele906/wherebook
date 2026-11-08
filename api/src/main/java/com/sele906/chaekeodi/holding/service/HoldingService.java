@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.holding.service;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
+import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.*;
 import com.sele906.chaekeodi.holding.mapper.HoldingMapper;
@@ -10,6 +11,7 @@ import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Duration;
@@ -22,43 +24,65 @@ import java.util.*;
 public class HoldingService {
 
     private final TransactionTemplate tx;
-    private final LibraryMapper libraryMapper;
     private final BookMapper bookMapper;
     private final HoldingMapper holdingMapper;
     private final Data4LibraryClient client;
 
     public LibrarySearchByBookResponse searchLibByBook(String isbn13, LibrarySearchByBookRequest req) {
 
-        List<String> regions;
+        // 1. 필요한 지역 목록 (위치 or 요청값)
+        List<Region> regions = resolveRegions(req);
 
-        // 지역 미지정 + 위치 있음 → API 호출용 region 추출
-        if (req.getLatitude() != null && req.getLongitude() != null) {
-
-            regions = holdingMapper.findNearestRegionWithLocationAndRadius(
-                    req.getLatitude(),
-                    req.getLongitude(),
-                    req.getRadius()
-            );
-
-        } else {
-            regions = List.of(req.getRegion());
+        if (regions.isEmpty()) {
+            return new LibrarySearchByBookResponse(List.of(), 0);
         }
 
-        // 소장 도서관 후보군 확보
-        //소장도서는 자주 바뀌지 않으므로 캐시 필요함
-        //db 있으면 불러오고 없으면 api 호출
-        List<String> libCodes = client.fetchLibByBook(isbn13, regions);
+        // 2. 그중 최근에 확인한 지역
+        Set<Region> fresh = holdingMapper.findFreshRegions(isbn13, regions);
+
+        // 3. 확인 안 했거나 오래된 지역만 API
+        for (Region r : regions) {
+            if (fresh.contains(r)) continue;
+            try {
+                List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13, r);
+
+                tx.executeWithoutResult(s -> {
+                    holdingMapper.deleteHoldings(isbn13, r);          // 더 이상 소장 안 하는 도서관 정리
+                    if (!items.isEmpty()) holdingMapper.insertHoldings(items);
+                    holdingMapper.upsertRegionFetch(isbn13, r);        // 0곳이어도 "확인함" 기록
+                });
+
+            } catch (ExternalApiException e) {
+                log.warn("소장 조회 실패, 건너뜀 isbn={} region={}", isbn13, r, e);
+            }
+        }
+
+        // 4. 소장 목록은 항상 DB에서 전체 지역 기준으로 읽기
+        List<String> libCodes = holdingMapper.getHoldingLibCodes(isbn13, regions);
 
         if (libCodes.isEmpty()) {
             return new LibrarySearchByBookResponse(List.of(), 0);
         }
 
-        req.setLibCodes("{" + String.join(",", libCodes) + "}");
+        req.setLibCodes(libCodes);
 
         //위치로 필터
-        List<LibrarySearchItem> libraries = libraryMapper.searchLibByDistance(req);
+        List<LibrarySearchItem> libraries = holdingMapper.searchLibByDistance(req);
 
         return new LibrarySearchByBookResponse(libraries,libraries.size());
+    }
+
+    private List<Region> resolveRegions(LibrarySearchByBookRequest req) {
+
+        if (req.getLatitude() != null && req.getLongitude() != null) {
+            return holdingMapper.findRegionsNear(req.getLatitude(), req.getLongitude(), req.getRadius());
+        }
+
+        if (req.getRegionCode() != null && req.getDtlRegionCode() != null) {
+            return List.of(new Region(req.getRegionCode(), req.getDtlRegionCode()));
+        }
+
+        throw new IllegalArgumentException("위치 또는 지역 코드가 필요합니다.");
     }
 
     public CallNumberResponse getCallNumber(String isbn13, String libCode) {

@@ -49,7 +49,7 @@ public class RouteService {
         }
 
         // 2. 반경 내 도서관의 지역 코드 수집 (중복 제거)
-        Set<Region> regions = new HashSet<>();
+        Set<RegionRoute> regions = new HashSet<>();
 
         for (CandidateLibrary lib : libraries) {
 
@@ -57,7 +57,7 @@ public class RouteService {
             String dtlRegionCode = lib.getDtlRegionCode();
 
             if (regionCode != null && dtlRegionCode != null) {
-                Region region = new Region(regionCode, dtlRegionCode);
+                RegionRoute region = new RegionRoute(regionCode, dtlRegionCode);
                 regions.add(region);
             }
         }

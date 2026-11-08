@@ -14,5 +14,4 @@ public interface LibraryMapper {
     List<LibraryMapSearchItem> searchLibrariesInMap(LibrarySearchRequest request);
     int countLibraries(LibrarySearchRequest request);
     Library getLibraryByLibCode(String libCode);
-    List<LibrarySearchItem> searchLibByDistance(LibrarySearchByBookRequest request);
 }

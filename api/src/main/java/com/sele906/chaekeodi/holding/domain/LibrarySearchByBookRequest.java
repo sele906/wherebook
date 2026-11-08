@@ -4,16 +4,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
 public class LibrarySearchByBookRequest {
-    private String region;
+    private String regionCode;
+    private String dtlRegionCode;
 
     private Double latitude;
     private Double longitude;
     private Integer radius = 10000;
-    private String libCodes;
+    private List<String> libCodes;
 
     public int getRadius() { return Math.min(Math.max(radius, 100), 50_000); }
 }

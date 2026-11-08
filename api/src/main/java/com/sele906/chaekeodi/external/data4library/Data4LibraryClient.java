@@ -5,9 +5,11 @@ import com.sele906.chaekeodi.book.domain.BookPopularItem;
 import com.sele906.chaekeodi.book.domain.BookSearchItem;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.holding.domain.CallNumberCandidate;
+import com.sele906.chaekeodi.holding.domain.HoldingLibraryItem;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
+import com.sele906.chaekeodi.holding.domain.Region;
 import com.sele906.chaekeodi.library.domain.Library;
-import com.sele906.chaekeodi.route.domain.Region;
+import com.sele906.chaekeodi.route.domain.RegionRoute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -205,97 +207,87 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 지역별 호출
-    public List<String> fetchLibByBook(String isbn, List<String> regions) {
+    public List<HoldingLibraryItem> fetchLibByBookInRegion(String isbn, Region r) {
+
+        List<HoldingLibraryItem> result = new ArrayList<>();
 
         // 중복 제거도 같이
         Set<String> libCodes = new LinkedHashSet<>();
 
         int pageSize = 100;
+        int pageNo = 1;
 
-        // 느림!! 보완 필요!!
-        // 자체 쿼리로 해결할수 있을거 같은데?? 아니면 db 인덱스??
-        // 지역 하나씩 조회
-        for (String region : regions) {
+        try {
+            while (true) {
+                JsonNode res = get("/libSrchByBook", Map.of(
+                        "isbn", isbn,
+                        "region", r.getRegionCode(),
+                        "dtl_region", r.getDtlRegionCode(),
+                        "pageNo", pageNo,
+                        "pageSize", pageSize
+                ))
+                .path("response");
 
-            int pageNo = 1;
-
-            try {
-                while (true) {
-
-                    JsonNode res = get("/libSrchByBook", Map.of(
-                            "isbn", isbn,
-                            "region", region,
-                            "pageNo", pageNo,
-                            "pageSize", pageSize
-                    ))
-                    .path("response");
-
-                    // 응답 구조 자체가 잘못된 경우
-                    if (res == null || !res.isObject()) {
-                        throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
-                    }
-
-                    //에러 시
-                    JsonNode errCode = res.path("errCode");
-                    JsonNode error = res.path("error");
-
-                    if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
-                        throw new ExternalApiException(errCode.asText() + ": " + error.asText());
-                    } else {
-                        if (!res.has("numFound")) {
-                            throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
-                        }
-                    }
-
-                    //정상호출
-                    JsonNode libs = res.path("libs");
-
-                    int numFound = res.path("numFound").asInt();
-
-                    // 더 이상 결과 없음
-                    if (!libs.isArray() || libs.isEmpty()) {
-                        break;
-                    }
-
-                    for (JsonNode item : libs) {
-
-                        String libCode = item.path("lib")
-                                .path("libCode")
-                                .asText();
-
-                        if (!libCode.isBlank()) {
-                            libCodes.add(libCode);
-                        }
-                    }
-
-                    log.debug(
-                            "region={} page={} numFound={} 현재페이지={} 누적={}",
-                            region,
-                            pageNo,
-                            numFound,
-                            libs.size(),
-                            libCodes.size()
-                    );
-
-                    // 마지막 페이지
-                    if (pageNo * pageSize >= numFound) {
-                        break;
-                    }
-
-                    pageNo++;
+                // 응답 구조 자체가 잘못된 경우
+                if (res == null || !res.isObject()) {
+                    throw new ExternalApiException("정보나루 응답 형식이 올바르지 않습니다.");
                 }
 
-            } catch (Exception e) {
-                log.warn(
-                        "소장 도서관 조회 실패 isbn={} region={}",
-                        isbn,
-                        region,
-                        e
-                );
+                //에러 시
+                JsonNode errCode = res.path("errCode");
+                JsonNode error = res.path("error");
+
+                if (errCode != null && !errCode.isMissingNode() && !errCode.isNull()) {
+                    throw new ExternalApiException(errCode.asText() + ": " + error.asText());
+                } else {
+                    if (!res.has("numFound")) {
+                        throw new ExternalApiException("정보나루 응답에 numFound가 없습니다.");
+                    }
+                }
+
+                //정상호출
+                JsonNode libs = res.path("libs");
+
+                int numFound = res.path("numFound").asInt();
+
+                // 더 이상 결과 없음
+                if (!libs.isArray() || libs.isEmpty()) {
+                    break;
+                }
+
+                for (JsonNode item : libs) {
+
+                    String libCode = item.path("lib")
+                            .path("libCode")
+                            .asText();
+
+                    if (!libCode.isBlank() && libCodes.add(libCode)) {
+                        result.add(new HoldingLibraryItem(
+                                isbn,
+                                libCode,
+                                r.getRegionCode(),
+                                r.getDtlRegionCode()
+                        ));
+                    }
+                }
+
+                log.debug( "region={} page={} numFound={} 현재페이지={} 누적={}", r, pageNo, numFound, libs.size(), libCodes.size());
+
+                // 마지막 페이지
+                if (pageNo * pageSize >= numFound) {
+                    break;
+                }
+
+                pageNo++;
             }
+
+        } catch (ExternalApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ExternalApiException("소장 도서관 조회 실패 isbn=" + isbn + " region=" + r, e);
         }
 
-        return new ArrayList<>(libCodes);
+        return result;
     }
 
     // 인접 광역 매핑
@@ -434,7 +426,7 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 세부 지역별 호출
-    public List<String> fetchLibByBookDtlRegion(String isbn, Set<Region> dtlRegions) {
+    public List<String> fetchLibByBookDtlRegion(String isbn, Set<RegionRoute> dtlRegions) {
 
         // 중복 제거도 같이
         Set<String> libCodes = new LinkedHashSet<>();
@@ -442,7 +434,7 @@ public class Data4LibraryClient {
         int pageSize = 100;
 
         // 세부지역 하나씩 조회
-        for (Region d : dtlRegions) {
+        for (RegionRoute d : dtlRegions) {
 
             int pageNo = 1;
 

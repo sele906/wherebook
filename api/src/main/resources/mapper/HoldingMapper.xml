@@ -68,18 +68,136 @@
         </foreach>
     </insert>
 
-    <select id="findNearestRegionWithLocationAndRadius" resultType="string">
-        SELECT DISTINCT region_code
+    <select id="findFreshRegions" resultType="Region">
+        select
+            region_code,
+            dtl_region_code
+        from holding_region
+        WHERE isbn13 = #{isbn13}
+        AND fetched_at > now() - INTERVAL '1 day'
+        AND (region_code, dtl_region_code) IN
+        <foreach collection="regions" item="r" open="(" separator="," close=")">
+            (#{r.regionCode}, #{r.dtlRegionCode})
+        </foreach>
+    </select>
+
+    <select id="getHoldingLibCodes" resultType="String">
+        select
+            lib_code
+        from holding_library
+        where isbn13 = #{isbn13}
+        AND (region_code, dtl_region_code) IN
+        <foreach collection="regions" item="region" open="(" separator="," close=")">
+            (#{region.regionCode}, #{region.dtlRegionCode})
+        </foreach>
+    </select>
+
+    <delete id="deleteHoldings">
+        DELETE FROM holding_library
+        WHERE isbn13 = #{isbn13}
+        AND region_code = #{region.regionCode}
+        AND dtl_region_code = #{region.dtlRegionCode}
+    </delete>
+
+    <insert id="insertHoldings">
+        insert into holding_library (
+            isbn13,
+            lib_code,
+            region_code,
+            dtl_region_code
+        )
+        values
+        <foreach collection="list" item="i" separator=",">
+            (
+                #{i.isbn13},
+                #{i.libCode},
+                #{i.regionCode},
+                #{i.dtlRegionCode}
+            )
+        </foreach>
+        ON CONFLICT (isbn13, lib_code) DO UPDATE SET
+        region_code = EXCLUDED.region_code,
+        dtl_region_code = EXCLUDED.dtl_region_code,
+        fetched_at = now()
+    </insert>
+
+    <insert id="upsertRegionFetch">
+        insert into holding_region (
+            isbn13,
+            region_code,
+            dtl_region_code
+        ) values (
+            #{isbn13},
+            #{region.regionCode},
+            #{region.dtlRegionCode}
+        )
+        ON CONFLICT (isbn13, region_code, dtl_region_code) DO UPDATE SET
+        fetched_at = now()
+    </insert>
+
+    <select id="findRegionsNear" resultType="Region">
+        SELECT
+            region_code,
+            dtl_region_code
         FROM library
         WHERE location IS NOT NULL
         AND ST_DWithin(
             location,
-            ST_SetSRID(
-                ST_MakePoint(#{longitude}, #{latitude}),
-                4326
-            )::geography,
+            ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
             #{radius}
-        );
+        )
+        GROUP BY region_code, dtl_region_code
+        ORDER BY MIN(
+            ST_Distance(
+                location,
+                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography
+            )
+        ) ASC
+    </select>
+
+    <select id="searchLibByDistance" resultType="LibrarySearchItem">
+        SELECT
+        lib_code,
+        name,
+        address,
+        tel,
+        fax,
+        homepage,
+        latitude,
+        longitude,
+        closed_days,
+        operating_time,
+        book_count,
+        dtl_region_code,
+
+        <choose>
+            <when test="latitude != null and longitude != null">
+                ST_Distance(
+                location,
+                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography
+                ) AS distance
+            </when>
+            <otherwise>
+                NULL AS distance
+            </otherwise>
+        </choose>
+
+        FROM library
+        WHERE lib_code IN
+
+        <foreach collection="libCodes" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+
+        <if test="latitude != null and longitude != null">
+            AND ST_DWithin(
+                location,
+                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
+                #{radius}
+            )
+        </if>
+
+        ORDER BY distance, name
     </select>
 
     <select id="getStatus" resultType="LoanStatus">

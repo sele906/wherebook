@@ -198,45 +198,4 @@
         WHERE lib_code = #{libCode}
     </select>
 
-    <select id="searchLibByDistance" resultType="LibrarySearchItem">
-        SELECT
-        lib_code,
-        name,
-        address,
-        tel,
-        fax,
-        homepage,
-        latitude,
-        longitude,
-        closed_days,
-        operating_time,
-        book_count,
-        dtl_region_code,
-
-        <choose>
-            <when test="latitude != null and longitude != null">
-                ST_Distance(
-                location,
-                ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography
-                ) AS distance
-            </when>
-            <otherwise>
-                NULL AS distance
-            </otherwise>
-        </choose>
-
-        FROM library
-        WHERE lib_code = ANY(#{libCodes}::varchar[])
-
-        <if test="latitude != null and longitude != null">
-            AND ST_DWithin(
-            location,
-            ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
-            #{radius}
-            )
-        </if>
-
-        ORDER BY distance, name
-    </select>
-
 </mapper>

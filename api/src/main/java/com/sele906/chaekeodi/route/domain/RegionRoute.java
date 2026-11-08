@@ -7,7 +7,7 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 @ToString
-public class Region {
+public class RegionRoute {
     private String region;
     private String dtlRegion;
 }
