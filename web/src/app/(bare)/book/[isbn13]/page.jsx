@@ -6,6 +6,7 @@ import { userAgentFromString } from 'next/server';
 
 import { ApiError, getBook, getLoanStatuses, LOAN_BATCH_SIZE, searchLibrariesByBook } from '@/api';
 import BackLink from '@/components/BackLink';
+import { CircleAlertIcon } from '@/components/icons';
 import { LibraryRowSkeleton } from '@/components/LibraryRow';
 import LoanBadge, { LoanBadgeSkeleton } from '@/components/LoanBadge';
 import { LoadingArea } from '@/components/Skeleton';
@@ -144,6 +145,14 @@ export default async function BookPage({ params, searchParams }) {
                     </h2>
                     {/* 기준 위치는 항상 글자로 */}
                     <p className={styles.base}>{describeBase(base, radiusKm)}</p>
+                    {/* 정보나루 대출 데이터가 하루 단위라, 배지만 믿고 헛걸음하지 않게 목록보다 먼저 굵게 알림.
+                        대출 배지를 안 그리는 크롤러에겐 뺌 */}
+                    {!isBot && (
+                        <p className={styles.caveat}>
+                            <CircleAlertIcon size={18} className={styles.caveatIcon} />
+                            대출 가능 여부는 전날 기준이에요. 가기 전에 도서관에 한 번 확인해 보세요.
+                        </p>
+                    )}
 
                     <Suspense key={`${radiusKm}:${baseKey(base)}`} fallback={<HoldingsSkeleton />}>
                         <Holdings base={base} isbn13={isbn13} radiusKm={radiusKm} checkLoan={!isBot} />
