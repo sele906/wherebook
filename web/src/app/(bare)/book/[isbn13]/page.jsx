@@ -12,7 +12,7 @@ import { LoadingArea } from '@/components/Skeleton';
 import { getBase } from '@/lib/base';
 import { getMyBorrowList } from '@/lib/borrowList';
 import { isValidIsbn13 } from '@/lib/ids';
-import { baseKey, describeBase, formatKm, readRadiusKm } from '@/lib/location';
+import { RADIUS_STEPS_KM, baseKey, describeBase, formatKm, readRadiusKm } from '@/lib/location';
 import { toHttps } from '@/lib/url';
 
 import BorrowListButton, { BorrowListProvider } from './BorrowListButton';
@@ -199,13 +199,15 @@ async function Holdings({ base, isbn13, radiusKm, checkLoan }) {
     const libraries = data.libraries ?? [];
 
     if (libraries.length === 0) {
+        // 한 번에 10km로 건너뛰지 않고 다음 단계 반경으로 (3 → 5 → 10). 10km면 없음
+        const widenKm = RADIUS_STEPS_KM.find((km) => km > radiusKm);
         return (
             <Notice
                 title={`${formatKm(radiusKm)} 안에 이 책을 가진 도서관이 없어요`}
                 action={
-                    radiusKm < 10 && (
-                        <Link href={bookHref(isbn13, 10)} className={styles.secondary}>
-                            10km까지 넓혀 보기
+                    widenKm && (
+                        <Link href={bookHref(isbn13, widenKm)} prefetch={false} className={styles.secondary}>
+                            {`${formatKm(widenKm)}까지 넓혀 보기`}
                         </Link>
                     )
                 }
