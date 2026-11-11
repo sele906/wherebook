@@ -52,11 +52,11 @@
         FROM book
         WHERE isbn13 IN
         <foreach collection="isbns"
-                 item="isbn"
+                 item="isbn13"
                  open="("
                  separator=","
                  close=")">
-            #{isbn}
+            #{isbn13}
         </foreach>
     </select>
 

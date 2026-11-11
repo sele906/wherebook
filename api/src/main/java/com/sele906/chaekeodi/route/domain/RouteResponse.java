@@ -6,7 +6,8 @@ public record RouteResponse(
         allAvailableBooksRoute allAvailableBooksRoute,
         bestSingleLibrary bestSingleLibrary,
         List<BookSummary> onLoanNearby,
-        List<BookSummary> notFoundNearby
+        List<BookSummary> notFoundNearby,
+        List<BookSummary> uncoveredBooks
 ) {
 
     public record BookSummary(String isbn13, String title, String authors, String publisher, String publicationYear) {}

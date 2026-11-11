@@ -5,8 +5,7 @@
 
 <mapper namespace="com.sele906.chaekeodi.library.mapper.LibraryMapper">
 
-    <select id="findOne"
-            resultType="Library">
+    <select id="findOne" resultType="Library">
         SELECT *
         FROM library
         LIMIT 1

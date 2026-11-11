@@ -7,13 +7,14 @@ import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.*;
 import com.sele906.chaekeodi.holding.mapper.HoldingMapper;
 import com.sele906.chaekeodi.library.domain.LibrarySearchItem;
-import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import jakarta.annotation.PreDestroy;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -28,6 +29,14 @@ public class HoldingService {
     private final HoldingMapper holdingMapper;
     private final Data4LibraryClient client;
 
+    // 외부 API 동시 호출 최대 4개
+    private final ExecutorService pool = Executors.newFixedThreadPool(4);
+
+    @PreDestroy
+    public void shutdownPool() {
+        pool.shutdown();
+    }
+
     public LibrarySearchByBookResponse searchLibByBook(String isbn13, LibrarySearchByBookRequest req) {
 
         // 1. 필요한 지역 목록 (위치 or 요청값)
@@ -37,27 +46,8 @@ public class HoldingService {
             return new LibrarySearchByBookResponse(List.of(), 0);
         }
 
-        // 2. 그중 최근에 확인한 지역
-        Set<Region> fresh = holdingMapper.findFreshRegions(isbn13, regions);
-
-        // 3. 확인 안 했거나 오래된 지역만 API
-        for (Region r : regions) {
-            if (fresh.contains(r)) continue;
-            try {
-                List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13, r);
-
-                tx.executeWithoutResult(s -> {
-                    holdingMapper.deleteHoldings(isbn13, r);          // 더 이상 소장 안 하는 도서관 정리
-                    if (!items.isEmpty()) holdingMapper.insertHoldings(items);
-                    holdingMapper.upsertRegionFetch(isbn13, r);        // 0곳이어도 "확인함" 기록
-                });
-
-            } catch (ExternalApiException e) {
-                log.warn("소장 조회 실패, 건너뜀 isbn={} region={}", isbn13, r, e);
-            }
-        }
-
-        // 4. 소장 목록은 항상 DB에서 전체 지역 기준으로 읽기
+        // 2. 지역 캐시
+        refreshStaleRegions(isbn13, regions);
         List<String> libCodes = holdingMapper.getHoldingLibCodes(isbn13, regions);
 
         if (libCodes.isEmpty()) {
@@ -66,12 +56,13 @@ public class HoldingService {
 
         req.setLibCodes(libCodes);
 
-        //위치로 필터
+        // 3. 위치로 필터
         List<LibrarySearchItem> libraries = holdingMapper.searchLibByDistance(req);
 
         return new LibrarySearchByBookResponse(libraries,libraries.size());
     }
 
+    //필요한 지역 목록 가져오기
     private List<Region> resolveRegions(LibrarySearchByBookRequest req) {
 
         if (req.getLatitude() != null && req.getLongitude() != null) {
@@ -296,28 +287,155 @@ public class HoldingService {
         return latestDate;
     }
 
-    //도서 소장/대출가능 여부
+    // ISBN별 소장 도서관 목록 조회
+    public Map<String, List<String>> getHoldingLibCodes(List<String> isbns, List<Region> regions) {
+
+        if (isbns == null || isbns.isEmpty() || regions == null || regions.isEmpty()) {
+            return Map.of();
+        }
+
+        // 캐시가 없는 지역만 API 호출 후 DB 갱신
+        for (String isbn : new LinkedHashSet<>(isbns)) {
+            refreshStaleRegions(isbn, regions);
+        }
+
+        // ISBN 여러 개를 DB에서 한 번에 조회
+        return holdingMapper
+                .getHoldingLibCodesBulk(isbns, regions)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        HoldingLibraryItem::getIsbn13,
+                        Collectors.mapping(
+                                HoldingLibraryItem::getLibCode,
+                                Collectors.toList()
+                        )
+                ));
+    }
+
+    // ISBN + 도서관별 대출 상태 개별 조회
     public LoanStatusResponse getLoanStatus(String isbn13, String libCode) {
-        try {
+        BookLib key = new BookLib(isbn13, libCode);
+        return Optional.ofNullable(getLoanStatuses(List.of(key)).get(key))
+                .map(s -> new LoanStatusResponse(s.isBookExists(), s.isLoanAvailable(), "OK"))
+                .orElse(new LoanStatusResponse(false, false, "ERROR"));
+    }
 
-            //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
-            //db 있으면 불러오고 없으면 api 호출
-            LoanStatus status = holdingMapper.getStatus(isbn13, libCode);
+    // ISBN + 도서관별 대출 상태 묶음 조회
+    public Map<BookLib, LoanStatus> getLoanStatuses(Collection<BookLib> keys) {
 
-            if (status == null) {
-                status = client.fetchLoanStatus(isbn13, libCode);
-                if (status != null) {
-                    holdingMapper.upsertStatus(status);
-                } else {
-                    log.warn("대출 여부 응답 없음 isbn={} libCode={}", isbn13, libCode);
-                    return new LoanStatusResponse(false, false, "ERROR");
+        if (keys == null || keys.isEmpty()) {
+            return Map.of();
+        }
+
+        // 유효한 캐시를 DB에서 한 번에 조회
+        Map<BookLib, LoanStatus> result = new HashMap<>();
+
+        List<LoanStatus> cached = holdingMapper.getFreshStatuses(keys);
+
+        for (LoanStatus s : cached) {
+            BookLib key = new BookLib(s.getIsbn13(), s.getLibCode());
+            result.put(key, s);
+        }
+
+        // 캐시가 없는 항목만 비동기로 API 호출
+        Map<BookLib, CompletableFuture<LoanStatus>> misses = new LinkedHashMap<>();
+
+        for (BookLib key : keys) {
+            if (result.containsKey(key)) { continue; }
+
+            CompletableFuture<LoanStatus> future =
+                    CompletableFuture.supplyAsync(
+                            () -> client.fetchLoanStatus(key.getIsbn13(), key.getLibCode()),
+                            pool
+                    );
+
+            misses.put(key, future);
+        }
+
+        // API 결과 수집 및 DB 저장
+        for (var entry : misses.entrySet()) {
+            try {
+                BookLib key = entry.getKey();
+                LoanStatus status = await(entry.getValue());
+
+                if (status == null) {
+                    throw new IllegalStateException("대출 상태 응답 없음: " + key);
                 }
-            }
 
-            return new LoanStatusResponse(status.isBookExists(), status.isLoanAvailable(), "OK");
-        } catch (Exception e) {
-            log.warn("대출 여부 조회 실패 isbn={} libCode={}", isbn13, libCode, e);
-            return new LoanStatusResponse(false, false, "ERROR");
+                // DB 저장에 필요한 키가 정확한지 확인
+                if (!Objects.equals(status.getIsbn13(), key.getIsbn13()) || !Objects.equals(status.getLibCode(), key.getLibCode())) {
+                    throw new IllegalStateException("대출 상태 응답의 ISBN/도서관 코드 불일치: " + key);
+                }
+
+                holdingMapper.upsertStatus(status);
+                result.put(key, status);
+            } catch (Exception e) {
+                log.warn("대출여부 조회 실패, 건너뜀 {}", entry.getKey(), e);
+            }
+        }
+
+        return result;
+    }
+
+    // 지역별 소장 도서관 캐시 갱신
+    public void refreshStaleRegions(String isbn13, List<Region> regions) {
+
+        if (regions == null || regions.isEmpty()) { return; }
+
+        // 최근 30일 내 확인한 지역
+        Set<Region> fresh = holdingMapper.findFreshRegions(isbn13, regions);
+
+        List<CompletableFuture<Void>> futures =  new ArrayList<>();
+
+        // 캐시가 없거나 만료된 지역만 조회
+        for (Region region : new LinkedHashSet<>(regions)) {
+
+            if (fresh.contains(region)) { continue; }
+
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+
+                List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13,region);
+
+                if (items == null) {
+                    throw new IllegalStateException("소장 도서관 응답 없음: " + isbn13 + ", " + region);
+                }
+
+                // 한 지역의 캐시 교체를 트랜잭션으로 처리
+                tx.executeWithoutResult(status -> {
+                    holdingMapper.deleteHoldings(isbn13, region);
+
+                    if (!items.isEmpty()) {
+                        holdingMapper.insertHoldings(items);
+                    }
+
+                    // 소장 도서관이 0곳이어도 조회 완료 기록
+                    holdingMapper.upsertRegionFetch(isbn13, region);
+
+                });
+
+            }, pool).exceptionally(e -> {
+                log.warn("소장 조회 실패, 건너뜀 isbn={} region={}", isbn13, region, e);
+                return null;
+            });
+
+            futures.add(future);
+        }
+
+        // 모든 지역의 갱신 작업이 끝날 때까지 대기
+        await(CompletableFuture.allOf(
+                futures.toArray(new CompletableFuture[0])
+        ));
+    }
+
+    // 4. 비동기 작업 결과 가져오기
+    private <T> T await(CompletableFuture<T> future) {
+        try {
+            return future.join();
+        } catch (CompletionException e) {
+            if (e.getCause() instanceof ExternalApiException apiException) {
+                throw apiException;
+            }
+            throw e;
         }
     }
 }

@@ -5,6 +5,7 @@ import com.sele906.chaekeodi.library.domain.LibrarySearchItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +43,14 @@ public interface HoldingMapper {
     void deleteCallNumberItems(String libCode, String isbn13);
     void insertCallNumberItems(List<BookCallNumberItem> items);
     List<BookCallNumberItem> findCallNumberItems(String libCode, String isbn13);
+    
+    List<HoldingLibraryItem> getHoldingLibCodesBulk(
+            @Param("isbns") List<String> isbns,
+            @Param("regions") List<Region> regions
+    );
 
-    LoanStatus getStatus(@Param("isbn13") String isbn13, @Param("libCode") String libCode);
+    List<LoanStatus> getFreshStatuses(
+            @Param("keys") Collection<BookLib> keys
+    );
     void upsertStatus(LoanStatus status);
 }

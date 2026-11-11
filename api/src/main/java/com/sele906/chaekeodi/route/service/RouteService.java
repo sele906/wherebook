@@ -1,37 +1,22 @@
 package com.sele906.chaekeodi.route.service;
 
-import com.sele906.chaekeodi.common.exception.ExternalApiException;
-import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
+import com.sele906.chaekeodi.holding.domain.Region;
+import com.sele906.chaekeodi.holding.service.HoldingService;
+import com.sele906.chaekeodi.holding.domain.BookLib;
 import com.sele906.chaekeodi.route.domain.*;
 import com.sele906.chaekeodi.route.mapper.RouteMapper;
-import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
 public class RouteService {
 
     private final RouteMapper routeMapper;
-    private final Data4LibraryClient client;
-
-    // 동시에 최대 4개의 API 작업 실행
-    private final ExecutorService pool = Executors.newFixedThreadPool(4);
-
-    // ISBN과 도서관 코드를 하나의 키로 묶기
-    private record BookLib(String isbn, String libCode) {}
-
-    @PreDestroy
-    public void shutdownPool() {
-        pool.shutdown();
-    }
+    private final HoldingService holdingService;
 
     public RouteResponse getCalcRoute(RouteRequest request) {
 
@@ -45,11 +30,11 @@ public class RouteService {
         List<CandidateLibrary> libraries = routeMapper.searchLibraries(request);
 
         if (libraries.isEmpty()) {
-            return new RouteResponse(null, null, List.of(), toBookSummaries(borrowList));
+            return new RouteResponse(null, null, List.of(), toBookSummaries(borrowList), List.of());
         }
 
         // 2. 반경 내 도서관의 지역 코드 수집 (중복 제거)
-        Set<RegionRoute> regions = new HashSet<>();
+        Set<Region> regions = new HashSet<>();
 
         for (CandidateLibrary lib : libraries) {
 
@@ -57,7 +42,7 @@ public class RouteService {
             String dtlRegionCode = lib.getDtlRegionCode();
 
             if (regionCode != null && dtlRegionCode != null) {
-                RegionRoute region = new RegionRoute(regionCode, dtlRegionCode);
+                Region region = new Region(regionCode, dtlRegionCode);
                 regions.add(region);
             }
         }
@@ -86,79 +71,56 @@ public class RouteService {
         List<String> isbnsnotFoundNearbyNearby = new ArrayList<>();
 
         // 5. 빌릴 책들 조회
-        // 5-1. ISBN별 소장 도서관 조회 (비동기)
-        Map<String, CompletableFuture<List<String>>> holdingsF = new LinkedHashMap<>();
+        // 5-1. 중복 ISBN 제거
+        List<String> uniqueIsbns = borrowList.stream().distinct().toList();
 
-        // 중복 ISBN 제거
-        List<String> uniqueIsbns = borrowList.stream()
-                .distinct()
-                .toList();
+        // 소장 도서관 캐시 조회
+        Map<String, List<String>> holdings = holdingService.getHoldingLibCodes(uniqueIsbns, new ArrayList<>(regions));
 
-        for (String isbn : uniqueIsbns) {
-
-            //소장도서는 자주 바뀌지 않으므로 캐시 필요함
-            //db 있으면 불러오고 없으면 api 호출
-            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> client.fetchLibByBookDtlRegion(isbn, regions), pool);
-
-            holdingsF.put(isbn, future);
-        }
-
-        // 5-2. ISBN + 도서관별 대출 상태 조회 (비동기)
-        Map<BookLib, CompletableFuture<LoanStatus>> loanF = new LinkedHashMap<>();
+        // 5-2. 대출 상태 조회 대상 생성
+        Set<BookLib> keys = new HashSet<>();
 
         for (String isbn : uniqueIsbns) {
+            List<String> libCodes = holdings.getOrDefault(isbn, List.of());
 
-            // 소장 도서관 조회 결과 가져오기
-            List<String> holdingLibraryCodes = holdingsF.get(isbn).join();
-
-            // 중복 도서관 코드 제거
-            for (String libCode : new LinkedHashSet<>(holdingLibraryCodes)) {
-
-                // 사용자 검색 반경 내 도서관만 확인
-                if (!candidateLibraryCodes.contains(libCode)) continue;
-
-                BookLib key = new BookLib(isbn, libCode);
-
-                //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
-                //db 있으면 불러오고 없으면 api 호출
-                CompletableFuture<LoanStatus> future = CompletableFuture.supplyAsync(() -> client.fetchLoanStatus(isbn, libCode), pool);
-
-                loanF.put(key, future);
+            for (String libCode : libCodes) {
+                // 사용자 반경 내 도서관만 확인
+                if (!candidateLibraryCodes.contains(libCode)) { continue; }
+                keys.add(new BookLib(isbn, libCode));
             }
         }
 
-        // 5-3. API 결과 수집 및 ISBN 분류
+        // 대출 상태 캐시 조회
+        Map<BookLib, LoanStatus> statuses = holdingService.getLoanStatuses(keys);
+
+        // 5-3. ISBN별 대출 상태 분류
         for (String isbn : uniqueIsbns) {
 
             boolean availableNearby = false;
             boolean heldNearby = false;
 
-            // 이미 요청한 소장 도서관 조회 결과
-            List<String> holdingLibraryCodes = await(holdingsF.get(isbn));
+            List<String> libCodes = holdings.getOrDefault(isbn, List.of());
 
-            for (String libCode : holdingLibraryCodes) {
+            // 중복 도서관 코드 제거
+            for (String libCode : new LinkedHashSet<>(libCodes)) {
 
                 if (!candidateLibraryCodes.contains(libCode)) continue;
 
-                // 이미 요청한 대출 상태 조회 결과
                 BookLib key = new BookLib(isbn, libCode);
-                LoanStatus s = await(loanF.get(key));
 
-                if (s == null || !s.isBookExists()) continue;
+                // 이미 요청한 대출 상태 조회 결과
+                LoanStatus s = statuses.get(key);
+
+                if (s == null || !s.isBookExists()) { continue; }
 
                 heldNearby = true;
 
                 if (s.isLoanAvailable()) {
 
                     // 도서관별 대출 가능한 ISBN 저장
-                    Set<String> heldIsbns = availableByLibrary.get(libCode);
-
-                    if (heldIsbns == null) {
-                        heldIsbns = new HashSet<>();
-                        availableByLibrary.put(libCode, heldIsbns);
-                    }
-
-                    heldIsbns.add(isbn);
+                    availableByLibrary
+                            .computeIfAbsent(libCode, k -> new HashSet<>())
+                            .add(isbn);
 
                     availableNearby = true;
                 }
@@ -187,7 +149,8 @@ public class RouteService {
                 plan,
                 libByCode,
                 isbnsOnLoanNearby,
-                isbnsnotFoundNearbyNearby
+                isbnsnotFoundNearbyNearby,
+                plan.uncoveredBooks()
         );
     }
 
@@ -195,7 +158,8 @@ public class RouteService {
             RoutePlan plan,
             Map<String, CandidateLibrary> libByCode,
             List<String> onLoanNearby,
-            List<String> notFoundNearby
+            List<String> notFoundNearby,
+            List<String> uncoveredBooks
     ) {
 
         // 1. 한 곳만 방문하는 계획
@@ -261,7 +225,8 @@ public class RouteService {
                 allAvailableBooksRoute,
                 bestSingleLibrary,
                 toBookSummaries(onLoanNearby),
-                toBookSummaries(notFoundNearby)
+                toBookSummaries(notFoundNearby),
+                toBookSummaries(uncoveredBooks)
         );
     }
 
@@ -307,19 +272,5 @@ public class RouteService {
                     );
                 })
                 .toList();
-    }
-
-    private <T> T await(CompletableFuture<T> future) {
-        try {
-            return future.join();
-
-        } catch (CompletionException e) {
-
-            if (e.getCause() instanceof ExternalApiException apiException) {
-                throw apiException;
-            }
-
-            throw e;
-        }
     }
 }

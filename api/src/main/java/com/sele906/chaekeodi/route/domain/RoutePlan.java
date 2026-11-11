@@ -5,7 +5,8 @@ import java.util.List;
 public record RoutePlan(
         Single single,
         List<PlannedStop> stops,
-        double totalKm
+        double totalKm,
+        List<String> uncoveredBooks
 ) {
     public record PlannedStop(String libCode, List<String> isbns) {}
 

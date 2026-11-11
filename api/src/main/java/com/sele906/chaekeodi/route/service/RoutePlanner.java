@@ -28,7 +28,7 @@ public final class RoutePlanner {
         }
 
         if (availableIsbns.isEmpty()) {
-            return new RoutePlan(null, List.of(), 0);
+            return new RoutePlan(null, List.of(), 0, List.of());
         }
 
         // 대출 가능한 책이 있는 도서관만 계산에 포함
@@ -54,9 +54,10 @@ public final class RoutePlanner {
             }
         }
 
-        // 3. 대출 가능한 책을 모두 빌리는 경로
+        // 3. 최대 3곳 안에서 가장 많이 빌릴 수 있는 경로 (같으면 가장 짧은 경로)
         List<String> bestRoute = null;
         double bestLength = Double.MAX_VALUE;
+        int bestCovered = 0;
 
         //경로 계산할 도서관 수 제한
         for (int k = 1; k <= Math.min(MAX_STOPS, libCodes.size()); k++) {
@@ -64,26 +65,23 @@ public final class RoutePlanner {
             // 조합: 방문할 도서관 선택
             for (List<String> combo : Combinatorics.combinations(libCodes, k)) {
 
-                if (!coversAll(combo, availableByLibrary, availableIsbns)) {
-                    continue;
-                }
+                int covered = countCovered(combo, availableByLibrary);
+
+                // 지금까지 최선보다 적게 빌리는 조합은 순서 계산할 필요도 없음
+                if (covered < bestCovered) continue;
 
                 // 순열: 방문 순서 결정
                 for (List<String> order : Combinatorics.permutations(combo)) {
 
-                    double length = routeLength(
-                            startLat, startLng, order, libByCode
-                    );
+                    double length = routeLength(startLat, startLng, order, libByCode);
 
-                    if (length < bestLength) {
+                    if (covered > bestCovered || length < bestLength) {
+                        bestCovered = covered;
                         bestLength = length;
                         bestRoute = order;
                     }
                 }
             }
-
-            // 최소 방문 도서관 수 우선
-            if (bestRoute != null) break;
         }
 
         // 4. 한 곳만 방문하는 계획
@@ -102,7 +100,7 @@ public final class RoutePlanner {
 
         // 5. 전체 경로가 없다면
         if (bestRoute == null) {
-            return new RoutePlan(single, List.of(), 0);
+            return new RoutePlan(single, List.of(), 0, List.of());
         }
 
         // 6. 방문 경로를 PlannedStop으로 변환
@@ -124,7 +122,12 @@ public final class RoutePlanner {
             stops.add(new RoutePlan.PlannedStop(libCode, books));
         }
 
-        return new RoutePlan(single, stops, bestLength);
+        // 7. 대출은 가능하지만 이번 경로에 못 넣은 책
+        List<String> uncoveredBooks = availableIsbns.stream()
+                .filter(isbn -> !assignedIsbns.contains(isbn))
+                .toList();
+
+        return new RoutePlan(single, stops, bestLength, uncoveredBooks);
     }
 
     // 출발지에서 특정 도서관까지의 거리
@@ -141,19 +144,13 @@ public final class RoutePlanner {
         );
     }
 
-    // 선택한 도서관들에서 필요한 책을 모두 구할 수 있는지
-    private static boolean coversAll(
-            List<String> combo,
-            Map<String, Set<String>> availableByLibrary,
-            Set<String> target
-    ) {
+    // 선택한 도서관들에서 빌릴 수 있는 책 수
+    private static int countCovered(List<String> combo, Map<String, Set<String>> availableByLibrary) {
         Set<String> covered = new HashSet<>();
-
         for (String libCode : combo) {
             covered.addAll(availableByLibrary.getOrDefault(libCode, Collections.emptySet()));
         }
-
-        return covered.containsAll(target);
+        return covered.size();
     }
 
     // 출발지부터 각 도서관까지의 총 직선거리

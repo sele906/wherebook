@@ -9,12 +9,10 @@ import com.sele906.chaekeodi.holding.domain.HoldingLibraryItem;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import com.sele906.chaekeodi.holding.domain.Region;
 import com.sele906.chaekeodi.library.domain.Library;
-import com.sele906.chaekeodi.route.domain.RegionRoute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.HtmlUtils;
 import tools.jackson.databind.JsonNode;
@@ -426,7 +424,7 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 세부 지역별 호출
-    public List<String> fetchLibByBookDtlRegion(String isbn, Set<RegionRoute> dtlRegions) {
+    public List<String> fetchLibByBookDtlRegion(String isbn, Set<Region> dtlRegions) {
 
         // 중복 제거도 같이
         Set<String> libCodes = new LinkedHashSet<>();
@@ -434,7 +432,7 @@ public class Data4LibraryClient {
         int pageSize = 100;
 
         // 세부지역 하나씩 조회
-        for (RegionRoute d : dtlRegions) {
+        for (Region d : dtlRegions) {
 
             int pageNo = 1;
 
@@ -443,8 +441,8 @@ public class Data4LibraryClient {
 
                     JsonNode res = get("/libSrchByBook", Map.of(
                             "isbn", isbn,
-                            "region", d.getRegion(),
-                            "dtl_region", d.getDtlRegion(),
+                            "region", d.getRegionCode(),
+                            "dtl_region", d.getDtlRegionCode(),
                             "pageNo", pageNo,
                             "pageSize", pageSize
                     ))
@@ -507,7 +505,7 @@ public class Data4LibraryClient {
                 log.error(
                         "소장 도서관 조회 실패 isbn={} region={}",
                         isbn,
-                        d.getDtlRegion(),
+                        d,
                         e
                 );
 
