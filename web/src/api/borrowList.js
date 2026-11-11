@@ -19,8 +19,7 @@ export function getBorrowList(init) {
 
 // 빌릴 책에 추가 — POST /api/borrow-list/{isbn13}
 // 처음 추가하면 백엔드가 게스트를 만들고 쿠키를 내려준다. 이미 있는 책이면 그대로 성공.
-// 없는 ISBN이면 400 (ApiError)
-// TODO: 최대 권수 제한은 백엔드에 아직 없음
+// 없는 ISBN이면 400, 이미 14권이면 409 (ApiError)
 export function addToBorrowList(isbn13) {
   return apiPost(`/api/borrow-list/${encodeURIComponent(isbn13)}`);
 }

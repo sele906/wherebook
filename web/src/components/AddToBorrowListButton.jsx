@@ -15,7 +15,7 @@ import styles from './BookRow.module.css';
  * 추가는 여러 번 보내도 결과가 같아서 이미 담긴 책을 눌러도 "추가됨"이 될 뿐이다.
  * 누르면 버튼과 배지 권수를 바로 바꾸고(낙관적 업데이트) 실패하면 둘 다 되돌린 뒤 행 아래에 알려준다.
  * compact: 글자 없이 아이콘만 (메인 인기 대출 표지 위). 모양은 className·errorClassName으로 넘긴다.
- * TODO: 최대 권수 제한 — 백엔드에 생기면 그 오류를 받아서 안내
+ * 최대 권수를 넘으면(409) 되돌리고 그 이유를 안내한다 (borrowListErrorMessage).
  */
 export default function AddToBorrowListButton({
     isbn13,
