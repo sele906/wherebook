@@ -10,6 +10,7 @@ import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.user.support.GuestIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +24,15 @@ public class BorrowListService {
     public List<BorrowListItem> getBorrowList(UUID userId) {
         return borrowlistMapper.getBorrowListByUserId(userId);
     }
-    
+
+    @Transactional
     public void addBorrowList(String isbn13, UUID userId) {
+
+        //db 에서 14권 이하 검증
+        if (!borrowlistMapper.canAddBook(userId)) {
+            throw new IllegalStateException("빌릴 책은 최대 14권까지 담을 수 있어요.");
+        }
+
         //빌릴책 db에 넣기
         borrowlistMapper.addItem(isbn13, userId);
     }

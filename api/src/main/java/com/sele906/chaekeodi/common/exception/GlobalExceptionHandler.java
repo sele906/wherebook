@@ -30,6 +30,13 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
+    // 지금 상태로는 할 수 없음 (빌릴 책 최대 권수 초과 등) → 409
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> conflict(IllegalStateException
+                                                          e) {
+        return error(HttpStatus.CONFLICT, e.getMessage());
+    }
+
     // 형식이 틀림 (ISBN13 등) → 400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> badRequest(IllegalArgumentException e) {

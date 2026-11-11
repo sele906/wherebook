@@ -35,4 +35,12 @@
         where user_id = #{userId}
         and isbn13 = #{isbn13}
     </delete>
+
+    <select id="canAddBook" resultType="boolean">
+        <![CDATA[
+            SELECT COUNT(*) < 14
+            FROM borrow_list
+            WHERE user_id = #{userId}
+        ]]>
+    </select>
 </mapper>
