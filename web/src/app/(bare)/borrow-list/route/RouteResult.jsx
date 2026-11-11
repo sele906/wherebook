@@ -13,9 +13,10 @@ import styles from './page.module.css';
 
 /*
  * 동선 결과 (디자인 chaekeodi-route.html). 지도·헤더 부제와 같은 응답 (loadRoute cache).
- *   A안 "N권 다 빌리기" — 반경 안에서 대출 가능한 책을 다 빌리는 방문 순서 (최대 3곳)
+ *   A안 "N권 다 빌리기" — 최대 3곳 안에서 가장 많이 빌리는 방문 순서.
+ *                         3곳으로 다 못 담으면(uncoveredBooks) "N권 빌리기"
  *   B안 "한 곳만 가기"  — 대출 가능한 책이 가장 많은 한 곳. A안이 1곳이면 같은 말이라 숨김
- *   못 빌리는 책 한 줄 — 펼치면 책마다 "대출중" / "근처에 없어요"
+ *   못 빌리는 책 한 줄 — 펼치면 책마다 "동선에 못 넣었어요" / "대출중" / "근처에 없어요"
  *   안내 두 줄 — 거리는 직선거리, 대출 가능 여부는 전날 기준 (정보나루 데이터가 하루 단위)
  *   Primary "지도 앱으로 길찾기" — 기준 위치에서 고른 안의 도서관들을 순서대로
  * 안이 둘이면 카드를 눌러 고르고(PlanCard), 하나뿐이면 선택된 모양의 일반 카드.
@@ -57,6 +58,9 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
     const route = data.allAvailableBooksRoute;
     const onLoan = data.onLoanNearby ?? [];
     const notFound = data.notFoundNearby ?? [];
+    // 반경 안에서 빌릴 수 있지만 3곳 동선에 못 넣은 책 — 반경을 넓혀도 안 풀려서 따로 문구
+    const uncovered = data.uncoveredBooks ?? [];
+    const missingCount = onLoan.length + notFound.length + uncovered.length;
     // A안이 1곳뿐이면 B안과 같은 말이라 숨김
     const single = route?.stops.length === 1 ? null : data.bestSingleLibrary;
     const choosable = Boolean(route && single);
@@ -75,22 +79,28 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
 
             {route && (
                 <Card value="all" choosable={choosable}>
-                    <AllBooksPlan route={route} />
+                    <AllBooksPlan route={route} complete={uncovered.length === 0} />
                 </Card>
             )}
             {single && (
                 <Card value="single" choosable={choosable}>
-                    <SinglePlan single={single} onLoan={onLoan} notFound={notFound} />
+                    <SinglePlan single={single} shownBelow={[...onLoan, ...notFound, ...uncovered]} />
                 </Card>
             )}
 
-            {(onLoan.length > 0 || notFound.length > 0) && (
+            {missingCount > 0 && (
                 <MissingBooks
                     summary={
-                        <>
-                            <strong>{countFormat.format(onLoan.length + notFound.length)}권</strong>은{' '}
-                            {formatKm(radiusKm)} 안에서 못 빌려요
-                        </>
+                        uncovered.length > 0 ? (
+                            <>
+                                <strong>{countFormat.format(missingCount)}권</strong>은 이 동선으로 못 빌려요
+                            </>
+                        ) : (
+                            <>
+                                <strong>{countFormat.format(missingCount)}권</strong>은 {formatKm(radiusKm)} 안에서
+                                못 빌려요
+                            </>
+                        )
                     }
                     widen={
                         widenHref && (
@@ -102,11 +112,14 @@ export default async function RouteResult({ base, isbnKey, radiusKm, retryHref, 
                     }
                 >
                     <ul className={styles.missingList}>
+                        {uncovered.map((book) => (
+                            <MissingRow key={book.isbn13} book={book} reason="uncovered" />
+                        ))}
                         {onLoan.map((book) => (
-                            <MissingRow key={book.isbn13} book={book} onLoan />
+                            <MissingRow key={book.isbn13} book={book} reason="onLoan" />
                         ))}
                         {notFound.map((book) => (
-                            <MissingRow key={book.isbn13} book={book} />
+                            <MissingRow key={book.isbn13} book={book} reason="notFound" />
                         ))}
                     </ul>
                 </MissingBooks>
@@ -132,11 +145,13 @@ function Card({ value, choosable, children }) {
 }
 
 // 카드 안은 버튼일 수 있어서 span만 쓴다 (PlanCard 설명)
-function AllBooksPlan({ route }) {
+// complete: 반경 안에서 빌릴 수 있는 책을 이 동선에 다 넣었는지 (uncoveredBooks가 비었는지)
+function AllBooksPlan({ route, complete }) {
+    const count = countFormat.format(route.borrowableBookCount);
     return (
         <>
             <span className={styles.cardHead}>
-                <span className={styles.cardTitle}>{`${countFormat.format(route.borrowableBookCount)}권 다 빌리기`}</span>
+                <span className={styles.cardTitle}>{complete ? `${count}권 다 빌리기` : `${count}권 빌리기`}</span>
                 <span className={styles.cardMeta}>
                     {`${countFormat.format(route.stops.length)}곳 · ${distanceText(route.totalKm)}`}
                 </span>
@@ -161,10 +176,10 @@ function AllBooksPlan({ route }) {
     );
 }
 
-function SinglePlan({ single, onLoan, notFound }) {
-    // 빠지는 책 = 이 도서관엔 없지만 다른 도서관에선 빌릴 수 있는 책.
-    // 반경 안에서 아예 못 빌리는 책(대출중·근처에 없음)은 아래 "못 빌리는 책" 줄에서 따로 보여줌
-    const elsewhere = new Set([...onLoan, ...notFound].map((book) => book.isbn13));
+function SinglePlan({ single, shownBelow }) {
+    // 빠지는 책 = 이 도서관엔 없지만 A안 동선에선 빌리는 책.
+    // 동선으로 못 빌리는 책(대출중·근처에 없음·동선에 못 넣음)은 아래 "못 빌리는 책" 줄에서 따로 보여줌
+    const elsewhere = new Set(shownBelow.map((book) => book.isbn13));
     const missing = (single.unavailableBooks ?? []).filter((book) => !elsewhere.has(book.isbn13));
 
     return (
@@ -185,18 +200,17 @@ function SinglePlan({ single, onLoan, notFound }) {
 }
 
 // 한 행 전체가 책 상세 링크 (반경 밖 소장 도서관은 상세에서 볼 수 있음).
-// 상태는 글자로 — 대출중은 배지, 근처에 없음은 보조 글자 (색만으로 구분하지 않음)
-function MissingRow({ book, onLoan = false }) {
+// 상태는 글자로 — 대출중은 배지, 나머지는 보조 글자 (색만으로 구분하지 않음)
+//   uncovered: 반경 안에서 대출 가능하지만 3곳 동선에 못 넣음 → 상세에서 도서관을 골라 따로 빌리면 됨
+function MissingRow({ book, reason }) {
     return (
         <li>
             {/* 미리 불러오기는 끔 — 보이기만 한 책 때문에 책 상세 API·정보나루를 부르지 않게 */}
             <Link href={`/book/${book.isbn13}`} prefetch={false} className={styles.missingRow}>
                 <BookLine book={book} />
-                {onLoan ? (
-                    <span className={styles.onLoanBadge}>대출중</span>
-                ) : (
-                    <span className={styles.missingMeta}>근처에 없어요</span>
-                )}
+                {reason === 'onLoan' && <span className={styles.onLoanBadge}>대출중</span>}
+                {reason === 'notFound' && <span className={styles.missingMeta}>근처에 없어요</span>}
+                {reason === 'uncovered' && <span className={styles.missingMeta}>동선에 못 넣었어요</span>}
             </Link>
         </li>
     );

@@ -154,8 +154,8 @@
  */
 
 /**
- * @typedef {Object} AllAvailableBooksRoute  반경 안에서 대출 가능한 책을 모두 빌리는 동선 (최대 3곳)
- * @property {number} borrowableBookCount
+ * @typedef {Object} AllAvailableBooksRoute  최대 3곳 안에서 가장 많이 빌리는 동선 (같으면 가장 짧은 동선)
+ * @property {number} borrowableBookCount  이 동선에서 빌리는 책 수 (uncoveredBooks는 빠짐)
  * @property {number} totalKm  기준 위치 → 도서관들 직선거리 합
  * @property {RouteStop[]} stops  방문 순서대로
  */
@@ -177,6 +177,7 @@
  * @property {BestSingleLibrary|null} bestSingleLibrary  빌릴 수 있는 책이 없으면 null
  * @property {RouteBook[]} onLoanNearby  반경 안에서 소장은 하지만 전부 대출중
  * @property {RouteBook[]} notFoundNearby  반경 안 도서관에 없음
+ * @property {RouteBook[]} uncoveredBooks  반경 안에서 대출 가능하지만 3곳 동선에 못 넣은 책
  */
 
 export {};

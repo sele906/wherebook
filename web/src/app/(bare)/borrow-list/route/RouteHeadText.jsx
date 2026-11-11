@@ -20,7 +20,11 @@ export default async function RouteHeadText({ base, isbnKey, radiusKm, selectedC
         summary = `선택한 ${countFormat.format(selectedCount)}권 · ${describeBase(base, radiusKm)}`;
     } else {
         const borrowable = data.allAvailableBooksRoute?.borrowableBookCount ?? 0;
-        const total = borrowable + (data.onLoanNearby?.length ?? 0) + (data.notFoundNearby?.length ?? 0);
+        const total =
+            borrowable +
+            (data.onLoanNearby?.length ?? 0) +
+            (data.notFoundNearby?.length ?? 0) +
+            (data.uncoveredBooks?.length ?? 0);
         summary = (
             <>
                 {countFormat.format(total)}권 중 <strong>{countFormat.format(borrowable)}권</strong> 빌릴 수 있어요 ·{' '}
