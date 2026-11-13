@@ -1,5 +1,6 @@
 package com.sele906.chaekeodi.external.kakao;
 
+import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.place.domain.PlaceSearchResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,10 @@ public class KakaoClient {
 
     //장소 검색결과 호출
     public List<PlaceSearchResponse> fetchPlaces(String keyword) {
+
+        if (keyword == null || keyword.isBlank()) {
+            throw new BadRequestException("검색어를 입력해 주세요.");
+        }
 
         JsonNode res;
 

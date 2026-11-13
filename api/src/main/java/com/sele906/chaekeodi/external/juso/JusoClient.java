@@ -1,6 +1,6 @@
 package com.sele906.chaekeodi.external.juso;
 
-import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
+import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.place.domain.PlaceCoordRequest;
 import com.sele906.chaekeodi.place.domain.PlaceCoordResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import tools.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
@@ -43,9 +44,8 @@ public class JusoClient {
         JsonNode common = results.path("common");
 
         if (!"0".equals(common.path("errorCode").asText())) {
-            throw new IllegalStateException(
-                    "주소 검색 API 오류: " +
-                            common.path("errorMessage").asText()
+            throw new ExternalApiException(
+                    "주소 검색 API 오류: " + common.path("errorMessage").asText()
             );
         }
 
@@ -94,7 +94,7 @@ public class JusoClient {
         String errorCode = results.path("common").path("errorCode").asText();
 
         if (!"0".equals(errorCode)) {
-            throw new IllegalStateException(
+            throw new ExternalApiException(
                     "주소 좌표 API 오류: " + results.path("common").path("errorMessage").asText()
             );
         }
@@ -102,14 +102,22 @@ public class JusoClient {
         JsonNode coordResults = results.path("juso");
 
         if (!coordResults.isArray() || coordResults.isEmpty()) {
-            throw new ResponseNotFoundException(
+            throw new ExternalApiException(
                     "주소 좌표를 찾을 수 없습니다."
             );
         }
 
         JsonNode coordItem = coordResults.get(0);
-        double x = Double.parseDouble(coordItem.path("entX").asText());
-        double y = Double.parseDouble(coordItem.path("entY").asText());
+        double x;
+        double y;
+
+        try {
+            x = Double.parseDouble(coordItem.path("entX").asText());
+            y = Double.parseDouble(coordItem.path("entY").asText());
+        } catch (NumberFormatException e) {
+            throw new ExternalApiException("주소 좌표 값이 올바르지 않습니다.", e);
+        }
+
         var coords = coordConverter.toWgs84(x, y);
 
         return new PlaceCoordResponse(req.getName(), req.getAddress(), coords.latitude(), coords.longitude());
@@ -117,15 +125,28 @@ public class JusoClient {
 
     // 공통 호출
     private JsonNode call(HttpMethod method, String path, String key, Map<String, Object> params) {
-        return jusoRestClient.method(method)
-                .uri(b -> {
-                    b.path(path)
-                            .queryParam("confmKey", key)
-                            .queryParam("resultType", "json");
-                    params.forEach(b::queryParam);
-                    return b.build();
-                })
-                .retrieve()
-                .body(JsonNode.class);
+
+        JsonNode res;
+
+        try {
+            res = jusoRestClient.method(method)
+                    .uri(b -> {
+                        b.path(path)
+                                .queryParam("confmKey", key)
+                                .queryParam("resultType", "json");
+                        params.forEach(b::queryParam);
+                        return b.build();
+                    })
+                    .retrieve()
+                    .body(JsonNode.class);
+        } catch (RestClientException e) {
+            throw new ExternalApiException("도로명주소 API 호출 실패: " + path, e);
+        }
+
+        if (res == null) {
+            throw new ExternalApiException("도로명주소 API 응답이 없습니다: " + path);
+        }
+
+        return res;
     }
 }

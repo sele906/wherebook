@@ -47,7 +47,7 @@ public class BorrowListController {
     public ResponseEntity<Void> addBorrowList(
             @PathVariable("isbn13") String isbn13,
             @CookieValue(value = GuestCookies.NAME, required = false) String cookieUserId
-    ) throws IllegalArgumentException {
+    ) {
 
         //책 정보 캐시
         bookService.getBookDetail(isbn13);

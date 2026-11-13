@@ -5,7 +5,7 @@ import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.book.service.BookService;
 import com.sele906.chaekeodi.borrowList.domain.BorrowListItem;
 import com.sele906.chaekeodi.borrowList.mapper.BorrowListMapper;
-import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
+import com.sele906.chaekeodi.common.exception.ConflictException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.user.support.GuestIds;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class BorrowListService {
 
         //db 에서 14권 이하 검증
         if (!borrowlistMapper.canAddBook(userId)) {
-            throw new IllegalStateException("빌릴 책은 최대 14권까지 담을 수 있어요.");
+            throw new ConflictException("빌릴 책은 최대 14권까지 담을 수 있어요.");
         }
 
         //빌릴책 db에 넣기

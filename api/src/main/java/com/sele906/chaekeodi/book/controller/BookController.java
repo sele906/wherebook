@@ -35,7 +35,7 @@ public class BookController {
     @GetMapping("/{isbn13}")
     public ResponseEntity<Book> getBookDetail(
             @PathVariable("isbn13") String isbn13
-    ) throws IllegalArgumentException {
+    ) {
         Book response = bookService.getBookDetail(isbn13);
         return ResponseEntity.ok(response);
     }

@@ -1,5 +1,6 @@
 package com.sele906.chaekeodi.route.service;
 
+import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.holding.domain.LoanStatus;
 import com.sele906.chaekeodi.holding.domain.Region;
 import com.sele906.chaekeodi.holding.service.HoldingService;
@@ -21,7 +22,7 @@ public class RouteService {
     public RouteResponse getCalcRoute(RouteRequest request) {
 
         if (request.getLatitude() == null || request.getLongitude() == null) {
-            throw new IllegalArgumentException("경로 계산에는 위치 정보가 필요합니다.");
+            throw new BadRequestException("경로 계산에는 위치 정보가 필요합니다.");
         }
 
         List<String> borrowList = request.getIsbns();

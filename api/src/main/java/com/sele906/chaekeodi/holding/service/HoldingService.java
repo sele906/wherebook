@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.holding.service;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
+import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.holding.domain.*;
@@ -73,7 +74,7 @@ public class HoldingService {
             return List.of(new Region(req.getRegionCode(), req.getDtlRegionCode()));
         }
 
-        throw new IllegalArgumentException("위치 또는 지역 코드가 필요합니다.");
+        throw new BadRequestException("위치 또는 지역 코드가 필요합니다.");
     }
 
     public CallNumberResponse getCallNumber(String isbn13, String libCode) {
@@ -359,12 +360,12 @@ public class HoldingService {
                 LoanStatus status = await(entry.getValue());
 
                 if (status == null) {
-                    throw new IllegalStateException("대출 상태 응답 없음: " + key);
+                    throw new ExternalApiException("대출 상태 응답 없음: " + key);
                 }
 
                 // DB 저장에 필요한 키가 정확한지 확인
                 if (!Objects.equals(status.getIsbn13(), key.getIsbn13()) || !Objects.equals(status.getLibCode(), key.getLibCode())) {
-                    throw new IllegalStateException("대출 상태 응답의 ISBN/도서관 코드 불일치: " + key);
+                    throw new ExternalApiException("대출 상태 응답의 ISBN/도서관 코드 불일치: " + key);
                 }
 
                 holdingMapper.upsertStatus(status);
@@ -397,7 +398,7 @@ public class HoldingService {
                 List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13,region);
 
                 if (items == null) {
-                    throw new IllegalStateException("소장 도서관 응답 없음: " + isbn13 + ", " + region);
+                    throw new ExternalApiException("소장 도서관 응답 없음: " + isbn13 + ", " + region);
                 }
 
                 // 한 지역의 캐시 교체를 트랜잭션으로 처리
