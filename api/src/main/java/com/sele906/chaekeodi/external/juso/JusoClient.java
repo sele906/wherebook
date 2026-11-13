@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi.external.juso;
 
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
+import com.sele906.chaekeodi.external.common.ApiMeter;
 import com.sele906.chaekeodi.place.domain.PlaceCoordRequest;
 import com.sele906.chaekeodi.place.domain.PlaceCoordResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JusoClient {
 
+    private final ApiMeter apiMeter;
     private final RestClient jusoRestClient;
     private final CoordinateConverter coordConverter;
 
@@ -40,14 +42,8 @@ public class JusoClient {
                 "keyword", keyword
         ));
 
+        // 오류 코드는 call()에서 이미 확인함
         JsonNode results = res.path("results");
-        JsonNode common = results.path("common");
-
-        if (!"0".equals(common.path("errorCode").asText())) {
-            throw new ExternalApiException(
-                    "주소 검색 API 오류: " + common.path("errorMessage").asText()
-            );
-        }
 
         List<JusoAddress> addresses = new ArrayList<>();
 
@@ -89,15 +85,8 @@ public class JusoClient {
                 "buldSlno", req.getBuldSlno()
         ));
 
+        // 오류 코드는 call()에서 이미 확인함
         JsonNode results = res.path("results");
-
-        String errorCode = results.path("common").path("errorCode").asText();
-
-        if (!"0".equals(errorCode)) {
-            throw new ExternalApiException(
-                    "주소 좌표 API 오류: " + results.path("common").path("errorMessage").asText()
-            );
-        }
 
         JsonNode coordResults = results.path("juso");
 
@@ -126,10 +115,10 @@ public class JusoClient {
     // 공통 호출
     private JsonNode call(HttpMethod method, String path, String key, Map<String, Object> params) {
 
-        JsonNode res;
+        String error = null;
 
         try {
-            res = jusoRestClient.method(method)
+            JsonNode res = jusoRestClient.method(method)
                     .uri(b -> {
                         b.path(path)
                                 .queryParam("confmKey", key)
@@ -139,14 +128,40 @@ public class JusoClient {
                     })
                     .retrieve()
                     .body(JsonNode.class);
+
+            // 응답 없음
+            if (res == null) {
+                error = ApiMeter.EMPTY_RESPONSE;
+                throw new ExternalApiException(
+                        "도로명주소 API 응답이 없습니다: " + path
+                );
+            }
+
+            // 응답 구조 검증
+            JsonNode common = res.path("results").path("common");
+
+            if (!common.isObject() || !common.hasNonNull("errorCode")) {
+                error = ApiMeter.INVALID_RESPONSE;
+                throw new ExternalApiException(
+                        "도로명주소 API 응답 형식 오류: " + path
+                );
+            }
+
+            // 도로명주소 자체 오류
+            if (!"0".equals(common.path("errorCode").asText())) {
+                error = ApiMeter.API_RESPONSE_ERROR;
+                throw new ExternalApiException(
+                        "도로명주소 API 오류: " + common.path("errorMessage").asText()
+                );
+            }
+
+            return res;
+
         } catch (RestClientException e) {
+            error = ApiMeter.HTTP_ERROR;
             throw new ExternalApiException("도로명주소 API 호출 실패: " + path, e);
+        } finally {
+            apiMeter.record("JUSO", path, error);
         }
-
-        if (res == null) {
-            throw new ExternalApiException("도로명주소 API 응답이 없습니다: " + path);
-        }
-
-        return res;
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sele906.chaekeodi.external.common.ApiUsageMapper">
+
+    <insert id="increaseUsage">
+        INSERT INTO api_usage (
+            usage_date,
+            provider,
+            api_name,
+            call_count,
+            fail_count,
+            error_at,
+            last_error
+        ) VALUES (
+            #{usageDate},
+            #{provider},
+            #{apiName},
+            1,
+            #{failCount},
+            CASE WHEN #{failCount} = 1 THEN now() END,
+            #{error, jdbcType=VARCHAR}
+        )
+        ON CONFLICT (usage_date, provider, api_name) DO UPDATE SET
+            call_count = api_usage.call_count + 1,
+            fail_count = api_usage.fail_count + EXCLUDED.fail_count,
+            error_at   = COALESCE(EXCLUDED.error_at, api_usage.error_at),
+            last_error = COALESCE(EXCLUDED.last_error, api_usage.last_error)
+    </insert>
+
+</mapper>
