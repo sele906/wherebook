@@ -43,7 +43,7 @@ public interface HoldingMapper {
     void deleteCallNumberItems(String libCode, String isbn13);
     void insertCallNumberItems(List<BookCallNumberItem> items);
     List<BookCallNumberItem> findCallNumberItems(String libCode, String isbn13);
-    
+
     List<HoldingLibraryItem> getHoldingLibCodesBulk(
             @Param("isbns") List<String> isbns,
             @Param("regions") List<Region> regions
