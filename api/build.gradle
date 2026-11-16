@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.8'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.gorylenko.gradle-git-properties' version '4.0.1'
 }
 
 group = 'com.sele906.chaekeodi'
@@ -25,6 +26,8 @@ dependencies {
 	implementation 'org.locationtech.proj4j:proj4j:1.4.3'
 	implementation 'org.locationtech.proj4j:proj4j-epsg:1.4.3'
 
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -40,6 +43,10 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+springBoot {
+	buildInfo()
 }
 
 tasks.named('test') {
