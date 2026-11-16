@@ -20,4 +20,9 @@ public class BookPopularRequest {
     public int getPageNo()   { return Math.max(pageNo, 1); }
     public int getPageSize() { return Math.min(Math.max(pageSize, 1), 50); }
     public int getOffset() { return (getPageNo() - 1) * getPageSize(); }
+
+    public BookPopularRequest(int pageNo, int pageSize) {
+        this.pageNo = pageNo;
+        this.pageSize = pageSize;
+    }
 }

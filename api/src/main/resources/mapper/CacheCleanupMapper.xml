@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sele906.chaekeodi.cache.mapper.CacheCleanupMapper">
+
+    <delete id="deletePopularBooks">
+        <![CDATA[
+            DELETE FROM popular_book
+            WHERE fetched_at < #{before}
+        ]]>
+    </delete>
+
+    <delete id="deleteHoldingRegions">
+        <![CDATA[
+            DELETE FROM holding_region
+            WHERE fetched_at < #{before}
+        ]]>
+    </delete>
+
+    <delete id="deleteHoldingLibraries">
+        <![CDATA[
+            DELETE FROM holding_library
+            WHERE fetched_at < #{before}
+        ]]>
+    </delete>
+
+    <delete id="deleteBookStatuses">
+        <![CDATA[
+            DELETE FROM book_status
+            WHERE fetched_at < #{before}
+        ]]>
+    </delete>
+
+    <delete id="deleteCallNumbers">
+        <![CDATA[
+            DELETE FROM book_call_number
+            WHERE status = #{status}
+            AND fetched_at < #{before}
+        ]]>
+    </delete>
+
+</mapper>
