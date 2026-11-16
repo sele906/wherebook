@@ -49,14 +49,14 @@ public class JusoClient {
 
         for (JsonNode juso : results.path("juso")) {
             addresses.add(JusoAddress.builder()
-                    .name(juso.path("bdNm").asText())
-                    .address(juso.path("roadAddrPart1").asText())
-                    .emdNm(juso.path("emdNm").asText())
-                    .admCd(juso.path("admCd").asText())
-                    .rnMgtSn(juso.path("rnMgtSn").asText())
-                    .udrtYn(juso.path("udrtYn").asText())
-                    .buldMnnm(juso.path("buldMnnm").asText())
-                    .buldSlno(juso.path("buldSlno").asText())
+                    .name(juso.path("bdNm").asString())
+                    .address(juso.path("roadAddrPart1").asString())
+                    .emdNm(juso.path("emdNm").asString())
+                    .admCd(juso.path("admCd").asString())
+                    .rnMgtSn(juso.path("rnMgtSn").asString())
+                    .udrtYn(juso.path("udrtYn").asString())
+                    .buldMnnm(juso.path("buldMnnm").asString())
+                    .buldSlno(juso.path("buldSlno").asString())
                     .build());
         }
 
@@ -101,8 +101,8 @@ public class JusoClient {
         double y;
 
         try {
-            x = Double.parseDouble(coordItem.path("entX").asText());
-            y = Double.parseDouble(coordItem.path("entY").asText());
+            x = Double.parseDouble(coordItem.path("entX").asString());
+            y = Double.parseDouble(coordItem.path("entY").asString());
         } catch (NumberFormatException e) {
             throw new ExternalApiException("주소 좌표 값이 올바르지 않습니다.", e);
         }
@@ -148,10 +148,10 @@ public class JusoClient {
             }
 
             // 도로명주소 자체 오류
-            if (!"0".equals(common.path("errorCode").asText())) {
+            if (!"0".equals(common.path("errorCode").asString())) {
                 error = ApiMeter.API_RESPONSE_ERROR;
                 throw new ExternalApiException(
-                        "도로명주소 API 오류: " + common.path("errorMessage").asText()
+                        "도로명주소 API 오류: " + common.path("errorMessage").asString()
                 );
             }
 

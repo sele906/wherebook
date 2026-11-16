@@ -196,7 +196,7 @@ public class Data4LibraryClient {
 
                     String libCode = item.path("lib")
                             .path("libCode")
-                            .asText();
+                            .asString();
 
                     if (!libCode.isBlank() && libCodes.add(libCode)) {
                         result.add(new HoldingLibraryItem(
@@ -298,8 +298,8 @@ public class Data4LibraryClient {
 
         JsonNode result = res.path("result");
 
-        String hasBook = result.path("hasBook").asText();
-        String loanAvailable = result.path("loanAvailable").asText();
+        String hasBook = result.path("hasBook").asString();
+        String loanAvailable = result.path("loanAvailable").asString();
 
         // Y 또는 N 이외의 값은 오류 처리
         if (!isValidYn(hasBook) || !isValidYn(loanAvailable)) {
@@ -361,7 +361,7 @@ public class Data4LibraryClient {
             if (!errCode.isMissingNode() && !errCode.isNull()) {
                 error = ApiMeter.API_RESPONSE_ERROR;
                 throw new ExternalApiException(
-                        "정보나루 API 오류: " + errCode.asText() + " " + res.path("error").asText()
+                        "정보나루 API 오류: " + errCode.asString() + " " + res.path("error").asString()
                 );
             }
 
@@ -411,7 +411,7 @@ public class Data4LibraryClient {
             return 0;
         }
 
-        int num = Integer.parseInt(value.asText().trim());
+        int num = Integer.parseInt(value.asString().trim());
 
         return num == 0 ? 0 : num;
     }
@@ -423,7 +423,7 @@ public class Data4LibraryClient {
             return null;
         }
 
-        String text = value.asText().trim();
+        String text = value.asString().trim();
 
         return text.isEmpty() ? null : text;
     }

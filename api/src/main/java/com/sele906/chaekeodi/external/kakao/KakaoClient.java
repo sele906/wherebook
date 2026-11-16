@@ -41,16 +41,16 @@ public class KakaoClient {
         for (JsonNode doc : res.path("documents")) {
 
             // 좌표 없는 장소는 건너뛰기 (asDouble은 없으면 0.0을 반환)
-            if (doc.path("x").asText().isBlank() || doc.path("y").asText().isBlank()) {
+            if (doc.path("x").asString().isBlank() || doc.path("y").asString().isBlank()) {
                 continue;
             }
 
             // 도로명 주소 우선, 없으면 지번
-            String road = doc.path("road_address_name").asText();
-            String address = road.isBlank() ? doc.path("address_name").asText() : road;
+            String road = doc.path("road_address_name").asString();
+            String address = road.isBlank() ? doc.path("address_name").asString() : road;
 
             places.add(new PlaceSearchResponse(
-                    doc.path("place_name").asText(),
+                    doc.path("place_name").asString(),
                     address,
                     toCategory(doc)
             ));
@@ -62,10 +62,10 @@ public class KakaoClient {
     // "지하철역" 같은 그룹명, 없으면 category_name의 마지막 단계
     private String toCategory(JsonNode doc) {
 
-        String group = doc.path("category_group_name").asText();
+        String group = doc.path("category_group_name").asString();
         if (!group.isBlank()) return group;
 
-        String full = doc.path("category_name").asText();
+        String full = doc.path("category_name").asString();
         if (full.isBlank()) return "";
         String[] parts = full.split(">");
 
