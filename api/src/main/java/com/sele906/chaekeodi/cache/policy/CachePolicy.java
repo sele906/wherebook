@@ -1,8 +1,6 @@
 package com.sele906.chaekeodi.cache.policy;
 
 import com.sele906.chaekeodi.holding.domain.BookCallNumber;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.time.*;
 

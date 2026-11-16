@@ -102,7 +102,7 @@ public class KakaoClient {
 
         } catch (RestClientException e) {
             error = ApiMeter.HTTP_ERROR;
-            throw new ExternalApiException("카카오 API 호출 실패: ", e);
+            throw new ExternalApiException("카카오 API 호출 실패: " + path, e);
         } finally {
             apiMeter.record("KAKAO", path, error);
         }

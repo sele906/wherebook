@@ -18,8 +18,9 @@ public interface HoldingMapper {
 
     Set<Region> findFreshRegions(
             @Param("isbn13") String isbn13,
-            @Param("regions")List<Region> regions,
-            OffsetDateTime freshSince);
+            @Param("regions") List<Region> regions,
+            @Param("freshSince") OffsetDateTime freshSince
+    );
     List<String> getHoldingLibCodes(
             @Param("isbn13") String isbn13,
             @Param("regions")List<Region> regions
@@ -51,6 +52,7 @@ public interface HoldingMapper {
 
     List<LoanStatus> getFreshStatuses(
             @Param("keys") Collection<BookLib> keys,
-            OffsetDateTime freshSince);
+            @Param("freshSince") OffsetDateTime freshSince
+    );
     void upsertStatus(LoanStatus status);
 }
