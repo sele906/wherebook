@@ -79,6 +79,7 @@
         <foreach collection="regions" item="r" open="(" separator="," close=")">
             (#{r.regionCode}, #{r.dtlRegionCode})
         </foreach>
+        AND fetched_at > #{freshSince}
     </select>
 
     <select id="getHoldingLibCodes" resultType="String">
@@ -200,18 +201,6 @@
         ORDER BY distance, name
     </select>
 
-    <select id="getStatus" resultType="LoanStatus">
-        SELECT
-            isbn13,
-            lib_code,
-            book_exists,
-            loan_available
-        FROM book_status
-        WHERE isbn13 = #{isbn13}
-        AND lib_code = #{libCode}
-        AND fetched_at > now() - INTERVAL '24 hours'
-    </select>
-
     <insert id="upsertStatus">
         INSERT INTO book_status (
             isbn13,
@@ -234,7 +223,7 @@
         SELECT
             isbn13,
             lib_code
-            FROM holding_library
+        FROM holding_library
         WHERE isbn13 IN
         <foreach collection="isbns" item="isbn13" open="(" separator="," close=")">
             #{isbn13}
@@ -251,12 +240,12 @@
             lib_code,
             book_exists,
             loan_available
-            FROM book_status
+        FROM book_status
         WHERE (isbn13, lib_code) IN
         <foreach collection="keys" item="k" open="(" separator="," close=")">
             (#{k.isbn13}, #{k.libCode})
         </foreach>
-        AND fetched_at > now() - INTERVAL '24 hours'
+        AND fetched_at > #{freshSince}
     </select>
 
 </mapper>

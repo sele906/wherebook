@@ -5,9 +5,9 @@ import com.sele906.chaekeodi.library.domain.LibrarySearchItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Mapper
@@ -18,8 +18,8 @@ public interface HoldingMapper {
 
     Set<Region> findFreshRegions(
             @Param("isbn13") String isbn13,
-            @Param("regions")List<Region> regions
-    );
+            @Param("regions")List<Region> regions,
+            OffsetDateTime freshSince);
     List<String> getHoldingLibCodes(
             @Param("isbn13") String isbn13,
             @Param("regions")List<Region> regions
@@ -50,7 +50,7 @@ public interface HoldingMapper {
     );
 
     List<LoanStatus> getFreshStatuses(
-            @Param("keys") Collection<BookLib> keys
-    );
+            @Param("keys") Collection<BookLib> keys,
+            OffsetDateTime freshSince);
     void upsertStatus(LoanStatus status);
 }

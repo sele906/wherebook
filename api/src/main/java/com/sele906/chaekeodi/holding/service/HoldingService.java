@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.holding.service;
 
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
+import com.sele906.chaekeodi.cache.policy.CachePolicy;
 import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
@@ -83,7 +84,7 @@ public class HoldingService {
         BookCallNumber cached = holdingMapper.findCallNumber(libCode, isbn13);
 
         //있으면 바로 출력
-        if (cached != null && isFresh(cached)) {
+        if (cached != null && CachePolicy.isFresh(cached)) {
 
             //유효성 검사
             List<BookCallNumberItem> itemList = "OK".equals(cached.getStatus())
@@ -154,24 +155,6 @@ public class HoldingService {
         if (classNo == null) return null;
         String digits = classNo.replaceAll("[^0-9]", "");
         return digits.length() >= 2 ? digits.substring(0, 2) : null;
-    }
-
-    //TTL
-    private boolean isFresh(BookCallNumber c) {
-        if (c.getFetchedAt() == null) {
-            return false;
-        }
-
-        long days = Duration.between(
-                c.getFetchedAt(),
-                OffsetDateTime.now()
-        ).toDays();
-
-        return switch (c.getStatus()) {
-            case "OK" -> true;
-            case "NOT_FOUND" -> days < 30;
-            default -> days < 3;
-        };
     }
 
     // 청구기호 응답 객체 생성
@@ -331,7 +314,7 @@ public class HoldingService {
         // 유효한 캐시를 DB에서 한 번에 조회
         Map<BookLib, LoanStatus> result = new HashMap<>();
 
-        List<LoanStatus> cached = holdingMapper.getFreshStatuses(keys);
+        List<LoanStatus> cached = holdingMapper.getFreshStatuses(keys, CachePolicy.LOAN_STATUS.freshSince());
 
         for (LoanStatus s : cached) {
             BookLib key = new BookLib(s.getIsbn13(), s.getLibCode());
@@ -384,7 +367,7 @@ public class HoldingService {
         if (regions == null || regions.isEmpty()) { return; }
 
         // 최근 30일 내 확인한 지역
-        Set<Region> fresh = holdingMapper.findFreshRegions(isbn13, regions);
+        Set<Region> fresh = holdingMapper.findFreshRegions(isbn13, regions, CachePolicy.HOLDING.freshSince());
 
         List<CompletableFuture<Void>> futures =  new ArrayList<>();
 

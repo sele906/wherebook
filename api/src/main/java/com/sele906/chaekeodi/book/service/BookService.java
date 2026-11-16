@@ -2,6 +2,7 @@ package com.sele906.chaekeodi.book.service;
 
 import com.sele906.chaekeodi.book.domain.*;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
+import com.sele906.chaekeodi.cache.policy.CachePolicy;
 import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
@@ -40,7 +41,7 @@ public class BookService {
 
         //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
         //db 있으면 불러오고 없으면 api 호출
-        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularRequest(startDt, endDt, req.getPageNo(), req.getPageSize()));
+        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularRequest(startDt, endDt, req.getPageNo(), req.getPageSize()), CachePolicy.POPULAR_BOOK.freshSince());
 
         if (books == null || books.isEmpty()) {
             var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
