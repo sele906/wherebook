@@ -19,6 +19,13 @@ public class RouteService {
     private final RouteMapper routeMapper;
     private final HoldingService holdingService;
 
+    /*
+     * 동선 계산 흐름
+     * 1. 반경 내 도서관·지역 조회 (RouteMapper)
+     * 2. 책별 소장 도서관 (HoldingService.getHoldingLibCodes → holding_region/library 캐시)
+     * 3. 책×도서관 대출 여부 (HoldingService.getLoanStatuses → book_status 캐시)
+     * 4. 경로 계산 (RoutePlanner)
+     */
     public RouteResponse getCalcRoute(RouteRequest request) {
 
         if (request.getLatitude() == null || request.getLongitude() == null) {
