@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/libraries")
 public class LibraryController {
 
-    private final Data4LibraryClient client;
-    private final LibraryMapper libraryMapper;
-
     private final LibraryService libraryService;
 
     //도서관 db 업데이트용

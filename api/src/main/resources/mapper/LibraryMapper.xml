@@ -5,13 +5,17 @@
 
 <mapper namespace="com.sele906.chaekeodi.library.mapper.LibraryMapper">
 
-    <select id="findOne" resultType="Library">
-        SELECT *
-        FROM library
-        LIMIT 1
+    <select id="findAllDtlRegions" resultType="Region">
+        SELECT
+        SUBSTRING(code FROM 1 FOR 2) AS region_code,
+        code                         AS dtl_region_code
+        FROM region
+        WHERE LENGTH(code) = 5
+        AND isactive IS TRUE
+        ORDER BY code ASC
     </select>
 
-    <insert id="upsertLibrary">
+    <select id="upsertLibrary" resultType="boolean">
         INSERT INTO library (
             lib_code,
             name,
@@ -24,7 +28,9 @@
             closed_days,
             operating_time,
             book_count,
-            location
+            location,
+            region_code,
+            dtl_region_code
         )
         VALUES (
             #{libCode},
@@ -49,26 +55,37 @@
             <otherwise>
                 NULL
             </otherwise>
-        </choose>
+        </choose>,
+            #{regionCode},
+            #{dtlRegionCode}
         )
 
         ON CONFLICT (lib_code)
         DO UPDATE SET
-        name = EXCLUDED.name,
-        address = EXCLUDED.address,
-        tel = EXCLUDED.tel,
-        fax = EXCLUDED.fax,
-        homepage = EXCLUDED.homepage,
-        latitude = EXCLUDED.latitude,
-        longitude = EXCLUDED.longitude,
-        location = EXCLUDED.location,
-        closed_days = EXCLUDED.closed_days,
-        operating_time = EXCLUDED.operating_time,
-        book_count = EXCLUDED.book_count,
-        updated_at = NOW()
-    </insert>
+            name = EXCLUDED.name,
+            address = EXCLUDED.address,
+            tel = EXCLUDED.tel,
+            fax = EXCLUDED.fax,
+            homepage = EXCLUDED.homepage,
+            latitude = EXCLUDED.latitude,
+            longitude = EXCLUDED.longitude,
+            location = EXCLUDED.location,
+            closed_days = EXCLUDED.closed_days,
+            operating_time = EXCLUDED.operating_time,
+            book_count = EXCLUDED.book_count,
+            region_code = EXCLUDED.region_code,
+            dtl_region_code = EXCLUDED.dtl_region_code,
+            updated_at = NOW()
+        RETURNING (xmax = 0) AS inserted
+    </select>
 
-    <!--  새 데이터 추가시 빈 지역컬럼 자동화하는 쿼리도 있으면 좋음  -->
+    <delete id="deleteRegionFetches">
+        delete from holding_region
+        where (region_code, dtl_region_code) IN
+        <foreach collection="regions" item="r" open="(" separator="," close=")">
+            (#{r.regionCode}, #{r.dtlRegionCode})
+        </foreach>
+    </delete>
 
     <sql id="searchWhere">
         <where>

@@ -1,14 +1,18 @@
 package com.sele906.chaekeodi.library.service;
 
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
+import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
+import com.sele906.chaekeodi.holding.domain.Region;
 import com.sele906.chaekeodi.library.domain.*;
 import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -19,17 +23,42 @@ public class LibraryService {
     private final Data4LibraryClient client;
 
     public int syncLibraries() {
-        int pageNo = 1, pageSize = 100, processed = 0;
+        List<Region> regions = libraryMapper.findAllDtlRegions();  // 지역코드 테이블
+        Set<Region> regionsWithNewLibs = new HashSet<>();
+        int processed = 0;
 
-        while (true) {
-            var page = client.fetchLibraries(pageNo, pageSize);
-            for (Library lib : page.libraries()) {
-                processed += libraryMapper.upsertLibrary(lib);
+        for (Region region : regions) {
+            try {
+                int pageNo = 1, pageSize = 100;
+
+                while (true) {
+                    var page = client.fetchLibraries(region, pageNo, pageSize);
+
+                    for (Library lib : page.libraries()) {
+                        lib.setRegionCode(region.getRegionCode());
+                        lib.setDtlRegionCode(region.getDtlRegionCode());
+
+                        boolean inserted = libraryMapper.upsertLibrary(lib);
+                        if (inserted) regionsWithNewLibs.add(region);
+                        processed++;
+                    }
+
+                    log.info("libSrch page={} 지역도서관={} 전체누적={}", pageNo, page.numFound(), processed);
+
+                    if (pageNo * pageSize >= page.numFound()) break;
+                    pageNo++;
+                }
+
+            } catch (ExternalApiException e) {
+                log.warn("도서관 동기화 실패, 건너뜀 region={}", region, e);
             }
-            log.info("libSrch page={} 누적={}/{}", pageNo, processed, page.numFound());
+        }
 
-            if (pageNo * pageSize >= page.numFound()) break;
-            pageNo++;
+        log.info("도서관 동기화 완료 processed={} 신규도서관지역={}", processed, regionsWithNewLibs);
+
+        // 새 도서관이 생긴 지역만 소장 캐시 무효화
+        if (!regionsWithNewLibs.isEmpty()) {
+            libraryMapper.deleteRegionFetches(regionsWithNewLibs);
         }
 
         return processed;

@@ -78,9 +78,11 @@ public class Data4LibraryClient {
     }
 
     //도서관 목록 호출
-    public LibraryPage fetchLibraries(int pageNo, int pageSize) {
+    public LibraryPage fetchLibraries(Region region, int pageNo, int pageSize) {
 
         JsonNode res = get("/libSrch", Map.of(
+                "region", region.getRegionCode(),
+                "dtl_region", region.getDtlRegionCode(),
                 "pageNo", pageNo,
                 "pageSize", pageSize
         ));
