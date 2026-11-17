@@ -17,8 +17,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import jakarta.annotation.PreDestroy;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
-import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 @Slf4j
@@ -125,8 +123,8 @@ public class HoldingService {
                 return toResponse("OK", itemList);
             }
 
-            items = List.of();
-            status = "ERROR";
+            // 실패는 저장하지 않고 이번 응답만 ERROR로
+            return toResponse("ERROR", List.of());
         }
 
         // 4. 저장 후 반환

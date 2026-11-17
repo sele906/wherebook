@@ -29,8 +29,7 @@ public enum CachePolicy {
     },
 
     // 청구기호: 상태별로 유효기간이 다름 (OK는 만료·청소 없음)
-    CALL_NUMBER_NOT_FOUND(Duration.ofDays(30), Duration.ofDays(30)),
-    CALL_NUMBER_ERROR(Duration.ofDays(3), Duration.ofDays(3));
+    CALL_NUMBER_NOT_FOUND(Duration.ofDays(30), Duration.ofDays(30));
 
     public static final int POPULAR_BOOK_CACHE_SIZE = 50;   // 여기부터 필드
     private static final ZoneId SEOUL = ZoneId.of("Asia/Seoul");
@@ -75,8 +74,7 @@ public enum CachePolicy {
 
         return switch (c.getStatus()) {
             case "OK" -> true;
-            case "NOT_FOUND" -> c.getFetchedAt().isAfter(CachePolicy.CALL_NUMBER_NOT_FOUND.freshSince());
-            default -> c.getFetchedAt().isAfter(CachePolicy.CALL_NUMBER_ERROR.freshSince());
+            default -> c.getFetchedAt().isAfter(CachePolicy.CALL_NUMBER_NOT_FOUND.freshSince());
         };
     }
 

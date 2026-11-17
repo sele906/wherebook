@@ -43,7 +43,6 @@ public class CacheCleanupScheduler {
         run("holding_library",() -> mapper.deleteHoldingLibraries(CachePolicy.HOLDING.expiredBefore()));
         run("book_status",    () -> mapper.deleteBookStatuses(CachePolicy.LOAN_STATUS.expiredBefore()));
         run("call_number(NOT_FOUND)", () -> mapper.deleteCallNumbers("NOT_FOUND", CachePolicy.CALL_NUMBER_NOT_FOUND.expiredBefore()));
-        run("call_number(ERROR)",     () -> mapper.deleteCallNumbers("ERROR", CachePolicy.CALL_NUMBER_ERROR.expiredBefore()));
     }
 
     private void run(String table, Supplier<Integer> delete) {
