@@ -9,8 +9,18 @@ import java.util.UUID;
 
 @Mapper
 public interface BorrowListMapper {
-    List<BorrowListItem> getBorrowListByUserId (@Param("userId") UUID userId);
-    void addItem(@Param("isbn13") String isbn13, @Param("userId") UUID userId);
-    void deleteItem(@Param("isbn13") String isbn13, @Param("userId") UUID userId);
-    boolean canAddBook(@Param("userId") UUID userId);
+    List<BorrowListItem> getBorrowListByUserId (
+            @Param("userId") UUID userId
+    );
+    void addItem(
+            @Param("isbn13") String isbn13,
+            @Param("userId") UUID userId
+    );
+    void deleteItem(
+            @Param("isbn13") String isbn13,
+            @Param("userId") UUID userId
+    );
+    boolean canAddBook(
+            @Param("userId") UUID userId
+    );
 }

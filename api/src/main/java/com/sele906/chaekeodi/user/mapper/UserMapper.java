@@ -7,6 +7,10 @@ import java.util.UUID;
 
 @Mapper
 public interface UserMapper {
-    int loginGuest(@Param("userId") UUID userId);
-    void joinGuest(@Param("userId") UUID userId);
+    int loginGuest(
+            @Param("userId") UUID userId
+    );
+    void joinGuest(
+            @Param("userId") UUID userId
+    );
 }

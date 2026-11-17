@@ -12,6 +12,10 @@ import java.util.Map;
 @Mapper
 public interface RouteMapper {
 
-    List<CandidateLibrary> searchLibraries(RouteRequest routeSearchRequest);
-    List<Map<String, String>> getBooksByIsbns(@Param(value = "isbns") Collection<String> isbns);
+    List<CandidateLibrary> searchLibraries(
+            RouteRequest routeSearchRequest
+    );
+    List<Map<String, String>> getBooksByIsbns(
+            @Param(value = "isbns") Collection<String> isbns
+    );
 }

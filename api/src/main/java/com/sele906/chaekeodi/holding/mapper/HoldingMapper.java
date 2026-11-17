@@ -12,9 +12,13 @@ import java.util.Set;
 
 @Mapper
 public interface HoldingMapper {
-    BookCallNumber findCallNumber(@Param("libCode") String libCode,
-                                  @Param("isbn13") String isbn13);
-    void upsertCallNumber(BookCallNumber callNumber);
+    BookCallNumber findCallNumber(
+            @Param("libCode") String libCode,
+            @Param("isbn13") String isbn13
+    );
+    void upsertCallNumber(
+            BookCallNumber callNumber
+    );
 
     Set<Region> findFreshRegions(
             @Param("isbn13") String isbn13,
@@ -29,7 +33,9 @@ public interface HoldingMapper {
             @Param("isbn13") String isbn13,
             @Param("region") Region region
     );
-    void insertHoldings(List<HoldingLibraryItem> items);
+    void insertHoldings(
+            List<HoldingLibraryItem> items
+    );
     List<Region> findRegionsNear(
             @Param("latitude") Double latitude,
             @Param("longitude") Double longitude,
@@ -39,11 +45,21 @@ public interface HoldingMapper {
             @Param("isbn13") String isbn13,
             @Param("region") Region region
     );
-    List<LibrarySearchItem> searchLibByDistance(LibrarySearchByBookRequest request);
+    List<LibrarySearchItem> searchLibByDistance(
+            LibrarySearchByBookRequest request
+    );
 
-    void deleteCallNumberItems(String libCode, String isbn13);
-    void insertCallNumberItems(List<BookCallNumberItem> items);
-    List<BookCallNumberItem> findCallNumberItems(String libCode, String isbn13);
+    void deleteCallNumberItems(
+            @Param("libCode") String libCode,
+            @Param("isbn13") String isbn13
+    );
+    void insertCallNumberItems(
+            List<BookCallNumberItem> items
+    );
+    List<BookCallNumberItem> findCallNumberItems(
+            @Param("libCode") String libCode,
+            @Param("isbn13") String isbn13
+    );
 
     List<HoldingLibraryItem> getHoldingLibCodesBulk(
             @Param("isbns") List<String> isbns,
@@ -54,5 +70,7 @@ public interface HoldingMapper {
             @Param("keys") Collection<BookLib> keys,
             @Param("freshSince") OffsetDateTime freshSince
     );
-    void upsertStatus(LoanStatus status);
+    void upsertStatus(
+            LoanStatus status
+    );
 }
