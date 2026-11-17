@@ -74,7 +74,7 @@
             dtl_region_code
         from holding_region
         WHERE isbn13 = #{isbn13}
-        AND fetched_at > now() - INTERVAL '30 days'
+        AND fetched_at > #{freshSince}
         AND (region_code, dtl_region_code) IN
         <foreach collection="regions" item="r" open="(" separator="," close=")">
             (#{r.regionCode}, #{r.dtlRegionCode})
