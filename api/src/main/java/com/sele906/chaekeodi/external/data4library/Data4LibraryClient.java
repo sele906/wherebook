@@ -163,9 +163,6 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 지역별 호출
-    int received = 0;
-    int expected = 0;
-
     public List<HoldingLibraryItem> fetchLibByBookInRegion(String isbn, Region r) {
 
         List<HoldingLibraryItem> result = new ArrayList<>();
@@ -175,6 +172,8 @@ public class Data4LibraryClient {
 
         int pageSize = 100;
         int pageNo = 1;
+        int received = 0;
+        int expected = 0;
 
         try {
             while (true) {
