@@ -163,6 +163,9 @@ public class Data4LibraryClient {
     }
 
     //소장 도서관 지역별 호출
+    int received = 0;
+    int expected = 0;
+
     public List<HoldingLibraryItem> fetchLibByBookInRegion(String isbn, Region r) {
 
         List<HoldingLibraryItem> result = new ArrayList<>();
@@ -184,13 +187,19 @@ public class Data4LibraryClient {
                 ));
 
                 int numFound = requireNumFound(res);
+                if (pageNo == 1) expected = numFound;
 
                 JsonNode libs = res.path("libs");
+                if (!libs.isArray() || (numFound > 0 && libs.isEmpty())) {
+                    throw new ExternalApiException("정보나루 libSrchByBook 응답 형태가 올바르지 않습니다.");
+                }
 
                 // 더 이상 결과 없음
-                if (!libs.isArray() || libs.isEmpty()) {
+                if (libs.isEmpty()) {
                     break;
                 }
+
+                received += libs.size();
 
                 for (JsonNode item : libs) {
 
@@ -211,11 +220,16 @@ public class Data4LibraryClient {
                 log.debug( "region={} page={} numFound={} 현재페이지={} 누적={}", r, pageNo, numFound, libs.size(), libCodes.size());
 
                 // 마지막 페이지
-                if (pageNo * pageSize >= numFound) {
+                if (pageNo * pageSize >= expected) {
                     break;
                 }
 
                 pageNo++;
+            }
+
+            if (received < expected) {
+                throw new ExternalApiException(
+                        "정보나루 libSrchByBook 결과 누락 expected=" + expected + " received=" + received);
             }
 
         } catch (ExternalApiException e) {
@@ -224,19 +238,6 @@ public class Data4LibraryClient {
 
         return result;
     }
-
-    // 인접 광역 매핑
-    private static final Map<String, List<String>> ADJACENT = Map.of(
-            "23", List.of("31"),              // 인천 ↔ 경기
-            "31", List.of("11", "23", "32"),  // 경기 ↔ 서울·인천·강원
-            "11", List.of("31"),              // 서울 ↔ 경기
-            "21", List.of("38"),              // 부산 ↔ 경남
-            "22", List.of("37"),              // 대구 ↔ 경북
-            "24", List.of("36"),              // 광주 ↔ 전남
-            "25", List.of("34", "33"),        // 대전 ↔ 충남·충북
-            "26", List.of("38"),              // 울산 ↔ 경남
-            "29", List.of("34", "33")         // 세종 ↔ 충남·충북
-    );
 
     //청구기호 호출
     public List<CallNumberCandidate> fetchCallNumber(String isbn13, String libCode, String dtlKdc) {
@@ -253,8 +254,12 @@ public class Data4LibraryClient {
         }
 
         JsonNode res = get("/itemSrch", params);
+        int numFound = requireNumFound(res);
 
         JsonNode docs = res.path("docs");
+        if (!docs.isArray() || (numFound > 0 && docs.isEmpty())) {
+            throw new ExternalApiException("정보나루 itemSrch 응답 형태가 올바르지 않습니다.");
+        }
 
         //여러 청구기호 후보 리스트로 전환
         for (JsonNode d : docs) {
@@ -399,7 +404,7 @@ public class Data4LibraryClient {
         l.setLatitude(doubleValue(lib, "latitude"));
         l.setLongitude(doubleValue(lib, "longitude"));
         l.setClosedDays(text(lib, "closed"));
-        l.setOperatingTime(text(lib, "operatingTime"));   // ← 수정
+        l.setOperatingTime(text(lib, "operatingTime"));
         l.setBookCount(intValue(lib, "BookCount"));
         return l;
     }
@@ -413,7 +418,7 @@ public class Data4LibraryClient {
 
         int num = Integer.parseInt(value.asString().trim());
 
-        return num == 0 ? 0 : num;
+        return num;
     }
 
     private String text(JsonNode node, String field) {
