@@ -98,7 +98,7 @@ jobs:
           # 정상 실행 확인
           for i in $(seq 1 20); do
             if curl -fsS --max-time 3 \
-              http://127.0.0.1:8080/api/health \
+              http://127.0.0.1:8081/actuator/health \
               >/dev/null 2>&1; then
               echo "Deployment successful!"
               exit 0
@@ -111,7 +111,7 @@ jobs:
 
           echo "=== HTTP 응답 확인 ==="
           curl -i --max-time 10 \
-            http://127.0.0.1:8080/api/health || true
+            http://127.0.0.1:8081/actuator/health || true
 
           echo "=== Spring Boot 로그 ==="
           journalctl -u wherebook -n 80 --no-pager || true
