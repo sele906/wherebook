@@ -11,8 +11,17 @@ import java.util.List;
 
 @Mapper
 public interface BookMapper {
-    Book getBookByIsbn13(@Param("isbn13") String isbn13);
-    void upsertBook(Book book);
-    List<BookPopularItem> getPopularBooks(@Param("item") BookPopularRequest bookPopularItem, @Param("freshSince") OffsetDateTime freshSince);
-    void upsertPopularBook(List<BookPopularItem> books);
+    Book getBookByIsbn13(
+            @Param("isbn13") String isbn13
+    );
+    void upsertBook(
+            Book book
+    );
+    List<BookPopularItem> getPopularBooks(
+            @Param("startDt") OffsetDateTime startDt,
+            @Param("endDt") OffsetDateTime endDt,
+            @Param("freshSince") OffsetDateTime freshSince);
+    void upsertPopularBook(
+            List<BookPopularItem> books
+    );
 }

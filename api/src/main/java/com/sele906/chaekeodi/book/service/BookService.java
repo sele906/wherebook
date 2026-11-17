@@ -7,6 +7,7 @@ import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookService {
@@ -36,23 +38,24 @@ public class BookService {
         OffsetDateTime startDt = weekAgo.atStartOfDay(zone).toOffsetDateTime();
         OffsetDateTime endDt = today.atStartOfDay(zone).toOffsetDateTime();
 
-        req.setStartDt(startDt);
-        req.setEndDt(endDt);
-
         //하루 동안 똑같은 기록 보여주는 것이므로 캐시 필요함
         //db 있으면 불러오고 없으면 api 호출
-        List<BookPopularItem> books = bookMapper.getPopularBooks(new BookPopularRequest(startDt, endDt, req.getPageNo(), req.getPageSize()), CachePolicy.POPULAR_BOOK.freshSince());
+        List<BookPopularItem> all = bookMapper.getPopularBooks(startDt, endDt, CachePolicy.POPULAR_BOOK.freshSince());
 
-        if (books == null || books.isEmpty()) {
-            var result = client.fetchPopularBooks(req.getStartDt(), req.getEndDt(), req.getPageNo(), req.getPageSize());
-            books = result.books();
-
-            if (!books.isEmpty()) {
-                bookMapper.upsertPopularBook(books); //db에 캐시
+        // 전국 7일치 인기대출이 0건이면 정상일 수 없으므로 캐시하지 않고 다음 요청에서 재시도
+        if (all.isEmpty()) {
+            log.warn("인기도서 0건 응답 startDt={} endDt={}", startDt, endDt);
+            all = client.fetchPopularBooks(startDt, endDt, 1, CachePolicy.POPULAR_BOOK_CACHE_SIZE).books();
+            if (!all.isEmpty()) {
+                bookMapper.upsertPopularBook(all);
             }
         }
 
-        return new BookPopularResponse(books, req.getPageNo(), req.getPageSize());
+        // 요청한 페이지만 잘라서 반환
+        int from = Math.min(req.getOffset(), all.size());
+        int to = Math.min(req.getOffset() + req.getPageSize(), all.size());
+
+        return new BookPopularResponse(all.subList(from, to), req.getPageNo(), req.getPageSize());
     }
 
     public BookSearchResponse searchBooks(BookSearchRequest req) {

@@ -26,7 +26,7 @@ public class CacheCleanupScheduler {
         long start = System.currentTimeMillis();
 
         try {
-            bookService.loanPopularBooks(new BookPopularRequest(1, 20));
+            bookService.loanPopularBooks(new BookPopularRequest(CachePolicy.POPULAR_BOOK_CACHE_SIZE));
             log.info("인기도서 워밍 완료");
         } catch (Exception e) {
             log.warn("인기도서 워밍 실패", e);

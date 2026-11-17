@@ -32,6 +32,7 @@ public enum CachePolicy {
     CALL_NUMBER_NOT_FOUND(Duration.ofDays(30), Duration.ofDays(30)),
     CALL_NUMBER_ERROR(Duration.ofDays(3), Duration.ofDays(3));
 
+    public static final int POPULAR_BOOK_CACHE_SIZE = 50;   // 여기부터 필드
     private static final ZoneId SEOUL = ZoneId.of("Asia/Seoul");
 
     // 정보나루 대출 가능여부 반영 시각 (한국 시간)

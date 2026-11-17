@@ -18,10 +18,9 @@
             end_dt,
             fetched_at
         FROM popular_book
-        WHERE start_dt = #{item.startDt}
-            AND end_dt = #{item.endDt}
-            AND fetched_at >= #{freshSince}
-            AND ranking BETWEEN #{item.offset} + 1 AND #{item.offset} + #{item.pageSize}
+        WHERE start_dt = #{startDt}
+        AND end_dt = #{endDt}
+        AND fetched_at >= #{freshSince}
         ORDER BY ranking
     </select>
 
