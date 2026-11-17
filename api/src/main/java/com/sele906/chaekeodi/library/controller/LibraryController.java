@@ -1,8 +1,6 @@
 package com.sele906.chaekeodi.library.controller;
 
-import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
 import com.sele906.chaekeodi.library.domain.*;
-import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import com.sele906.chaekeodi.library.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class LibraryController {
 
     private final LibraryService libraryService;
-
-    //도서관 db 업데이트용
-    @PostMapping("/syncLibraries")
-    public int syncLibraries() {
-        return libraryService.syncLibraries();
-    }
 
     //도서관 검색
     @GetMapping

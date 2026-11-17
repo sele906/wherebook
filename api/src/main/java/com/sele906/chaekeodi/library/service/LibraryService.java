@@ -9,6 +9,7 @@ import com.sele906.chaekeodi.library.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ public class LibraryService {
 
     private final LibraryMapper libraryMapper;
     private final Data4LibraryClient client;
+    private final TransactionTemplate tx;
 
     public int syncLibraries() {
         List<Region> regions = libraryMapper.findAllDtlRegions();  // 지역코드 테이블
@@ -38,8 +40,14 @@ public class LibraryService {
                         lib.setRegionCode(region.getRegionCode());
                         lib.setDtlRegionCode(region.getDtlRegionCode());
 
-                        boolean inserted = libraryMapper.upsertLibrary(lib);
-                        if (inserted) regionsWithNewLibs.add(region);
+                        tx.executeWithoutResult(s -> {
+                            boolean inserted = libraryMapper.upsertLibrary(lib);
+                            if (inserted) {
+                                regionsWithNewLibs.add(region);
+                                libraryMapper.deleteRegionFetches(region);
+                            }
+                        });
+
                         processed++;
                     }
 
@@ -55,11 +63,6 @@ public class LibraryService {
         }
 
         log.info("도서관 동기화 완료 processed={} 신규도서관지역={}", processed, regionsWithNewLibs);
-
-        // 새 도서관이 생긴 지역만 소장 캐시 무효화
-        if (!regionsWithNewLibs.isEmpty()) {
-            libraryMapper.deleteRegionFetches(regionsWithNewLibs);
-        }
 
         return processed;
     }

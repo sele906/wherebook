@@ -81,10 +81,8 @@
 
     <delete id="deleteRegionFetches">
         delete from holding_region
-        where (region_code, dtl_region_code) IN
-        <foreach collection="regions" item="r" open="(" separator="," close=")">
-            (#{r.regionCode}, #{r.dtlRegionCode})
-        </foreach>
+        where region_code = #{regionCode}
+        and dtl_region_code = #{dtlRegionCode}
     </delete>
 
     <sql id="searchWhere">
