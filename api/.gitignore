@@ -38,5 +38,9 @@ out/
 
 ### env ###
 .env
+.env.test
 .env.*
 !.env.example
+
+### File ###
+/loadtest/db-dump/full_dump.sql

@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "127.0.0.1:8081:8081"
+    env_file:
+        - .env.test
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      LIBRARY_API_BASE_URL: http://wiremock:8080/api
+      LIBRARY_API_AUTH_KEY: dummy
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx768m"
+    cpus: "2.0"
+    mem_limit: 577m
+    memswap_limit: 577m
+    depends_on:
+      - wiremock
+      - db
+
+  wiremock:
+    image: wiremock/wiremock:3.13.2
+    command: ["--container-threads", "200", "--async-response-enabled", "true"]
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./wiremock:/home/wiremock
+
+  db:
+    image: postgis/postgis:18-3.6
+    env_file:
+      - .env.test
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - ./loadtest/db-dump/full_dump.sql:/docker-entrypoint-initdb.d/01-full_dump.sql:ro
