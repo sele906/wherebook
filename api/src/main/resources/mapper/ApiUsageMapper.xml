@@ -20,7 +20,7 @@
             #{apiName},
             #{callCount},
             #{failCount},
-            CASE WHEN #{failCount} = 1 THEN now() END,
+            CASE WHEN #{failCount} > 0 THEN now() END,
             #{error, jdbcType=VARCHAR}
         )
         ON CONFLICT (usage_date, provider, api_name) DO UPDATE SET
