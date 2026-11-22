@@ -1,5 +1,6 @@
 package com.sele906.chaekeodi.external.data4library;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -10,6 +11,9 @@ import java.time.Duration;
 @Configuration
 public class Data4LibraryConfig {
 
+    @Value("${library.api.base-url}")
+    private String baseUrl;
+
     @Bean
     public RestClient data4LibraryRestClient() {
         var factory = new SimpleClientHttpRequestFactory();
@@ -17,7 +21,7 @@ public class Data4LibraryConfig {
         factory.setReadTimeout(Duration.ofSeconds(15));
 
         return RestClient.builder()
-                .baseUrl("http://data4library.kr/api")
+                .baseUrl(baseUrl)
                 .requestFactory(factory)
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.sele906.chaekeodi;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
@@ -8,6 +9,10 @@ import org.springframework.web.client.RestClient;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Data4LibraryApiTest {
+
+    @Value("${library.api.base-url}")
+    private String baseUrl;
+
 
     @Test
     void 정보공개_도서관을_조회한다() {
@@ -21,14 +26,14 @@ public class Data4LibraryApiTest {
                 .isNotBlank();
 
         RestClient restClient = RestClient.builder()
-                .baseUrl("https://data4library.kr")
+                .baseUrl(baseUrl)
                 .build();
 
         //when
         //진짜 검사하고 싶은 코드 실행
         ResponseEntity<String> response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/api/libSrch")
+                        .path("/libSrch")
                         .queryParam("authKey", authKey)
                         .queryParam("pageNo", 1)
                         .queryParam("pageSize", 2)
