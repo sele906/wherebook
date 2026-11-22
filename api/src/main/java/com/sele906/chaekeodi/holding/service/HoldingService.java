@@ -29,8 +29,8 @@ public class HoldingService {
     private final HoldingMapper holdingMapper;
     private final Data4LibraryClient client;
 
-    // 외부 API 동시 호출 최대 4개
-    private final ExecutorService pool = Executors.newFixedThreadPool(4);
+    // 외부 API 동시 호출 최대 20개
+    private final ExecutorService pool = Executors.newFixedThreadPool(20);
 
     @PreDestroy
     public void shutdownPool() {
@@ -319,7 +319,23 @@ public class HoldingService {
             result.put(key, s);
         }
 
-        // 캐시가 없는 항목만 비동기로 API 호출
+        // 캐시가 없는 항목만 API 호출
+        List<BookLib> missKeys = keys.stream().filter(k -> !result.containsKey(k)).toList();
+
+        //대출상태 개별 호출 > 스레드풀 사용X
+        if (missKeys.size() == 1) {
+            BookLib key = missKeys.get(0);
+            try {
+                LoanStatus status = fetchValidated(key);
+                holdingMapper.upsertStatus(status);
+                result.put(key, status);
+            } catch (Exception e) {
+                log.warn("대출여부 조회 실패, 건너뜀 {}", key, e);
+            }
+            return result;
+        }
+
+        //대출상태 여러개 호출 > 스레드풀 사용O
         Map<BookLib, CompletableFuture<LoanStatus>> misses = new LinkedHashMap<>();
 
         for (BookLib key : keys) {
@@ -327,7 +343,7 @@ public class HoldingService {
 
             CompletableFuture<LoanStatus> future =
                     CompletableFuture.supplyAsync(
-                            () -> client.fetchLoanStatus(key.getIsbn13(), key.getLibCode()),
+                            () -> fetchValidated(key),
                             pool
                     );
 
@@ -357,6 +373,18 @@ public class HoldingService {
         }
 
         return result;
+    }
+
+    private LoanStatus fetchValidated(BookLib key) {
+        LoanStatus status = client.fetchLoanStatus(key.getIsbn13(), key.getLibCode());
+        if (status == null) {
+            throw new ExternalApiException("대출 상태 응답 없음: " + key);
+        }
+        if (!Objects.equals(status.getIsbn13(), key.getIsbn13())
+                || !Objects.equals(status.getLibCode(), key.getLibCode())) {
+            throw new ExternalApiException("대출 상태 응답의 ISBN/도서관 코드 불일치: " + key);
+        }
+        return status;
     }
 
     // 지역별 소장 도서관 캐시 갱신
@@ -412,7 +440,7 @@ public class HoldingService {
     // 4. 비동기 작업 결과 가져오기
     private <T> T await(CompletableFuture<T> future) {
         try {
-            return future.join();
+            return future.orTimeout(10, TimeUnit.SECONDS).join();
         } catch (CompletionException e) {
             if (e.getCause() instanceof ExternalApiException apiException) {
                 throw apiException;
