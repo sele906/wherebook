@@ -11,7 +11,8 @@ public interface ApiUsageMapper {
             @Param("usageDate") LocalDate usageDate,
             @Param("provider") String provider,
             @Param("apiName") String apiName,
-            @Param("failCount") int failCount,
+            @Param("callCount") long callCount,
+            @Param("failCount") long failCount,
             @Param("error") String error
     );
 }

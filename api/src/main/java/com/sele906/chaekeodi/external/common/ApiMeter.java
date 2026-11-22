@@ -1,11 +1,16 @@
 package com.sele906.chaekeodi.external.common;
 
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 
 /*
  * API 계량기: 외부 API 호출 수를 하루·API별로 api_usage 테이블에 기록
@@ -33,18 +38,51 @@ public class ApiMeter {
 
     private final ApiUsageMapper mapper;
 
+    private final ConcurrentHashMap<UsageKey, AtomicLong> pending = new ConcurrentHashMap<>();
+
+    // 호출할 때는 메모리 카운터만 올림 (DB 접근 없음)
     public void record(String provider, String apiName, String error) {
-        try {
-            mapper.increaseUsage(
-                    LocalDate.now(ZoneId.of("Asia/Seoul")),
-                    provider,
-                    apiName,
-                    error == null ? 0 : 1,
-                    error
-            );
-        } catch (Exception e) {
-            // 기록 실패가 API 응답까지 망치지 않도록 로그만 남김
-            log.warn("API 사용량 기록 실패 {} {}", provider, apiName, e);
+        pending.computeIfAbsent(new UsageKey(
+                        LocalDate.now(ZoneId.of("Asia/Seoul")),
+                        provider,
+                        apiName,
+                        error
+                ), k -> new AtomicLong()
+                ).incrementAndGet();
+    }
+
+    // 5초마다 모아서 한 번에 저장
+    @Scheduled(fixedDelay = 5000)
+    public void flush() {
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+
+        for (var entry : pending.entrySet()) {
+            UsageKey key = entry.getKey();
+            long n = entry.getValue().getAndSet(0);   // 꺼내면서 0으로 (원자적)
+
+            if (n > 0) {
+                try {
+                    mapper.increaseUsage(
+                            key.getUsageDate(),
+                            key.getProvider(),
+                            key.getApiName(),
+                            n,
+                            key.getError() == null ? 0 : n,
+                            key.getError()
+                            );
+                } catch (Exception e) {
+                    entry.getValue().addAndGet(n);    // 저장 실패하면 다음 flush에서 다시 시도
+                    log.warn("API 사용량 저장 실패 {} +{}", key, n, e);
+                }
+            }
+
+            // 지난 날짜 키는 다 비웠으면 정리 (맵이 계속 커지지 않게)
+            if (key.getUsageDate().isBefore(today) && entry.getValue().get() == 0) {
+                pending.remove(key, entry.getValue());
+            }
         }
     }
+
+    @PreDestroy
+    public void shutdown() { flush(); }   // 종료할 때 남은 값 저장
 }
