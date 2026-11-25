@@ -1,0 +1,7 @@
+.gradle
+.git
+.idea
+loadtest
+wiremock
+build/*
+!build/libs/*.jar
