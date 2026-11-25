@@ -3,6 +3,7 @@ package com.sele906.chaekeodi.holding.service;
 import com.sele906.chaekeodi.book.domain.Book;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.cache.policy.CachePolicy;
+import com.sele906.chaekeodi.cache.support.SingleFlight;
 import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ExternalApiException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
@@ -28,6 +29,9 @@ public class HoldingService {
     private final BookMapper bookMapper;
     private final HoldingMapper holdingMapper;
     private final Data4LibraryClient client;
+
+    // 진행 중인 대출 상태 조회 (같은 키는 하나만 실행)
+    private final SingleFlight singleFlight;
 
     // 외부 API 동시 호출 최대 20개
     private final ExecutorService pool = Executors.newFixedThreadPool(20);
@@ -96,22 +100,15 @@ public class HoldingService {
         Book book = bookMapper.getBookByIsbn13(isbn13);
         String dtlKdc = (book == null) ? null : toDtlKdc(book.getClassNo());
 
-        // 3. 외부 호출
-        List<BookCallNumberItem> items;
-        String status;
-
+        // 3. 외부 호출 + 저장 (같은 책·도서관은 동시에 한 번만)
         try {
-            List<CallNumberCandidate> candidates = client.fetchCallNumber(isbn13, libCode, dtlKdc);
+            List<BookCallNumberItem> items = singleFlight.run("callno:" + isbn13 + ":" + libCode,
+                    () -> fetchAndSaveCallNumber(isbn13, libCode, dtlKdc));
 
-            if (candidates.isEmpty() && dtlKdc != null) {
-                candidates = client.fetchCallNumber(isbn13, libCode, null);
-            }
-
-            // 청구기호 그룹화하고 정렬
-            items = groupAndSort(candidates, libCode, isbn13);
-            status = items.isEmpty() ? "NOT_FOUND" : "OK";
+            return toResponse(items.isEmpty() ? "NOT_FOUND" : "OK", items);
 
         } catch (Exception e) {
+
             //실패  → status=ERROR 저장
             log.warn("청구기호 조회 실패 isbn={} libCode={}", isbn13, libCode, e);
 
@@ -126,26 +123,35 @@ public class HoldingService {
             // 실패는 저장하지 않고 이번 응답만 ERROR로
             return toResponse("ERROR", List.of());
         }
+    }
 
-        // 4. 저장 후 반환
+    // 기존 3번 try 안쪽 + 4번 저장 블록을 그대로 옮긴 것
+    private List<BookCallNumberItem> fetchAndSaveCallNumber(String isbn13, String libCode, String dtlKdc) {
+
+        List<CallNumberCandidate> candidates = client.fetchCallNumber(isbn13, libCode, dtlKdc);
+
+        // 분류번호로 좁혀서 못 찾았으면 조건 없이 재조회
+        if (candidates.isEmpty() && dtlKdc != null) {
+            candidates = client.fetchCallNumber(isbn13, libCode, null);
+        }
+
+        //청구기호 정렬 및 그룹화
+        List<BookCallNumberItem> items = groupAndSort(candidates, libCode, isbn13);
+
         BookCallNumber header = new BookCallNumber();
         header.setLibCode(libCode);
         header.setIsbn13(isbn13);
-        header.setStatus(status);
-
-        //트랜잭션 없으면 3가지 쿼리를 한꺼번에 실행했을 때 중간에 에러날경우 되돌리기가 어려움
-        List<BookCallNumberItem> itemsToSave = items;
+        header.setStatus(items.isEmpty() ? "NOT_FOUND" : "OK");
 
         tx.executeWithoutResult(s -> {
-            holdingMapper.upsertCallNumber(header); //청구기호 헤더 저장
-            holdingMapper.deleteCallNumberItems(libCode, isbn13); //기존 청구기호 아이템 삭제
-            if (!itemsToSave.isEmpty()) {
-                holdingMapper.insertCallNumberItems(itemsToSave); //새로운 청구기호 아이템 추가
+            holdingMapper.upsertCallNumber(header);
+            holdingMapper.deleteCallNumberItems(libCode, isbn13);
+            if (!items.isEmpty()) {
+                holdingMapper.insertCallNumberItems(items);
             }
         });
 
-        return toResponse(status, items);
-
+        return items;
     }
 
     //class_no에서 앞 2자리 반환
@@ -326,9 +332,11 @@ public class HoldingService {
         if (missKeys.size() == 1) {
             BookLib key = missKeys.get(0);
             try {
-                LoanStatus status = fetchValidated(key);
-                holdingMapper.upsertStatus(status);
-                result.put(key, status);
+                result.put(key, singleFlight.run("loan:" + key.getIsbn13() + ":" + key.getLibCode(), () -> {
+                    LoanStatus status = fetchValidated(key);
+                    holdingMapper.upsertStatus(status);
+                    return status;
+                }));
             } catch (Exception e) {
                 log.warn("대출여부 조회 실패, 건너뜀 {}", key, e);
             }
@@ -343,29 +351,24 @@ public class HoldingService {
 
             CompletableFuture<LoanStatus> future =
                     CompletableFuture.supplyAsync(
-                            () -> fetchValidated(key),
-                            pool
+                            () -> singleFlight.run(
+                                    "loan:" + key.getIsbn13() + ":" + key.getLibCode(),
+                                    () -> {
+                                        LoanStatus status = fetchValidated(key);
+                                        holdingMapper.upsertStatus(status);
+                                        return status;
+                                    }
+                            ) , pool
                     );
 
             misses.put(key, future);
         }
 
-        // API 결과 수집 및 DB 저장
+        // 저장 끝난 결과 수집
         for (var entry : misses.entrySet()) {
             try {
                 BookLib key = entry.getKey();
                 LoanStatus status = await(entry.getValue());
-
-                if (status == null) {
-                    throw new ExternalApiException("대출 상태 응답 없음: " + key);
-                }
-
-                // DB 저장에 필요한 키가 정확한지 확인
-                if (!Objects.equals(status.getIsbn13(), key.getIsbn13()) || !Objects.equals(status.getLibCode(), key.getLibCode())) {
-                    throw new ExternalApiException("대출 상태 응답의 ISBN/도서관 코드 불일치: " + key);
-                }
-
-                holdingMapper.upsertStatus(status);
                 result.put(key, status);
             } catch (Exception e) {
                 log.warn("대출여부 조회 실패, 건너뜀 {}", entry.getKey(), e);
@@ -402,28 +405,34 @@ public class HoldingService {
 
             if (fresh.contains(region)) { continue; }
 
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() ->
 
-                List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13,region);
+            singleFlight.run("holding:" + isbn13 + ":" + region.getRegionCode() + ":" + region.getDtlRegionCode(),
+                    () -> {
 
-                if (items == null) {
-                    throw new ExternalApiException("소장 도서관 응답 없음: " + isbn13 + ", " + region);
-                }
+                        List<HoldingLibraryItem> items = client.fetchLibByBookInRegion(isbn13,region);
 
-                // 한 지역의 캐시 교체를 트랜잭션으로 처리
-                tx.executeWithoutResult(status -> {
-                    holdingMapper.deleteHoldings(isbn13, region);
+                        if (items == null) {
+                            throw new ExternalApiException("소장 도서관 응답 없음: " + isbn13 + ", " + region);
+                        }
 
-                    if (!items.isEmpty()) {
-                        holdingMapper.insertHoldings(items);
+                        // 한 지역의 캐시 교체를 트랜잭션으로 처리
+                        tx.executeWithoutResult(status -> {
+                            holdingMapper.deleteHoldings(isbn13, region);
+
+                            if (!items.isEmpty()) {
+                                holdingMapper.insertHoldings(items);
+                            }
+
+                            // 소장 도서관이 0곳이어도 조회 완료 기록
+                            holdingMapper.upsertRegionFetch(isbn13, region);
+
+                        });
+
+                        return null;
+
                     }
-
-                    // 소장 도서관이 0곳이어도 조회 완료 기록
-                    holdingMapper.upsertRegionFetch(isbn13, region);
-
-                });
-
-            }, pool).exceptionally(e -> {
+            ), pool).exceptionally(e -> {
                 log.warn("소장 조회 실패, 건너뜀 isbn={} region={}", isbn13, region, e);
                 return null;
             });

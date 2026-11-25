@@ -3,6 +3,7 @@ package com.sele906.chaekeodi.book.service;
 import com.sele906.chaekeodi.book.domain.*;
 import com.sele906.chaekeodi.book.mapper.BookMapper;
 import com.sele906.chaekeodi.cache.policy.CachePolicy;
+import com.sele906.chaekeodi.cache.support.SingleFlight;
 import com.sele906.chaekeodi.common.exception.BadRequestException;
 import com.sele906.chaekeodi.common.exception.ResponseNotFoundException;
 import com.sele906.chaekeodi.external.data4library.Data4LibraryClient;
@@ -25,6 +26,9 @@ public class BookService {
     private final Data4LibraryClient client;
     private static final Pattern ISBN13 = Pattern.compile("^97[89]\\d{10}$");
 
+    // 진행 중인 대출 상태 조회 (같은 키는 하나만 실행)
+    private final SingleFlight singleFlight;
+
     public BookPopularResponse loanPopularBooks(BookPopularRequest req) {
 
         ZoneId zone = ZoneId.of("Asia/Seoul");
@@ -43,12 +47,17 @@ public class BookService {
         List<BookPopularItem> all = bookMapper.getPopularBooks(startDt, endDt, CachePolicy.POPULAR_BOOK.freshSince());
 
         // 전국 7일치 인기대출이 0건이면 정상일 수 없으므로 캐시하지 않고 다음 요청에서 재시도
+
         if (all.isEmpty()) {
-            log.warn("인기도서 0건 응답 startDt={} endDt={}", startDt, endDt);
-            all = client.fetchPopularBooks(startDt, endDt, 1, CachePolicy.POPULAR_BOOK_CACHE_SIZE).books();
-            if (!all.isEmpty()) {
-                bookMapper.upsertPopularBook(all);
-            }
+            all = singleFlight.run("popular:" + startDt, () -> {
+                List<BookPopularItem> books = client.fetchPopularBooks(startDt, endDt, 1, CachePolicy.POPULAR_BOOK_CACHE_SIZE).books();
+                if (books.isEmpty()) {
+                    log.warn("인기도서 0건 응답 startDt={} endDt={}", startDt, endDt);
+                } else {
+                    bookMapper.upsertPopularBook(books);
+                }
+                return books;
+            });
         }
 
         // 요청한 페이지만 잘라서 반환
@@ -82,12 +91,14 @@ public class BookService {
 
         if (book == null) {
             // 정보나루는 정상 응답했지만 그 ISBN의 책이 없음 → 404
-            book = client.fetchBookByIsbn13(isbn13)
-                    .orElseThrow(() -> new ResponseNotFoundException(
-                            "도서를 찾을 수 없습니다. isbn13: " + isbn13
-                    ));
-
-            bookMapper.upsertBook(book); //db에 캐시
+            book = singleFlight.run("book:" + isbn13, () -> {
+                Book fetched = client.fetchBookByIsbn13(isbn13)
+                        .orElseThrow(() -> new ResponseNotFoundException(
+                                "도서를 찾을 수 없습니다. isbn13: " + isbn13
+                        ));
+                bookMapper.upsertBook(fetched);
+                return fetched;
+            });
         }
 
         return book;
