@@ -1,0 +1,102 @@
+{
+  "response": {
+    "request": {
+      "libCode": "123002",
+      "type": "all",
+      "isbn13": "9788956604992",
+      "pageSize": "100",
+      "format": "json"
+    },
+    "libNm": "인천광역시교육청부평도서관",
+    "pageNo": 1,
+    "pageSize": 100,
+    "numFound": 3,
+    "resultNum": 3,
+    "docs": [
+      {
+        "doc": {
+          "bookname": "7년의 밤:정유정 장편소설",
+          "authors": "정유정 지음",
+          "publisher": "은행나무",
+          "publication_year": "2011",
+          "isbn13": "9788956604992",
+          "set_isbn13": "",
+          "bookImageURL": "http://image.aladin.co.kr/product/14712/55/cover/k202532053_1.jpg",
+          "addition_symbol": "",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "callNumbers": [
+            {
+              "callNumber": {
+                "separate_shelf_code": "",
+                "separate_shelf_name": "적용안함",
+                "book_code": "정67ㅊ",
+                "shelf_loc_code": "",
+                "shelf_loc_name": "적용안함",
+                "copy_code": ""
+              }
+            }
+          ],
+          "reg_date": "2017-03-27"
+        }
+      },
+      {
+        "doc": {
+          "bookname": "7년의 밤:정유정 장편소설",
+          "authors": "정유정 지음",
+          "publisher": "은행나무",
+          "publication_year": "2011",
+          "isbn13": "9788956604992",
+          "set_isbn13": "",
+          "bookImageURL": "http://image.aladin.co.kr/product/14712/55/cover/k202532053_1.jpg",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "callNumbers": [
+            {
+              "callNumber": {
+                "separate_shelf_code": "",
+                "separate_shelf_name": "적용안함",
+                "book_code": "정67ㅊ",
+                "shelf_loc_code": "",
+                "shelf_loc_name": "적용안함",
+                "copy_code": ""
+              }
+            }
+          ],
+          "reg_date": "2017-03-27"
+        }
+      },
+      {
+        "doc": {
+          "bookname": "7년의 밤:정유정 장편소설",
+          "authors": "정유정 지음",
+          "publisher": "은행나무",
+          "publication_year": "2011",
+          "isbn13": "9788956604992",
+          "set_isbn13": "",
+          "bookImageURL": "http://image.aladin.co.kr/product/14712/55/cover/k202532053_1.jpg",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.6",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "callNumbers": [
+            {
+              "callNumber": {
+                "separate_shelf_code": "",
+                "separate_shelf_name": "적용안함",
+                "book_code": "정67ㅊ",
+                "shelf_loc_code": "",
+                "shelf_loc_name": "적용안함",
+                "copy_code": ""
+              }
+            }
+          ],
+          "reg_date": "2011-04-18"
+        }
+      }
+    ]
+  }
+}

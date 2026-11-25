@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/libSrchByBook"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "response": {
+      "pageNo": "1",
+      "pageSize": "100",
+      "numFound": 2,
+      "resultNum": 2,
+      "libs": [
+        {
+          "lib": {
+            "libCode": "111020",
+            "libName": "서울특별시교육청정독도서관",
+            "address": "서울특별시 종로구 북촌로5길 48",
+            "tel": "02-2011-5799",
+            "fax": "02-737-6943",
+            "latitude": "37.5810398",
+            "longitude": "126.982952",
+            "homepage": "http://jdlib.sen.go.kr/",
+            "closed": "매월 첫째주, 셋째주 수요일 / 일요일을 제외한 법정공휴일, 도서관 사정으로 임시로 정하는 휴일",
+            "operatingTime": "3월~10월(하절기): 7:00 - 22:00 / 11월~2월(동절기): 8:00 - 22:00"
+          }
+        },
+        {
+          "lib": {
+            "libCode": "111021",
+            "libName": "서울특별시교육청종로도서관",
+            "address": "서울특별시 종로구 사직로9길 15-14",
+            "tel": "02-721-0707",
+            "fax": "02-737-1707",
+            "latitude": "37.5764744",
+            "longitude": "126.966457",
+            "homepage": "http://jnlib.sen.go.kr/",
+            "closed": "매월 둘째주, 넷째주 월요일 / 법정공휴일, 도서관 운영상 도서관장이 필요하다고 지정한 날",
+            "operatingTime": "(평일) 어문학실, 인문사회과학실 09시~20시 / 자연과학정보실 09시~18시 / 인왕관 09시~18시 / 자율학습실 07시~22시(3~10월), 08시~22시(11~2월)  (주말) 어문학실, 인문사회과학실 09시~17시 / 자연과학정보실 09시~17시 / 자율학습실 07~22시(3~10월), 08시~22시(11~2월)  매달 2, 4번째 월요일 정기 휴관일"
+          }
+        }
+      ],
+      "delayDistribution": { "type": "lognormal", "median": 500, "sigma": 0.4 }
+    }}
+  }
+}

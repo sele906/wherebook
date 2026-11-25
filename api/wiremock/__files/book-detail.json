@@ -1,0 +1,28 @@
+{
+  "response": {
+    "request": {
+      "isbn13": "9788956604992",
+      "format": "json"
+    },
+    "detail": [
+      {
+        "book": {
+          "no": 1,
+          "bookname": "7년의 밤 :정유정 장편소설 ",
+          "authors": "지은이: 정유정",
+          "publisher": "은행나무",
+          "publication_date": "2011",
+          "publication_year": "2011",
+          "isbn": "8956604991",
+          "isbn13": "9788956604992",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "description": "제1회 세계청소년문학상 수상작 &lt;내 인생의 스프링 캠프&gt;, 제5회 세계문학상 수상작 &lt;내 심장을 쏴라&gt; 작가 정유정의 장편소설. 수상 이후 오랜 시간 준비하여 야심 차게 내놓는 소설로, 치밀한 사전 조사와 압도적인 상상력으로 무장한 작품이다. 7년의 밤 동안 아버지와 아들에게 일어난 슬프고 신비로우며 통렬한 이야기가 펼쳐진다.",
+          "bookImageURL": "http://image.aladin.co.kr/product/14712/55/cover/k202532053_1.jpg"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,915 @@
+{
+  "response": {
+    "request": {
+      "startDt": "2026-11-19",
+      "endDt": "2026-11-26",
+      "pageNo": 1,
+      "pageSize": 50,
+      "format": "json"
+    },
+    "resultNum": 50,
+    "numFound": 5000,
+    "docs": [
+      {
+        "doc": {
+          "no": 1,
+          "ranking": "1",
+          "bookname": "안녕이라 그랬어 :김애란 소설 ",
+          "authors": "지은이: 김애란",
+          "publisher": "문학동네",
+          "publication_year": "2025",
+          "isbn13": "9791141602376",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/36566/52/cover200/k462039240_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7073819",
+          "loan_count": "576"
+        }
+      },
+      {
+        "doc": {
+          "no": 2,
+          "ranking": "2",
+          "bookname": "모순 :양귀자 장편소설 ",
+          "authors": "지은이: 양귀자",
+          "publisher": "쓰다",
+          "publication_year": "2013",
+          "isbn13": "9788998441012",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.62",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://bookthumb-phinf.pstatic.net/cover/071/902/07190270.jpg?type=m1&udate=20170801",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=1938053",
+          "loan_count": "568"
+        }
+      },
+      {
+        "doc": {
+          "no": 3,
+          "ranking": "3",
+          "bookname": "혼모노 :성해나 소설집 ",
+          "authors": "지은이: 성해나",
+          "publisher": "창비",
+          "publication_year": "2025",
+          "isbn13": "9788936439743",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/36101/66/cover200/893643974x_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7035395",
+          "loan_count": "542"
+        }
+      },
+      {
+        "doc": {
+          "no": 4,
+          "ranking": "4",
+          "bookname": "소년이 온다 :한강 장편소설 ",
+          "authors": "지은이: 한강",
+          "publisher": "창비",
+          "publication_year": "2014",
+          "isbn13": "9788936434120",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.62",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "http://image.aladin.co.kr/product/4086/97/cover/8936434128_2.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=2037399",
+          "loan_count": "520"
+        }
+      },
+      {
+        "doc": {
+          "no": 5,
+          "ranking": "5",
+          "bookname": "절창 :구병모 장편소설 ",
+          "authors": "지은이: 구병모",
+          "publisher": "문학동네",
+          "publication_year": "2025",
+          "isbn13": "9791141602451",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/37172/36/cover200/k662031678_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7149374",
+          "loan_count": "472"
+        }
+      },
+      {
+        "doc": {
+          "no": 6,
+          "ranking": "6",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168418011",
+          "addition_symbol": "77810",
+          "vol": "16",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/33815/12/cover200/k832930683_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6863020",
+          "loan_count": "451"
+        }
+      },
+      {
+        "doc": {
+          "no": 7,
+          "ranking": "7",
+          "bookname": "불편한 편의점 :김호연 장편소설 ",
+          "authors": "지은이: 김호연",
+          "publisher": "나무옆의자",
+          "publication_year": "2021",
+          "isbn13": "9791161571188",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/26942/84/cover/k582730818_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5962217",
+          "loan_count": "449"
+        }
+      },
+      {
+        "doc": {
+          "no": 8,
+          "ranking": "8",
+          "bookname": "홍학의 자리 :정해연 장편소설 ",
+          "authors": "지은이: 정해연",
+          "publisher": "문학동네",
+          "publication_year": "2021",
+          "isbn13": "9788954681155",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/27587/94/cover/8954681158_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6050062",
+          "loan_count": "448"
+        }
+      },
+      {
+        "doc": {
+          "no": 9,
+          "ranking": "9",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168415232",
+          "addition_symbol": "77810",
+          "vol": "13",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/31527/55/cover/k812832343_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6679569",
+          "loan_count": "429"
+        }
+      },
+      {
+        "doc": {
+          "no": 10,
+          "ranking": "10",
+          "bookname": "찌니주의보 :정지아 장편소설 ",
+          "authors": "지은이: 정지아",
+          "publisher": "창비",
+          "publication_year": "2026",
+          "isbn13": "9788936439996",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/40013/75/cover200/8936439995_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7312107",
+          "loan_count": "428"
+        }
+      },
+      {
+        "doc": {
+          "no": 11,
+          "ranking": "11",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168417199",
+          "addition_symbol": "77810",
+          "vol": "15",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/32991/71/cover/k502936654_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6802275",
+          "loan_count": "425"
+        }
+      },
+      {
+        "doc": {
+          "no": 12,
+          "ranking": "12",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168416369",
+          "addition_symbol": "77810",
+          "vol": "14",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/32459/74/cover/k622935200_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6759968",
+          "loan_count": "421"
+        }
+      },
+      {
+        "doc": {
+          "no": 13,
+          "ranking": "13",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791175484290",
+          "addition_symbol": "77810",
+          "vol": "21",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/37938/93/cover200/k232033352_2.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7188658",
+          "loan_count": "420"
+        }
+      },
+      {
+        "doc": {
+          "no": 14,
+          "ranking": "14",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168412477",
+          "addition_symbol": "77810",
+          "vol": "11",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/29832/74/cover/k652838723_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6525944",
+          "loan_count": "415"
+        }
+      },
+      {
+        "doc": {
+          "no": 15,
+          "ranking": "14",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168414471",
+          "addition_symbol": "77810",
+          "vol": "12",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/30518/41/cover/k422830492_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6594703",
+          "loan_count": "415"
+        }
+      },
+      {
+        "doc": {
+          "no": 16,
+          "ranking": "16",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168418844",
+          "addition_symbol": "77810",
+          "vol": "17",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/34618/90/cover200/k522933982_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6945239",
+          "loan_count": "409"
+        }
+      },
+      {
+        "doc": {
+          "no": 17,
+          "ranking": "16",
+          "bookname": "투명한 나선 ",
+          "authors": "지은이: 히가시노 게이고 ;옮긴이: 김선영",
+          "publisher": "교보문고",
+          "publication_year": "2026",
+          "isbn13": "9791170614043",
+          "addition_symbol": "03830",
+          "vol": "",
+          "class_no": "833.6",
+          "class_nm": "문학 > 일본문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/39802/11/cover200/k082130602_3.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7297704",
+          "loan_count": "409"
+        }
+      },
+      {
+        "doc": {
+          "no": 18,
+          "ranking": "16",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791173473968",
+          "addition_symbol": "77810",
+          "vol": "19",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/36208/50/cover200/k712038303_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7046196",
+          "loan_count": "409"
+        }
+      },
+      {
+        "doc": {
+          "no": 19,
+          "ranking": "19",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791173114038",
+          "addition_symbol": "77810",
+          "vol": "18",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/35371/5/cover200/k792035405_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6986836",
+          "loan_count": "404"
+        }
+      },
+      {
+        "doc": {
+          "no": 20,
+          "ranking": "20",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791173479939",
+          "addition_symbol": "77810",
+          "vol": "20",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/37191/81/cover200/k042031295_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7150726",
+          "loan_count": "400"
+        }
+      },
+      {
+        "doc": {
+          "no": 21,
+          "ranking": "21",
+          "bookname": "급류 :정대건 장편소설 ",
+          "authors": "지은이: 정대건",
+          "publisher": "민음사",
+          "publication_year": "2022",
+          "isbn13": "9788937473401",
+          "addition_symbol": "04810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/30769/24/cover/8937473402_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6614564",
+          "loan_count": "388"
+        }
+      },
+      {
+        "doc": {
+          "no": 22,
+          "ranking": "22",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164134847",
+          "addition_symbol": "77810",
+          "vol": "4",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/23568/96/cover/k992638123_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5635121",
+          "loan_count": "387"
+        }
+      },
+      {
+        "doc": {
+          "no": 23,
+          "ranking": "22",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791168411685",
+          "addition_symbol": "77810",
+          "vol": "10",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/29286/99/cover/k082837005_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6447451",
+          "loan_count": "387"
+        }
+      },
+      {
+        "doc": {
+          "no": 24,
+          "ranking": "24",
+          "bookname": "프로젝트 헤일메리 ",
+          "authors": "앤디 위어 지음 ;강동혁 옮김",
+          "publisher": "RHK(알에이치코리아)",
+          "publication_year": "2021",
+          "isbn13": "9788925588735",
+          "addition_symbol": "04840",
+          "vol": "",
+          "class_no": "843.6",
+          "class_nm": "문학 > 영미문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/27045/43/cover/8925588730_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5969086",
+          "loan_count": "385"
+        }
+      },
+      {
+        "doc": {
+          "no": 25,
+          "ranking": "25",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164135592",
+          "addition_symbol": "77810",
+          "vol": "5",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/24307/73/cover/k822630592_2.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5686627",
+          "loan_count": "383"
+        }
+      },
+      {
+        "doc": {
+          "no": 26,
+          "ranking": "26",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164131686",
+          "addition_symbol": "77810",
+          "vol": "1",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/19404/61/cover/k712635217_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5429011",
+          "loan_count": "382"
+        }
+      },
+      {
+        "doc": {
+          "no": 27,
+          "ranking": "26",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164138197",
+          "addition_symbol": "77810",
+          "vol": "8",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/27456/81/cover/k752733475_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6041427",
+          "loan_count": "382"
+        }
+      },
+      {
+        "doc": {
+          "no": 28,
+          "ranking": "28",
+          "bookname": "세네카, 오늘을 빼앗기고 있는 당신에게",
+          "authors": "루키우스 안나이우스 세네카",
+          "publisher": "논픽션",
+          "publication_year": "2026",
+          "isbn13": "9791199489561",
+          "addition_symbol": "",
+          "vol": "",
+          "class_no": "",
+          "class_nm": "",
+          "bookImageURL": "https://shopping-phinf.pstatic.net/main_6056845/60568459498.20260623201840.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7288912",
+          "loan_count": "377"
+        }
+      },
+      {
+        "doc": {
+          "no": 29,
+          "ranking": "29",
+          "bookname": "흔한남매의 흔한 호기심 :일상에서 만나는 과학 상식",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2020",
+          "isbn13": "9791173471780",
+          "addition_symbol": "77400",
+          "vol": "13",
+          "class_no": "400",
+          "class_nm": "자연과학 > 자연과학 > 자연과학",
+          "bookImageURL": "https://image.aladin.co.kr/product/36019/61/cover200/k872037826_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7026796",
+          "loan_count": "373"
+        }
+      },
+      {
+        "doc": {
+          "no": 30,
+          "ranking": "30",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164137527",
+          "addition_symbol": "77810",
+          "vol": "7",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/26556/36/cover/k602738939_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5929100",
+          "loan_count": "372"
+        }
+      },
+      {
+        "doc": {
+          "no": 31,
+          "ranking": "31",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791175487802",
+          "addition_symbol": "77810",
+          "vol": "22",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/39134/78/cover200/k982137650_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7255781",
+          "loan_count": "371"
+        }
+      },
+      {
+        "doc": {
+          "no": 32,
+          "ranking": "32",
+          "bookname": "작별하지 않는다 :한강 장편소설 ",
+          "authors": "지은이: 한강",
+          "publisher": "문학동네",
+          "publication_year": "2021",
+          "isbn13": "9788954682152",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.62",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/27877/5/cover/8954682154_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6086446",
+          "loan_count": "370"
+        }
+      },
+      {
+        "doc": {
+          "no": 33,
+          "ranking": "33",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164132454",
+          "addition_symbol": "77810",
+          "vol": "2",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/20398/4/cover/k002635150_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5463101",
+          "loan_count": "369"
+        }
+      },
+      {
+        "doc": {
+          "no": 34,
+          "ranking": "34",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164134267",
+          "addition_symbol": "77810",
+          "vol": "3",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/22327/46/cover/k782636924_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5569013",
+          "loan_count": "364"
+        }
+      },
+      {
+        "doc": {
+          "no": 35,
+          "ranking": "35",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164139897",
+          "addition_symbol": "77810",
+          "vol": "9",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/28395/15/cover/k962835911_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6350914",
+          "loan_count": "361"
+        }
+      },
+      {
+        "doc": {
+          "no": 36,
+          "ranking": "36",
+          "bookname": "긴긴밤 ",
+          "authors": "루리 글·그림",
+          "publisher": "문학동네",
+          "publication_year": "2021",
+          "isbn13": "9788954677158",
+          "addition_symbol": "73810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/26302/71/cover/8954677150_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5857188",
+          "loan_count": "360"
+        }
+      },
+      {
+        "doc": {
+          "no": 37,
+          "ranking": "37",
+          "bookname": "그랬다고 적었다 :김애란 산문 ",
+          "authors": "지은이: 김애란",
+          "publisher": "문학동네",
+          "publication_year": "2026",
+          "isbn13": "9791141618575",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "814.7",
+          "class_nm": "문학 > 한국문학 > 수필",
+          "bookImageURL": "https://image.aladin.co.kr/product/40019/36/cover200/k742130236_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7312549",
+          "loan_count": "353"
+        }
+      },
+      {
+        "doc": {
+          "no": 38,
+          "ranking": "38",
+          "bookname": "흔한남매",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2019",
+          "isbn13": "9791164136261",
+          "addition_symbol": "77810",
+          "vol": "6",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/25301/95/cover/k062633309_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=5777315",
+          "loan_count": "349"
+        }
+      },
+      {
+        "doc": {
+          "no": 39,
+          "ranking": "39",
+          "bookname": "아코디언 :천명관 장편소설 ",
+          "authors": "지은이: 천명관",
+          "publisher": "창비",
+          "publication_year": "2026",
+          "isbn13": "9788936439965",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://shopping-phinf.pstatic.net/main_6041993/60419931459.20260612143521.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7282009",
+          "loan_count": "346"
+        }
+      },
+      {
+        "doc": {
+          "no": 40,
+          "ranking": "40",
+          "bookname": "이중 하나는 거짓말 :김애란 장편소설 ",
+          "authors": "지은이: 김애란",
+          "publisher": "문학동네",
+          "publication_year": "2024",
+          "isbn13": "9791141601300",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/34474/76/cover200/k292932634_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6933234",
+          "loan_count": "343"
+        }
+      },
+      {
+        "doc": {
+          "no": 41,
+          "ranking": "40",
+          "bookname": "빵충 사육 준수 사항",
+          "authors": "김혜영 (지은이)",
+          "publisher": "안전가옥",
+          "publication_year": "2026",
+          "isbn13": "9791194891178",
+          "addition_symbol": "",
+          "vol": "",
+          "class_no": "",
+          "class_nm": "",
+          "bookImageURL": "https://image.aladin.co.kr/product/39872/66/cover200/k242130313_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7301611",
+          "loan_count": "343"
+        }
+      },
+      {
+        "doc": {
+          "no": 42,
+          "ranking": "42",
+          "bookname": "시간의 감촉 :은희경 장편소설 ",
+          "authors": "지은이: 은희경",
+          "publisher": "문학동네",
+          "publication_year": "2026",
+          "isbn13": "9791141617226",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.62",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/39536/43/cover200/k182139749_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7280669",
+          "loan_count": "338"
+        }
+      },
+      {
+        "doc": {
+          "no": 43,
+          "ranking": "42",
+          "bookname": "괴테는 모든 것을 말했다 ",
+          "authors": "스즈키 유이 지음 ;이지수 옮김",
+          "publisher": "콘텐츠그룹 포레스트",
+          "publication_year": "2025",
+          "isbn13": "9791194530701",
+          "addition_symbol": "03830",
+          "vol": "",
+          "class_no": "833.6",
+          "class_nm": "문학 > 일본문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/37676/59/cover200/k212032349_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7177757",
+          "loan_count": "338"
+        }
+      },
+      {
+        "doc": {
+          "no": 44,
+          "ranking": "44",
+          "bookname": "한국사 이상현상 연구원 :최인서 소설 ",
+          "authors": "지은이: 최인서",
+          "publisher": "빅피시",
+          "publication_year": "2026",
+          "isbn13": "9791124137635",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/40090/97/cover200/k962130440_2.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7316990",
+          "loan_count": "337"
+        }
+      },
+      {
+        "doc": {
+          "no": 45,
+          "ranking": "44",
+          "bookname": "자몽살구클럽",
+          "authors": "한로로 (HANRORO) (지은이)",
+          "publisher": "어센틱",
+          "publication_year": "2025",
+          "isbn13": "9791199305304",
+          "addition_symbol": "",
+          "vol": "",
+          "class_no": "",
+          "class_nm": "",
+          "bookImageURL": "https://image.aladin.co.kr/product/36808/37/cover200/k082030009_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7095794",
+          "loan_count": "337"
+        }
+      },
+      {
+        "doc": {
+          "no": 46,
+          "ranking": "46",
+          "bookname": "주와 연 :청예 장편소설 ",
+          "authors": "지은이: 청예",
+          "publisher": "인플루엔셜",
+          "publication_year": "2026",
+          "isbn13": "9791168343887",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://shopping-phinf.pstatic.net/main_6064140/60641400804.20260630090120.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7292520",
+          "loan_count": "334"
+        }
+      },
+      {
+        "doc": {
+          "no": 47,
+          "ranking": "46",
+          "bookname": "어서오세요, 휴남동 서점입니다 :황보름 장편소설 ",
+          "authors": "지은이: 황보름",
+          "publisher": "클레이하우스",
+          "publication_year": "2022",
+          "isbn13": "9791197377143",
+          "addition_symbol": "03810",
+          "vol": "",
+          "class_no": "813.7",
+          "class_nm": "문학 > 한국문학 > 소설",
+          "bookImageURL": "https://image.aladin.co.kr/product/28685/95/cover/k362836265_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6389692",
+          "loan_count": "334"
+        }
+      },
+      {
+        "doc": {
+          "no": 48,
+          "ranking": "48",
+          "bookname": "흔한남매의 흔한 호기심 :일상에서 만나는 과학 상식",
+          "authors": "원작: 흔한남매 ;그림: 유난희",
+          "publisher": "미래엔",
+          "publication_year": "2020",
+          "isbn13": "9791168416598",
+          "addition_symbol": "77400",
+          "vol": "10",
+          "class_no": "400",
+          "class_nm": "자연과학 > 자연과학 > 자연과학",
+          "bookImageURL": "https://image.aladin.co.kr/product/32697/1/cover/k462936662_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6776181",
+          "loan_count": "328"
+        }
+      },
+      {
+        "doc": {
+          "no": 49,
+          "ranking": "49",
+          "bookname": "흔한남매 과학 탐험대",
+          "authors": "원작: 흔한남매 ;임혜영",
+          "publisher": "김영사",
+          "publication_year": "2021",
+          "isbn13": "9791173322914",
+          "addition_symbol": "77400",
+          "vol": "15",
+          "class_no": "400",
+          "class_nm": "자연과학 > 자연과학 > 자연과학",
+          "bookImageURL": "https://image.aladin.co.kr/product/37061/72/cover200/k632030237_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=7143072",
+          "loan_count": "326"
+        }
+      },
+      {
+        "doc": {
+          "no": 50,
+          "ranking": "50",
+          "bookname": "흔한남매 이무기 :이해하면 무서운 이야기",
+          "authors": "원작: 흔한남매 ;그림: 도니패밀리",
+          "publisher": "미래엔",
+          "publication_year": "2023",
+          "isbn13": "9791168415577",
+          "addition_symbol": "77810",
+          "vol": "1",
+          "class_no": "810",
+          "class_nm": "문학 > 한국문학 > 한국문학",
+          "bookImageURL": "https://image.aladin.co.kr/product/32095/72/cover/k502834901_1.jpg",
+          "bookDtlUrl": "https://data4library.kr/bookV?seq=6735778",
+          "loan_count": "324"
+        }
+      }
+    ]
+  }
+}
